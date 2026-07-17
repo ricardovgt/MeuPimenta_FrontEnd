@@ -1,0 +1,5 @@
+/* Estilos específicos da tela de cadastro */
+.container-cadastro {
+    max-width: 450px;
+    margin: 2rem 0; /* Margem extra caso a tela fique menor que o formulário */
+}

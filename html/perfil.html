@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil - MeuPimenta</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/perfil/perfil.css">
+</head>
+<body>
+
+    <main class="container perfil-container">
+        <header class="perfil-header perfil-header">
+            <div class="perfil-top">
+                <div class="perfil-avatar" aria-hidden="true">PC</div>
+                <div class="perfil-title">
+                    <p class="perfil-welcome" id="perfil-tipo-conta">Carregando...</p>
+                    <h1><span id="perfil-nome">Carregando...</span></h1>
+                    <p class="perfil-subtitle">Seu perfil está pronto para receber atualizações futuras, como foto e outras informações profissionais.</p>
+                </div>
+            </div>
+        </header>
+
+        <section class="perfil-panel">
+            <div class="user-info">
+                <div class="user-info-item">
+                    <span>Nome</span>
+                    <p id="info-nome">Carregando...</p>
+                </div>
+                <div class="user-info-item">
+                    <span>E-mail</span>
+                    <p id="info-email">Carregando...</p>
+                </div>
+                <div class="user-info-item">
+                    <span>Tipo de conta</span>
+                    <p id="info-tipo">Carregando...</p>
+                </div>
+            </div>
+
+            <div class="perfil-actions">
+                <button type="button" class="btn btn-danger" id="btn-sair">Sair da Conta</button>
+            </div>
+        </section>
+
+        <a href="servicos.html" class="btn btn-primary btn-servicos-outside" id="btn-servicos">Ver Serviços</a>
+    </main>
+
+    <script src="../js/perfil/utils.js"></script>
+    <script src="../js/perfil/api.js"></script>
+    <script src="../js/perfil/events.js"></script>
+    <script src="../js/perfil/main.js"></script>
+</body>
+</html>

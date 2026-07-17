@@ -1,0 +1,51 @@
+/* Layout principal da página de serviços */
+.top-nav {
+    width: 100%;
+    background-color: var(--surface-color);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #3f3f46;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+}
+
+.nav-logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary-color);
+}
+
+.nav-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    margin-top: 0;
+}
+
+.btn-outline {
+    background-color: transparent;
+    color: var(--text-primary);
+    border: 1px solid #3f3f46;
+}
+
+.btn-outline:hover {
+    border-color: var(--text-secondary);
+}
+
+.container-servicos {
+    display: flex;
+    gap: 2rem;
+    padding: 6rem 2rem 2rem 2rem;
+    max-width: 1400px;
+    margin: 0 auto 0 2rem;
+    width: 100%;
+    align-items: flex-start;
+}

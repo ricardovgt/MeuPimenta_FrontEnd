@@ -1,0 +1,154 @@
+/* Variáveis baseadas no design do app (Dark Mode) */
+:root {
+    --bg-color: #121214;
+    --surface-color: #202024;
+    --primary-color: #FACC15; /* Amarelo principal */
+    --accent-color: #10B981; /* Verde de sucesso/destaque */
+    --text-primary: #FFFFFF;
+    --text-secondary: #A1A1AA;
+    --border-radius: 12px;
+    --button-radius: 24px;
+}
+
+/* Reset básico para manter consistência entre navegadores */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-primary);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Container padrão para os formulários */
+.container {
+    background-color: var(--surface-color);
+    padding: 2.5rem 2rem;
+    border-radius: var(--border-radius);
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+.logo-placeholder {
+    text-align: center;
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 0.5rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+}
+
+.form-group input, .form-group select {
+    background-color: var(--bg-color);
+    border: 1px solid #3f3f46;
+    color: var(--text-primary);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus, .form-group select:focus {
+    border-color: var(--primary-color);
+}
+
+.btn {
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    border-radius: var(--button-radius);
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: opacity 0.3s, transform 0.1s;
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: #121214;
+    margin-top: 1rem;
+}
+
+.btn-primary:hover {
+    opacity: 0.9;
+}
+
+.footer-text {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.footer-text a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.footer-text a:hover {
+    text-decoration: underline;
+}
+
+/* Estilos de erro/sucesso (preparando para o JS) */
+.hidden {
+    display: none;
+}
+
+.feedback-msg {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    padding: 0.5rem;
+    border-radius: 8px;
+}
+
+/* Scrollbar customizada para todo o sistema */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(250, 204, 21, 0.35) #1f2937;
+}
+
+*::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+    background: #18181b;
+    border-radius: 999px;
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: rgba(250, 204, 21, 0.28);
+    border-radius: 999px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+    background-color: rgba(250, 204, 21, 0.42);
+}

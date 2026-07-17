@@ -1,0 +1,78 @@
+/* Grid e cards de serviços */
+.lista-servicos {
+    flex-grow: 1;
+}
+
+.lista-servicos h2 {
+    margin-bottom: 1.5rem;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.servico-card {
+    background-color: var(--surface-color);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    border: 1px solid #2a2a2e;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.servico-card.clickable {
+    cursor: pointer;
+}
+
+.servico-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+    border-color: var(--primary-color);
+}
+
+.servico-foto {
+    width: 100%;
+    height: 150px;
+    background-color: #3f3f46;
+    object-fit: cover;
+}
+
+.servico-info {
+    padding: 1.5rem;
+}
+
+.servico-info h4 {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.servico-info p {
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    margin-bottom: 0.8rem;
+    line-height: 1.4;
+}
+
+.servico-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #3f3f46;
+    font-size: 0.85rem;
+}
+
+.badge-link {
+    background-color: #3f3f46;
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    color: var(--text-primary);
+}
+
+.rating {
+    color: var(--primary-color);
+    font-weight: bold;
+}

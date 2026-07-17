@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serviços - MeuPimenta</title>
+    <link rel="stylesheet" href="../css/servicos/servicos-base.css">
+    <link rel="stylesheet" href="../css/servicos/servicos-layout.css">
+    <link rel="stylesheet" href="../css/servicos/servicos-filtros.css">
+    <link rel="stylesheet" href="../css/servicos/servicos-cards.css">
+    <link rel="stylesheet" href="../css/servicos/servicos-modals.css">
+</head>
+<body>
+
+    <header class="top-nav">
+        <div class="nav-logo">MeuPimenta</div>
+        <div class="nav-actions">
+            <button id="btn-novo-servico" class="btn btn-primary btn-sm">Anunciar Serviço</button>
+            <button id="btn-voltar-home" class="btn btn-outline btn-sm">Voltar</button>
+        </div>
+    </header>
+
+    <main class="container-servicos">
+        <aside class="filtros-section">
+            <h3>Filtrar Serviços</h3>
+            <form id="form-filtros">
+                <div class="form-group">
+                    <label for="filtro-bairro">Filtrar por Bairro</label>
+                        <select id="filtro-bairro" name="bairro">
+                            <option value="">Todos os bairros</option>
+                            <option value="Alvorada">Alvorada</option>
+                            <option value="Apediá">Apediá</option>
+                            <option value="Beira Rio">Beira Rio</option>
+                            <option value="BNH">BNH</option>
+                            <option value="CTG">CTG</option>
+                            <option value="Encontro das Águas">Encontro das Águas</option>
+                            <option value="Jardim das Oliveiras">Jardim das Oliveiras</option>
+                            <option value="Liberdade">Liberdade</option>
+                            <option value="Mutirão">Mutirão</option>
+                            <option value="Nova Pimenta">Nova Pimenta</option>
+                            <option value="Pioneiros">Pioneiros</option>
+                            <option value="Seringal">Seringal</option>
+                            <option value="Triângulo Verde">Triângulo Verde</option>
+                            <option value="Vila Nova">Vila Nova</option>
+                            <option value="Setor Industrial">Setor Industrial</option>
+                        </select>
+                </div>
+                <div class="form-group">
+                    <label class="rating-toggle-label">
+                        <input type="checkbox" id="filtro-top" class="hidden-checkbox">
+                        <span class="custom-rating-btn">⭐ Melhores Avaliações</span>
+                    </label>
+                 </div>
+                <button type="submit" class="btn btn-primary">Buscar</button>
+                <button type="button" id="btn-limpar-filtros" class="btn btn-outline" style="margin-top: 10px;">Limpar</button>
+            </form>
+        </aside>
+
+        <section class="lista-servicos">
+            <h2>Serviços Disponíveis</h2>
+            <div id="grid-servicos" class="grid-container">
+                <p>Carregando serviços...</p>
+            </div>
+        </section>
+    </main>
+
+    <div id="modal-aviso-conta" class="modal hidden">
+        <div class="modal-content">
+            <h2>Atenção!</h2>
+            <p>Para expor seu serviço e alcançar mais clientes, você precisa mudar sua conta para <strong>Comercial</strong>.</p>
+            <div class="modal-actions">
+                <button id="btn-cancelar-aviso" class="btn btn-outline">Cancelar</button>
+                <button id="btn-mudar-conta" class="btn btn-primary">Mudar para Comercial Agora</button>
+            </div>
+            <div id="feedback-mudar-conta" class="feedback-msg hidden" style="margin-top: 15px;"></div>
+        </div>
+    </div>
+
+    <div id="modal-cadastro-servico" class="modal hidden">
+        <div class="modal-content">
+            <h2>Anunciar Serviço</h2>
+            <div id="feedback-servico" class="feedback-msg hidden"></div>
+            
+            <form id="form-servico">
+                <div class="form-group">
+                    <label for="nome">Nome do Serviço/Profissional *</label>
+                    <input type="text" id="nome" name="nome" required>
+                </div>
+                <div class="form-group">
+                    <label for="descricao">Descrição curta</label>
+                    <input type="text" id="descricao" name="descricao" placeholder="O que você faz?">
+                </div>
+                <div class="form-group">
+                    <label for="descricaoDetalhada">Descrição detalhada</label>
+                    <textarea id="descricaoDetalhada" name="descricaoDetalhada" rows="4" placeholder="Conte mais sobre o serviço, horários, diferenciais e detalhes importantes." required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="telefone">Telefone (WhatsApp) *</label>
+                    <input type="text" id="telefone" name="telefone" required>
+                </div>
+                <div class="form-group">
+                <label for="bairro">Bairro</label>
+                    <select id="bairro" name="bairro" required>
+                        <option value="" disabled selected>Selecione o bairro</option>
+                        <option value="Alvorada">Alvorada</option>
+                        <option value="Apediá">Apediá</option>
+                        <option value="Beira Rio">Beira Rio</option>
+                        <option value="BNH">BNH</option>
+                        <option value="CTG">CTG</option>
+                        <option value="Encontro das Águas">Encontro das Águas</option>
+                        <option value="Jardim das Oliveiras">Jardim das Oliveiras</option>
+                        <option value="Liberdade">Liberdade</option>
+                        <option value="Mutirão">Mutirão</option>
+                        <option value="Nova Pimenta">Nova Pimenta</option>
+                        <option value="Pioneiros">Pioneiros</option>
+                        <option value="Seringal">Seringal</option>
+                        <option value="Triângulo Verde">Triângulo Verde</option>
+                        <option value="Vila Nova">Vila Nova</option>
+                        <option value="Setor Industrial">Setor Industrial</option>
+                    </select>
+            </div>
+                <div class="form-group">
+                    <label for="fotoUrl">Link da Foto (Opcional)</label>
+                    <input type="url" id="fotoUrl" name="fotoUrl" placeholder="https://...">
+                </div>
+                
+                <div class="modal-actions">
+                    <button type="button" id="btn-cancelar-servico" class="btn btn-outline">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Publicar Serviço</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="modal-detalhes-servico" class="modal hidden">
+        <div class="modal-content modal-detalhes">
+            <div class="modal-header">
+                <h2>Detalhes do Serviço</h2>
+                <button type="button" id="btn-fechar-detalhes" class="btn btn-outline btn-sm btn-fechar">Fechar</button>
+            </div>
+            <div id="feedback-detalhes-servico" class="feedback-msg hidden"></div>
+            <div id="conteudo-detalhes-servico"></div>
+        </div>
+    </div>
+
+    <div id="modal-avaliar" class="modal hidden">
+        <div class="modal-content modal-avaliacao">
+            <div class="modal-header">
+                <h2>Avaliar Serviço</h2>
+                <button type="button" id="btn-fechar-avaliacao" class="btn btn-outline btn-sm btn-fechar">Fechar</button>
+            </div>
+            <div id="feedback-avaliacao" class="feedback-msg hidden"></div>
+            <p id="texto-nota" class="texto-nota">Clique em uma estrela para avaliar</p>
+            <div class="estrelas-avaliacao" role="radiogroup" aria-label="Avaliação do serviço">
+                <button type="button" class="estrela-btn" data-valor="1" aria-label="1 estrela">★</button>
+                <button type="button" class="estrela-btn" data-valor="2" aria-label="2 estrelas">★</button>
+                <button type="button" class="estrela-btn" data-valor="3" aria-label="3 estrelas">★</button>
+                <button type="button" class="estrela-btn" data-valor="4" aria-label="4 estrelas">★</button>
+                <button type="button" class="estrela-btn" data-valor="5" aria-label="5 estrelas">★</button>
+            </div>
+            <form id="form-avaliacao">
+                <button type="submit" id="btn-enviar-avaliacao" class="btn btn-primary btn-enviar-avaliacao hidden">Enviar</button>
+            </form>
+        </div>
+    </div>
+    <script src="../js/servicos/api.js"></script>
+    <script src="../js/servicos/ui.js"></script>
+    <script src="../js/servicos/events.js"></script>
+    <script src="../js/servicos/main.js"></script>
+</body>
+</html>

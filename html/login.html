@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - MeuPimenta</title>
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/login/login.css">
+</head>
+<body>
+
+    <main class="container">
+        <div class="logo-placeholder">MeuPimenta</div>
+        
+        <div id="login-feedback" class="feedback-msg hidden"></div>
+
+        <form id="form-login">
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input type="email" id="email" name="email" placeholder="Seu e-mail cadastrado" required>
+            </div>
+
+            <div class="form-group">
+                <label for="senha">Senha</label>
+                <input type="password" id="senha" name="senha" placeholder="Sua senha" required>
+            </div>
+
+            <!-- <div class="forgot-password">
+                <a href="#">Esqueceu a senha?</a>
+            </div> -->
+
+            <button type="submit" class="btn btn-primary" id="btn-entrar">Entrar</button>
+        </form>
+
+        <div class="footer-text">
+            Ainda não tem uma conta? <a href="cadastro.html">Cadastre-se</a>
+        </div>
+    </main>
+
+    <script src="../js/login.js"></script>
+</body>
+</html>
