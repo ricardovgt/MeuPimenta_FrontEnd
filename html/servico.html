@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Serviço</title>
+    <link rel="stylesheet" href="../css/servicos/servicos-base.css">
+    <link rel="stylesheet" href="../css/servico/servico.css">
+</head>
+<body>
+    <header class="top-nav">
+        <a class="nav-logo" href="servicos.html">MeuPimenta</a>
+        <div class="nav-actions">
+            <button id="btn-voltar" class="btn btn-outline btn-sm">Voltar para Serviços</button>
+            <button id="btn-home" class="btn btn-outline btn-sm">Ir para Perfil</button>
+        </div>
+    </header>
+
+    <main class="container-servico">
+        <section id="servico-detalhe" class="card-servico">
+            <div class="hero">
+                <img id="servico-foto" src="" alt="Foto do serviço">
+            </div>
+            <div class="content">
+                <div id="feedback-servico" class="feedback-msg hidden"></div>
+                <h1 id="servico-nome">Carregando serviço...</h1>
+                <p id="servico-resumo" class="resumo"></p>
+
+                <div id="servico-badges" class="badges"></div>
+
+                <h2 class="section-title">Descrição</h2>
+                <p id="servico-descricao" class="descricao-detalhada"></p>
+
+                <div class="contato">
+                    <a id="servico-whatsapp" href="#" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+                    <a id="servico-bairro" href="#">Bairro</a>
+                </div>
+
+                <div class="actions">
+                    <button id="btn-avaliar" class="btn btn-primary">Avaliar Serviço</button>
+                    <button id="btn-compartilhar" class="btn btn-outline">Compartilhar</button>
+                </div>
+
+                <div class="avaliacao-panel">
+                    <h2 class="section-title">Avaliações</h2>
+                    <p id="texto-avaliacao">Carregando...</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="../js/servicos/api.js"></script>
+    <script src="../js/servico/servico.js"></script>
+</body>
+</html>

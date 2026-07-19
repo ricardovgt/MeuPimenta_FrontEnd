@@ -60,38 +60,6 @@ function configurarModais(token, estadoConta, elements) {
         });
     }
 
-    if (elements.btnFecharDetalhes) {
-        elements.btnFecharDetalhes.addEventListener("click", () => {
-            if (elements.modalDetalhesServico) {
-                elements.modalDetalhesServico.classList.add("hidden");
-            }
-        });
-    }
-
-    if (elements.btnFecharAvaliacao) {
-        elements.btnFecharAvaliacao.addEventListener("click", () => {
-            if (elements.modalAvaliacao) {
-                elements.modalAvaliacao.classList.add("hidden");
-            }
-        });
-    }
-
-    if (elements.modalDetalhesServico) {
-        elements.modalDetalhesServico.addEventListener("click", (event) => {
-            if (event.target === elements.modalDetalhesServico) {
-                elements.modalDetalhesServico.classList.add("hidden");
-            }
-        });
-    }
-
-    if (elements.modalAvaliacao) {
-        elements.modalAvaliacao.addEventListener("click", (event) => {
-            if (event.target === elements.modalAvaliacao) {
-                elements.modalAvaliacao.classList.add("hidden");
-            }
-        });
-    }
-
     if (elements.btnMudarConta) {
         elements.btnMudarConta.addEventListener("click", () => {
             if (!elements.feedbackAviso) return;

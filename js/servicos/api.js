@@ -4,7 +4,7 @@ function obterHeadersAutorizacao(token) {
     };
 }
 
-function carregarPerfilUsuario(token, estadoConta) {
+function carregarPerfilUsuario(token, estadoConta) { 
     fetch("http://localhost:8080/connecta-api/usuario", {
         method: "GET",
         headers: obterHeadersAutorizacao(token)
