@@ -1,71 +1,15 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const token = localStorage.getItem("tokenConnectaRO");
+function mostrarFeedback(elemento, mensagem, tipo = "error") {
+    if (!elemento) return;
 
-    if (!token) {
-        window.location.href = "login.html";
-        return;
+    elemento.textContent = mensagem;
+    elemento.classList.remove("hidden");
+    elemento.className = "feedback-msg";
+
+    if (tipo === "success") {
+        elemento.classList.add("success");
+    } else {
+        elemento.classList.add("error");
     }
-
-    const idServico = new URLSearchParams(window.location.search).get("id");
-
-    if (!idServico) {
-        window.location.href = "servicos.html";
-        return;
-    }
-
-    const elements = {
-        nome: document.getElementById("servico-nome"),
-        resumo: document.getElementById("servico-resumo"),
-        descricao: document.getElementById("servico-descricao"),
-        foto: document.getElementById("servico-foto"),
-        badges: document.getElementById("servico-badges"),
-        whatsapp: document.getElementById("servico-whatsapp"),
-        bairro: document.getElementById("servico-bairro"),
-        feedback: document.getElementById("feedback-servico"),
-        avaliacaoTexto: document.getElementById("texto-avaliacao"),
-        btnAvaliar: document.getElementById("btn-avaliar"),
-        btnCompartilhar: document.getElementById("btn-compartilhar"),
-        btnVoltar: document.getElementById("btn-voltar"),
-        btnHome: document.getElementById("btn-home")
-    };
-
-    configurarNavegacao(elements);
-    carregarServicoCompleto(token, idServico, elements);
-    configurarAvaliacoes(token, idServico, elements);
-});
-
-function configurarNavegacao(elements) {
-    if (elements.btnVoltar) {
-        elements.btnVoltar.addEventListener("click", () => {
-            window.location.href = "servicos.html";
-        });
-    }
-
-    if (elements.btnHome) {
-        elements.btnHome.addEventListener("click", () => {
-            window.location.href = "perfil.html";
-        });
-    }
-}
-
-function carregarServicoCompleto(token, idServico, elements) {
-    fetch(`http://localhost:8080/connecta-api/servicos?id=${encodeURIComponent(idServico)}`, {
-        method: "GET",
-        headers: obterHeadersAutorizacao(token)
-    })
-        .then((res) => res.json().then((data) => ({ status: res.status, body: data })))
-        .then(({ status, body }) => {
-            if (status !== 200) {
-                mostrarFeedback(elements.feedback, "Não foi possível carregar este serviço.", "error");
-                return;
-            }
-
-            popularServico(body, elements);
-        })
-        .catch((err) => {
-            console.error("Erro ao carregar serviço:", err);
-            mostrarFeedback(elements.feedback, "Erro de conexão com o servidor.", "error");
-        });
 }
 
 function popularServico(servico, elements) {
@@ -117,33 +61,6 @@ function popularServico(servico, elements) {
 
     if (elements.avaliacaoTexto) {
         elements.avaliacaoTexto.textContent = `${avaliacaoMedia.toFixed(1)} de 5 · ${totalAvaliacoes} ${totalAvaliacoes === 1 ? "avaliação" : "avaliações"}`;
-    }
-}
-
-function configurarAvaliacoes(token, idServico, elements) {
-    if (!elements.btnAvaliar) return;
-
-    elements.btnAvaliar.addEventListener("click", () => {
-        const painelExistente = document.querySelector(".avaliacao-form-panel");
-
-        if (painelExistente) {
-            painelExistente.remove();
-            return;
-        }
-
-        mostrarModalAvaliacao(token, idServico, elements);
-    });
-
-    if (elements.btnCompartilhar) {
-        elements.btnCompartilhar.addEventListener("click", async () => {
-            const url = window.location.href;
-            try {
-                await navigator.clipboard.writeText(url);
-                mostrarFeedback(elements.feedback, "Link copiado para a área de transferência.", "success");
-            } catch {
-                mostrarFeedback(elements.feedback, "Não foi possível copiar o link automaticamente.", "error");
-            }
-        });
     }
 }
 
@@ -207,19 +124,5 @@ function mostrarModalAvaliacao(token, idServico, elements) {
                     mostrarFeedback(feedback, "Erro de comunicação com o servidor.", "error");
                 });
         });
-    }
-}
-
-function mostrarFeedback(elemento, mensagem, tipo = "error") {
-    if (!elemento) return;
-
-    elemento.textContent = mensagem;
-    elemento.classList.remove("hidden");
-    elemento.className = "feedback-msg";
-
-    if (tipo === "success") {
-        elemento.classList.add("success");
-    } else {
-        elemento.classList.add("error");
     }
 }
