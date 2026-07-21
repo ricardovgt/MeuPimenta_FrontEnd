@@ -5,7 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalhes do Serviço</title>
     <link rel="stylesheet" href="../css/servicos/servicos-base.css">
-    <link rel="stylesheet" href="../css/servico/servico.css">
+    <link rel="stylesheet" href="../css/servicos/servicos-base.css">
+    <link rel="stylesheet" href="../css/servico/servico-base.css">
+    <link rel="stylesheet" href="../css/servico/servico-layout.css">
+    <link rel="stylesheet" href="../css/servico/servico-card.css">
+    <link rel="stylesheet" href="../css/servico/servico-modals.css">
 </head>
 <body>
     <header class="top-nav">
@@ -18,6 +22,7 @@
 
     <main class="container-servico">
         <section id="servico-detalhe" class="card-servico">
+            <span id="servico-postador" class="postador-badge hidden"></span>
             <div class="hero">
                 <img id="servico-foto" src="" alt="Foto do serviço">
             </div>
@@ -49,9 +54,9 @@
         </section>
     </main>
 
-    <script src="../js/servico/ui.js"></script>
     <script src="../js/servico/api.js"></script>
     <script src="../js/servico/events.js"></script>
     <script src="../js/servico/main.js"></script>
+    <script src="../js/servico/ui.js"></script>
 </body>
 </html>

@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
         badges: document.getElementById("servico-badges"),
         whatsapp: document.getElementById("servico-whatsapp"),
         bairro: document.getElementById("servico-bairro"),
+        postador: document.getElementById("servico-postador"),
         feedback: document.getElementById("feedback-servico"),
         avaliacaoTexto: document.getElementById("texto-avaliacao"),
         btnAvaliar: document.getElementById("btn-avaliar"),

@@ -1,0 +1,128 @@
+.card-servico {
+    position: relative;
+    background: var(--surface-color);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--border-radius);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.28);
+    overflow: hidden;
+}
+
+.postador-badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    z-index: 5;
+    background-color: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(4px);
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 0.45rem 0.9rem;
+    border-radius: 999px;
+}
+
+.card-servico .hero {
+    display: flex;
+    justify-content: center;
+    padding: 2rem 2rem 0;
+}
+
+.card-servico .hero img {
+    width: 100%;
+    max-width: 480px;
+    height: 300px;
+    object-fit: contain;
+    background-color: #ffffff;
+    border-radius: 12px;
+    display: block;
+}
+
+.card-servico .content {
+    padding: 2rem;
+}
+
+.card-servico h1 {
+    font-size: 2rem;
+    margin-bottom: 0.75rem;
+    color: var(--primary-color);
+}
+
+.card-servico .resumo {
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    margin-bottom: 1rem;
+    line-height: 1.6;
+}
+
+.badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.badge {
+    border-radius: 999px;
+    padding: 0.55rem 0.8rem;
+    background-color: rgba(255,255,255,0.08);
+    color: var(--text-primary);
+    font-size: 0.95rem;
+}
+
+.badge.avaliacao {
+    background-color: rgba(250, 204, 21, 0.16);
+    color: var(--primary-color);
+}
+
+.section-title {
+    font-size: 1.1rem;
+    margin-bottom: 0.5rem;
+    color: var(--primary-color);
+}
+
+.descricao-detalhada {
+    color: var(--text-secondary);
+    line-height: 1.7;
+    white-space: pre-line;
+    margin-bottom: 1.5rem;
+}
+
+.contato {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.contato a {
+    color: var(--text-primary);
+    text-decoration: none;
+    padding: 0.7rem 0.95rem;
+    border-radius: 999px;
+    background-color: rgba(255,255,255,0.05);
+}
+
+.actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.actions .btn {
+    width: auto;
+}
+
+@media (max-width: 768px) {
+    .card-servico .hero {
+        padding: 1.25rem 1.25rem 0;
+    }
+
+    .card-servico .hero img {
+        height: 220px;
+    }
+
+    .card-servico .content {
+        padding: 1.25rem;
+    }
+}

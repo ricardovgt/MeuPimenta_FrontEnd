@@ -1,0 +1,37 @@
+:root {
+    --bg-color: #121214;
+    --surface-color: #202024;
+    --primary-color: #FACC15;
+    --accent-color: #10B981;
+    --text-primary: #FFFFFF;
+    --text-secondary: #A1A1AA;
+    --border-radius: 16px;
+    --button-radius: 999px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    display: block;
+    justify-content: flex-start;
+    align-items: stretch;
+    background: linear-gradient(135deg, rgba(18, 18, 20, 0.96), rgba(32, 32, 36, 0.98));
+    color: var(--text-primary);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at top left, rgba(250, 204, 21, 0.14), transparent 28%);
+    pointer-events: none;
+}
+
+.hidden {
+    display: none;
+}

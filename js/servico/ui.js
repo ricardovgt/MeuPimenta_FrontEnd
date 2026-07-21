@@ -21,6 +21,17 @@ function popularServico(servico, elements) {
         elements.nome.textContent = servico.nome || "Serviço";
     }
 
+    if (elements.postador) {
+        const nomePostador = servico.nomeUsuario;
+
+        if (nomePostador) {
+            elements.postador.textContent = nomePostador;
+            elements.postador.classList.remove("hidden");
+        } else {
+            elements.postador.classList.add("hidden");
+        }
+    }
+
     if (elements.resumo) {
         elements.resumo.textContent = servico.descricao || "Sem descrição disponível.";
     }

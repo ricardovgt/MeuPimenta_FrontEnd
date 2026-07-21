@@ -1,0 +1,44 @@
+.avaliacao-panel {
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.08);
+}
+
+.estrelas-avaliacao {
+    display: flex;
+    gap: 0.5rem;
+    margin: 1rem 0;
+}
+
+.estrela-btn {
+    background: transparent;
+    border: none;
+    font-size: 2rem;
+    color: #6b7280;
+    cursor: pointer;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.estrela-btn:hover,
+.estrela-btn.active {
+    color: var(--primary-color);
+    transform: scale(1.06);
+}
+
+.feedback-msg {
+    margin-bottom: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 999px;
+    text-align: center;
+    font-size: 0.95rem;
+}
+
+.feedback-msg.success {
+    color: var(--accent-color);
+    background: rgba(16, 185, 129, 0.12);
+}
+
+.feedback-msg.error {
+    color: #f87171;
+    background: rgba(248, 113, 113, 0.12);
+}

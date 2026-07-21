@@ -19,6 +19,8 @@
     overflow: hidden;
     border: 1px solid #2a2a2e;
     transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
 }
 
 .servico-card.clickable {
@@ -40,6 +42,9 @@
 
 .servico-info {
     padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
 }
 
 .servico-info h4 {
@@ -53,13 +58,22 @@
     font-size: 0.9rem;
     margin-bottom: 0.8rem;
     line-height: 1.4;
+
+    /* Limita o texto a no máximo 3 linhas e adiciona o '...' */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+
+    /* Força altura mínima referente a 3 linhas para manter alinhamento */
+    min-height: 3.78rem;
 }
 
 .servico-meta {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 1rem;
+    margin-top: auto;
     padding-top: 1rem;
     border-top: 1px solid #3f3f46;
     font-size: 0.85rem;
