@@ -1,50 +1,84 @@
-document.getElementById("form-cadastro").addEventListener("submit", function(event) {
-    event.preventDefault(); 
-    
-    const form = this;
-    const formData = new FormData(form);
-    const dadosFormatados = new URLSearchParams(formData);
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("form-cadastro");
     const feedbackDiv = document.getElementById("cadastro-feedback");
 
-    feedbackDiv.classList.add("hidden");
-    feedbackDiv.textContent = "";
+    if (!form || !feedbackDiv) return;
 
-    fetch("http://localhost:8080/connecta-api/usuario", {
-        method: "POST",
-        body: dadosFormatados
-    })
+    const submitButton = form.querySelector('button[type="submit"]');
+    const labelOriginal = submitButton ? submitButton.textContent : "Cadastrar";
 
-    .then(response => {
-        return response.json().then(data => ({ status: response.status, body: data }));
-    }) 
-    .then(({ status, body }) => {
-        if (status === 201) {
-            
-            localStorage.setItem("tokenConnectaRO", body.token); 
+    const setSubmitting = (isSubmitting) => {
+        if (!submitButton) return;
+        submitButton.disabled = isSubmitting;
+        submitButton.textContent = isSubmitting ? "Cadastrando..." : labelOriginal;
+    };
 
-            
-            mostrarFeedback(feedbackDiv, "Conta criada com sucesso! Redirecionando...", true);
-            form.reset();
-            
-            // Redireciona para a home após 2 segundos
-            setTimeout(() => {
-                window.location.href = "perfil.html";
-            }, 2000);
-            
-        } else {
-            // Exibe o erro validado pelo backend (ex: e-mail já existe)
-            mostrarFeedback(feedbackDiv, body.erro || "Falha ao cadastrar.", false);
+    form.addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+        if (submitButton?.disabled) return;
+
+        const formData = new FormData(form);
+        const dadosFormatados = new URLSearchParams(formData);
+
+        limparFeedback(feedbackDiv);
+        setSubmitting(true);
+
+        try {
+            const response = await fetch("http://localhost:8080/connecta-api/usuario", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: dadosFormatados
+            });
+
+            const { status, body } = await lerResposta(response);
+
+            if (status === 201 && body?.token) {
+                sessionStorage.setItem("tokenConnectaRO", body.token);
+                mostrarFeedback(feedbackDiv, "Conta criada com sucesso! Redirecionando...", true);
+                form.reset();
+
+                setTimeout(() => {
+                    window.location.assign("perfil.html");
+                }, 1500);
+                return;
+            }
+
+            mostrarFeedback(feedbackDiv, body?.erro || body?.mensagem || "Falha ao cadastrar.", false);
+        } catch (erro) {
+            console.error("Erro na requisição:", erro);
+            mostrarFeedback(feedbackDiv, "Não foi possível se comunicar com o servidor.", false);
+        } finally {
+            setSubmitting(false);
         }
-    })
-    .catch(erro => {
-        console.error("Erro na requisição:", erro);
-        mostrarFeedback(feedbackDiv, "Não foi possível se comunicar com o servidor.", false);
     });
 });
 
+async function lerResposta(response) {
+    const text = await response.text();
+
+    if (!text) {
+        return { status: response.status, body: {} };
+    }
+
+    try {
+        return { status: response.status, body: JSON.parse(text) };
+    } catch {
+        return { status: response.status, body: { mensagem: text } };
+    }
+}
+
+function limparFeedback(elemento) {
+    elemento.className = "feedback-msg";
+    elemento.classList.add("hidden");
+    elemento.textContent = "";
+}
+
 function mostrarFeedback(elemento, mensagem, sucesso) {
     elemento.textContent = mensagem;
+    elemento.className = "feedback-msg";
     elemento.classList.remove("hidden");
-    elemento.style.backgroundColor = sucesso ? "var(--accent-color)" : "#ef4444";
-    elemento.style.color = "#fff";
+    elemento.classList.add(sucesso ? "success" : "error");
 }

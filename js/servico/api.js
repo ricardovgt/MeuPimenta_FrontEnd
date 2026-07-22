@@ -4,15 +4,30 @@ function obterHeadersAutorizacao(token) {
     };
 }
 
+async function lerResposta(response) {
+    const text = await response.text();
+
+    if (!text) {
+        return { status: response.status, body: {} };
+    }
+
+    try {
+        return { status: response.status, body: JSON.parse(text) };
+    } catch {
+        return { status: response.status, body: { mensagem: text } };
+    }
+}
+
 function carregarServicoCompleto(token, idServico, elements) {
     fetch(`http://localhost:8080/connecta-api/servicos?id=${encodeURIComponent(idServico)}`, {
         method: "GET",
         headers: obterHeadersAutorizacao(token)
     })
-        .then((res) => res.json().then((data) => ({ status: res.status, body: data })))
-        .then(({ status, body }) => {
+        .then(async (res) => {
+            const { status, body } = await lerResposta(res);
+
             if (status !== 200) {
-                mostrarFeedback(elements.feedback, "Não foi possível carregar este serviço.", "error");
+                mostrarFeedback(elements.feedback, body?.erro || body?.mensagem || "Não foi possível carregar este serviço.", "error");
                 return;
             }
 
@@ -24,9 +39,9 @@ function carregarServicoCompleto(token, idServico, elements) {
         });
 }
 
-function enviarAvaliacao(token, elements, idServico, nota) {
+function enviarAvaliacao(token, feedbackElement, idServico, nota) {
     if (!idServico || !nota) {
-        mostrarFeedback(elements.feedbackAvaliacao, "Selecione uma nota antes de enviar.", "error");
+        mostrarFeedback(feedbackElement, "Selecione uma nota antes de enviar.", "error");
         return Promise.resolve({ status: 400, body: { erro: "Selecione uma nota antes de enviar." } });
     }
 
@@ -44,15 +59,7 @@ function enviarAvaliacao(token, elements, idServico, nota) {
         body
     })
         .then(async (res) => {
-            const text = await res.text();
-            let data = {};
-
-            try {
-                data = text ? JSON.parse(text) : {};
-            } catch {
-                data = { mensagem: text };
-            }
-
-            return { status: res.status, body: data };
+            const data = await lerResposta(res);
+            return { status: res.status, body: data.body };
         });
 }

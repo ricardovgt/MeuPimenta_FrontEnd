@@ -1,13 +1,13 @@
 function configurarNavegacao(elements) {
     if (elements.btnVoltar) {
         elements.btnVoltar.addEventListener("click", () => {
-            window.location.href = "servicos.html";
+            window.location.assign("servicos.html");
         });
     }
 
     if (elements.btnHome) {
         elements.btnHome.addEventListener("click", () => {
-            window.location.href = "perfil.html";
+            window.location.assign("perfil.html");
         });
     }
 }
@@ -30,10 +30,24 @@ function configurarAvaliacoes(token, idServico, elements) {
         elements.btnCompartilhar.addEventListener("click", async () => {
             const url = window.location.href;
             try {
-                await navigator.clipboard.writeText(url);
-                mostrarFeedback(elements.feedback, "Link copiado para a área de transferência.", "success");
+                if (navigator.share) {
+                    await navigator.share({
+                        title: document.title,
+                        text: "Confira este serviço no MeuPimenta",
+                        url
+                    });
+                    return;
+                }
+
+                if (navigator.clipboard?.writeText) {
+                    await navigator.clipboard.writeText(url);
+                    mostrarFeedback(elements.feedback, "Link copiado para a área de transferência.", "success");
+                    return;
+                }
+
+                throw new Error("Compartilhamento indisponível");
             } catch {
-                mostrarFeedback(elements.feedback, "Não foi possível copiar o link automaticamente.", "error");
+                mostrarFeedback(elements.feedback, "Não foi possível compartilhar o link automaticamente.", "error");
             }
         });
     }

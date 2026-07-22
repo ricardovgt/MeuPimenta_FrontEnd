@@ -27,21 +27,39 @@ function criarCardServico(servico) {
     card.setAttribute("tabindex", "0");
 
     const imgSource = servico.fotoUrl || "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
+    const fallbackImage = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
 
-    card.innerHTML = `
-        <img src="${imgSource}" alt="${servico.nome}" class="servico-foto" onerror="this.src='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs='">
-        <div class="servico-info">
-            <h4>${servico.nome}</h4>
-            <p>${servico.descricao || "Sem descrição disponível."}</p>
-            <div class="servico-meta">
-                <span class="badge-link">Clique para ver mais</span>
-            </div>
-        </div>
-    `;
+    const img = document.createElement("img");
+    img.src = imgSource;
+    img.alt = servico.nome || "Serviço";
+    img.className = "servico-foto";
+    img.onerror = () => {
+        img.src = fallbackImage;
+    };
+
+    const info = document.createElement("div");
+    info.className = "servico-info";
+
+    const title = document.createElement("h4");
+    title.textContent = servico.nome || "Serviço";
+
+    const description = document.createElement("p");
+    description.textContent = servico.descricao || "Sem descrição disponível.";
+
+    const meta = document.createElement("div");
+    meta.className = "servico-meta";
+
+    const badge = document.createElement("span");
+    badge.className = "badge-link";
+    badge.textContent = "Clique para ver mais";
+
+    meta.appendChild(badge);
+    info.append(title, description, meta);
+    card.append(img, info);
 
     card.addEventListener("click", () => {
         if (servico.id) {
-            window.location.href = `servico.html?id=${encodeURIComponent(servico.id)}`;
+            window.location.assign(`servico.html?id=${encodeURIComponent(servico.id)}`);
         }
     });
 

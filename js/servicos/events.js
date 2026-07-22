@@ -28,7 +28,7 @@ function configurarFiltros(token, elements) {
 function configurarModais(token, estadoConta, elements) {
     if (elements.btnVoltarHome) {
         elements.btnVoltarHome.addEventListener("click", () => {
-            window.location.href = "perfil.html";
+            window.location.assign("perfil.html");
         });
     }
 
@@ -64,6 +64,9 @@ function configurarModais(token, estadoConta, elements) {
         elements.btnMudarConta.addEventListener("click", () => {
             if (!elements.feedbackAviso) return;
 
+            const botaoOriginal = elements.btnMudarConta.textContent;
+            elements.btnMudarConta.disabled = true;
+            elements.btnMudarConta.textContent = "Atualizando...";
             mostrarFeedback(elements.feedbackAviso, "Processando...", "error");
 
             mudarContaParaComercial(token)
@@ -84,11 +87,15 @@ function configurarModais(token, estadoConta, elements) {
                             }
                         }, 1500);
                     } else {
-                        mostrarFeedback(elements.feedbackAviso, body.erro || "Erro ao atualizar conta.", "error");
+                        mostrarFeedback(elements.feedbackAviso, body?.erro || "Erro ao atualizar conta.", "error");
                     }
                 })
                 .catch(() => {
                     mostrarFeedback(elements.feedbackAviso, "Erro de conexão com o servidor.", "error");
+                })
+                .finally(() => {
+                    elements.btnMudarConta.disabled = false;
+                    elements.btnMudarConta.textContent = botaoOriginal;
                 });
         });
     }
@@ -102,8 +109,17 @@ function configurarCadastroServico(token, elements) {
 
         const form = elements.formServico;
         const formData = new FormData(form);
+        const submitButton = form.querySelector('button[type="submit"]');
+        const labelOriginal = submitButton ? submitButton.textContent : "Publicar Serviço";
+
+        const setSubmitting = (isSubmitting) => {
+            if (!submitButton) return;
+            submitButton.disabled = isSubmitting;
+            submitButton.textContent = isSubmitting ? "Publicando..." : labelOriginal;
+        };
 
         mostrarFeedback(elements.feedbackServico, "Salvando...", "error");
+        setSubmitting(true);
 
         criarServico(token, elements, formData)
             .then(({ status, body }) => {
@@ -121,11 +137,14 @@ function configurarCadastroServico(token, elements) {
                         }
                     }, 2000);
                 } else {
-                    mostrarFeedback(elements.feedbackServico, body.erro || "Falha ao publicar serviço.", "error");
+                    mostrarFeedback(elements.feedbackServico, body?.erro || "Falha ao publicar serviço.", "error");
                 }
             })
             .catch(() => {
                 mostrarFeedback(elements.feedbackServico, "Erro de comunicação com o servidor.", "error");
+            })
+            .finally(() => {
+                setSubmitting(false);
             });
     });
 }

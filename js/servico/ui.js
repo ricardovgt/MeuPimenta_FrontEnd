@@ -123,13 +123,13 @@ function mostrarModalAvaliacao(token, idServico, elements) {
 
             mostrarFeedback(feedback, "Enviando avaliação...", "error");
 
-            enviarAvaliacao(token, elements, idServico, notaSelecionada)
+            enviarAvaliacao(token, feedback, idServico, notaSelecionada)
                 .then(({ status, body }) => {
                     if (status === 201 || status === 200) {
-                        mostrarFeedback(feedback, body.mensagem || "Avaliação enviada com sucesso!", "success");
+                        mostrarFeedback(feedback, body?.mensagem || "Avaliação enviada com sucesso!", "success");
                         return;
                     }
-                    mostrarFeedback(feedback, body.erro || body.mensagem || "Não foi possível enviar a avaliação.", "error");
+                    mostrarFeedback(feedback, body?.erro || body?.mensagem || "Não foi possível enviar a avaliação.", "error");
                 })
                 .catch(() => {
                     mostrarFeedback(feedback, "Erro de comunicação com o servidor.", "error");

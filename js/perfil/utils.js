@@ -9,6 +9,6 @@ function ocultarEmail(email) {
 }
 
 function fazerLogout() {
-    localStorage.removeItem("tokenConnectaRO");
-    window.location.href = "login.html";
+    sessionStorage.removeItem("tokenConnectaRO");
+    window.location.assign("login.html");
 }

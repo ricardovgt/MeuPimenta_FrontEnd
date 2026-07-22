@@ -4,20 +4,41 @@ function obterHeadersAutorizacao(token) {
     };
 }
 
-function carregarPerfilUsuario(token, estadoConta) { 
+async function lerResposta(response) {
+    const text = await response.text();
+
+    if (!text) {
+        return { status: response.status, body: {} };
+    }
+
+    try {
+        return { status: response.status, body: JSON.parse(text) };
+    } catch {
+        return { status: response.status, body: { mensagem: text } };
+    }
+}
+
+function carregarPerfilUsuario(token, estadoConta) {
+    if (!token) {
+        window.location.assign("login.html");
+        return;
+    }
+
     fetch("http://localhost:8080/connecta-api/usuario", {
         method: "GET",
         headers: obterHeadersAutorizacao(token)
     })
-        .then((res) => res.json().then((data) => ({ status: res.status, body: data })))
-        .then(({ status, body }) => {
+        .then(async (res) => {
+            const { status, body } = await lerResposta(res);
+
             if (status === 200) {
-                estadoConta.isContaComercial = body.tipoConta === "COMERCIAL";
+                estadoConta.isContaComercial = body?.tipoConta === "COMERCIAL";
                 return;
             }
 
-            alert("Sessão expirada.");
-            window.location.href = "login.html";
+            if (status === 401 || status === 403) {
+                window.location.assign("login.html");
+            }
         })
         .catch((err) => console.error("Erro ao buscar usuário:", err));
 }
@@ -37,20 +58,31 @@ function carregarServicos(token, elements, bairro = "", top = false) {
         method: "GET",
         headers: obterHeadersAutorizacao(token)
     })
-        .then((res) => res.json())
-        .then((data) => {
+        .then(async (res) => {
+            const { status, body } = await lerResposta(res);
             const grid = elements.gridServicos;
             if (!grid) return;
 
             grid.innerHTML = "";
 
-            if (data.length === 0) {
-                grid.innerHTML = "<p>Nenhum serviço encontrado com esses filtros.</p>";
+            if (status !== 200) {
+                const mensagem = document.createElement("p");
+                mensagem.textContent = body?.erro || "Não foi possível carregar os serviços.";
+                grid.appendChild(mensagem);
                 return;
             }
 
-            data.forEach((servico) => {
-                const card = criarCardServico(servico, token, elements);
+            const listaServicos = Array.isArray(body) ? body : [];
+
+            if (listaServicos.length === 0) {
+                const mensagem = document.createElement("p");
+                mensagem.textContent = "Nenhum serviço encontrado com esses filtros.";
+                grid.appendChild(mensagem);
+                return;
+            }
+
+            listaServicos.forEach((servico) => {
+                const card = criarCardServico(servico);
                 grid.appendChild(card);
             });
         })
@@ -68,7 +100,10 @@ function criarServico(token, elements, formData) {
         },
         body: dadosFormatados
     })
-        .then((res) => res.json().then((data) => ({ status: res.status, body: data })));
+        .then(async (res) => {
+            const body = await lerResposta(res);
+            return { status: res.status, body: body.body };
+        });
 }
 
 function mudarContaParaComercial(token) {
@@ -76,5 +111,8 @@ function mudarContaParaComercial(token) {
         method: "PUT",
         headers: obterHeadersAutorizacao(token)
     })
-        .then((res) => res.json().then((data) => ({ status: res.status, body: data })));
+        .then(async (res) => {
+            const body = await lerResposta(res);
+            return { status: res.status, body: body.body };
+        });
 }

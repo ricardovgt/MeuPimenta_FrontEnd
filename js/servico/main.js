@@ -1,8 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const token = localStorage.getItem("tokenConnectaRO");
+    const token = sessionStorage.getItem("tokenConnectaRO");
 
     if (!token) {
-        window.location.href = "login.html";
+        window.location.assign("login.html");
         return;
     }
 
