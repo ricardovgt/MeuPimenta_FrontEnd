@@ -87,6 +87,7 @@ function mostrarModalAvaliacao(token, idServico, elements) {
             <button type="button" class="estrela-btn" data-valor="4" aria-label="4 estrelas">★</button>
             <button type="button" class="estrela-btn" data-valor="5" aria-label="5 estrelas">★</button>
         </div>
+        <textarea id="comentario-avaliacao" class="comentario-input" placeholder="Deixe um comentário (opcional)"></textarea>
         <div id="feedback-avaliacao" class="feedback-msg hidden"></div>
         <button id="btn-enviar-avaliacao" type="button" class="btn btn-primary btn-sm">Enviar avaliação</button>
     `;
@@ -121,12 +122,25 @@ function mostrarModalAvaliacao(token, idServico, elements) {
                 return;
             }
 
+            const comentario = painel.querySelector("#comentario-avaliacao").value.trim();
+
             mostrarFeedback(feedback, "Enviando avaliação...", "error");
 
-            enviarAvaliacao(token, feedback, idServico, notaSelecionada)
+            enviarAvaliacao(token, feedback, idServico, notaSelecionada, comentario)
                 .then(({ status, body }) => {
                     if (status === 201 || status === 200) {
                         mostrarFeedback(feedback, body?.mensagem || "Avaliação enviada com sucesso!", "success");
+
+                        // Refresh avaliações list (reload first page) and serviço resumo
+                        if (typeof window.carregarAvaliacoesPagina === "function") {
+                            window.carregarAvaliacoesPagina(1);
+                        }
+
+                        if (typeof carregarServicoCompleto === "function") {
+                            // attempt to refresh service summary; elements must be available in scope where this function was called
+                            carregarServicoCompleto(token, idServico, elements);
+                        }
+
                         return;
                     }
                     mostrarFeedback(feedback, body?.erro || body?.mensagem || "Não foi possível enviar a avaliação.", "error");
@@ -136,4 +150,62 @@ function mostrarModalAvaliacao(token, idServico, elements) {
                 });
         });
     }
+}
+
+function criarAvaliacaoElemento(avaliacao) {
+    const container = document.createElement("div");
+    container.className = "avaliacao-item card";
+
+    const cabecalho = document.createElement("div");
+    cabecalho.className = "avaliacao-cabecalho";
+    cabecalho.textContent = `${avaliacao.nomeUsuario || 'Usuário'} · ${avaliacao.dataAvaliacao || ''}`;
+
+    const nota = document.createElement("div");
+    nota.className = "avaliacao-nota";
+    nota.textContent = `Nota: ${Number(avaliacao.nota || 0).toFixed(1)}/5`;
+
+    container.appendChild(cabecalho);
+    container.appendChild(nota);
+
+    if (avaliacao.comentario) {
+        const texto = document.createElement("p");
+        texto.className = "avaliacao-texto";
+        texto.textContent = avaliacao.comentario;
+        container.appendChild(texto);
+    }
+
+    return container;
+}
+
+function limparAvaliacoes() {
+    const list = document.getElementById("avaliacoes-list");
+    if (list) list.innerHTML = "";
+}
+
+function appendAvaliacoes(avaliacoes) {
+    const list = document.getElementById("avaliacoes-list");
+    if (!list) return;
+
+    if (!Array.isArray(avaliacoes) || avaliacoes.length === 0) return;
+
+    avaliacoes.forEach((av) => {
+        const el = criarAvaliacaoElemento(av);
+        list.appendChild(el);
+    });
+}
+
+function atualizarBotaoCarregarMais(paginaAtual, totalPaginas) {
+    const btn = document.getElementById("btn-carregar-mais");
+    if (!btn) return;
+
+    if (paginaAtual < totalPaginas) {
+        btn.classList.remove("hidden");
+    } else {
+        btn.classList.add("hidden");
+    }
+}
+
+function mostrarErroAvaliacoes(mensagem) {
+    const feedback = document.getElementById("feedback-avaliacoes");
+    if (feedback) mostrarFeedback(feedback, mensagem, "error");
 }
