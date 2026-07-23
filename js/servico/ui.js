@@ -182,13 +182,26 @@ function limparAvaliacoes() {
     if (list) list.innerHTML = "";
 }
 
+function temComentarioValido(avaliacao) {
+    return typeof avaliacao?.comentario === "string" && avaliacao.comentario.trim().length > 0;
+}
+
 function appendAvaliacoes(avaliacoes) {
     const list = document.getElementById("avaliacoes-list");
     if (!list) return;
 
-    if (!Array.isArray(avaliacoes) || avaliacoes.length === 0) return;
+    const comentarios = Array.isArray(avaliacoes)
+        ? avaliacoes.filter(temComentarioValido)
+        : [];
 
-    avaliacoes.forEach((av) => {
+    if (comentarios.length === 0) {
+        if (list.children.length === 0) {
+            list.innerHTML = '<p class="avaliacao-vazia">Ainda não há comentários para este serviço.</p>';
+        }
+        return;
+    }
+
+    comentarios.forEach((av) => {
         const el = criarAvaliacaoElemento(av);
         list.appendChild(el);
     });
