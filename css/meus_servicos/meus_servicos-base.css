@@ -1,0 +1,149 @@
+/* Estrutura visual da página Meus Serviços */
+body {
+    display: block;
+    min-height: 100vh;
+    background:
+        radial-gradient(circle at top right, rgba(250, 204, 21, 0.08), transparent 30rem),
+        var(--bg-color);
+}
+
+.container-servicos {
+    width: min(1200px, calc(100% - 2rem));
+    margin: 6rem auto 3rem auto;
+}
+
+.container-servicos > h1 {
+    color: var(--text-primary);
+    font-size: clamp(1.8rem, 4vw, 2.5rem);
+    margin-bottom: 0.5rem;
+}
+
+.container-servicos > p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+}
+
+#meus-servicos-area {
+    margin-top: 2rem;
+    min-height: 180px;
+}
+
+/* Modais */
+.modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.72);
+    backdrop-filter: blur(6px);
+}
+
+.modal.hidden {
+    display: none !important;
+}
+
+.modal .modal-content {
+    width: min(100%, 620px);
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+    padding: 2rem;
+    background: var(--surface-color);
+    border: 1px solid #3f3f46;
+    border-radius: var(--border-radius);
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
+}
+
+.modal h2 {
+    color: var(--primary-color);
+    margin-bottom: 1.25rem;
+}
+
+.modal p,
+.modal label {
+    color: var(--text-secondary);
+    line-height: 1.5;
+}
+
+.modal label {
+    display: block;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.modal input[type="text"],
+.modal input[type="email"],
+.modal textarea {
+    width: 100%;
+    margin-top: 0.45rem;
+    padding: 0.85rem 1rem;
+    color: var(--text-primary);
+    background: var(--bg-color);
+    border: 1px solid #3f3f46;
+    border-radius: 8px;
+    outline: none;
+    resize: vertical;
+}
+
+.modal input:focus,
+.modal textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.12);
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+}
+
+.modal-actions button {
+    padding: 0.7rem 1rem;
+    color: #18181b;
+    font: inherit;
+    font-weight: 700;
+    background: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.modal-actions #btn-cancelar-edicao,
+.modal-actions #btn-cancelar-excluir {
+    color: var(--text-primary);
+    background: transparent;
+    border-color: #3f3f46;
+}
+
+.modal-actions button:hover {
+    filter: brightness(1.06);
+}
+
+@media (max-width: 600px) {
+    header nav {
+        padding: 1rem;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+    }
+
+    .container-servicos {
+        width: min(100% - 1.5rem, 1200px);
+        margin: 2rem auto;
+    }
+
+    .modal .modal-content {
+        padding: 1.25rem;
+    }
+
+    .modal-actions {
+        flex-direction: column-reverse;
+    }
+
+    .modal-actions button {
+        width: 100%;
+    }
+}

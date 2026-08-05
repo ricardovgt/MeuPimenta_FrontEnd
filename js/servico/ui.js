@@ -50,7 +50,7 @@ function popularServico(servico, elements) {
         const badges = [
             { label: `📍 ${servico.bairro || "Bairro não informado"}` },
             { label: `📞 ${servico.telefone || "Telefone não informado"}` },
-            { label: `⭐ ${avaliacaoMedia.toFixed(1)} · ${totalAvaliacoes} ${totalAvaliacoes === 1 ? "avaliação" : "avaliações"}`, className: "avaliacao" }
+            { label: `⭐ ${avaliacaoMedia.toFixed(1)} - ${totalAvaliacoes} ${totalAvaliacoes === 1 ? "avaliação" : "avaliações"}`, className: "avaliacao" }
         ];
 
         badges.forEach((badge) => {
@@ -63,7 +63,7 @@ function popularServico(servico, elements) {
 
     if (elements.whatsapp) {
         elements.whatsapp.href = `https://wa.me/${(servico.telefone || "").replace(/\D/g, "")}`;
-        elements.whatsapp.textContent = servico.telefone ? "Abrir WhatsApp" : "Telefone indisponível";
+        elements.whatsapp.innerHTML = `<span>💬</span> ${servico.telefone ? "Abrir WhatsApp" : "Telefone indisponível"}`;
     }
 
     if (elements.bairro) {

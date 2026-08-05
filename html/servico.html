@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalhes do Serviço</title>
+    <title>Detalhes do Serviço - MeuPimenta</title>
+    <link rel="stylesheet" href="../css/global.css">
     <link rel="stylesheet" href="../css/servicos/servicos-base.css">
     <link rel="stylesheet" href="../css/servico/servico-base.css">
     <link rel="stylesheet" href="../css/servico/servico-layout.css">
@@ -12,16 +13,22 @@
 </head>
 <body>
     <header class="top-nav">
-        <a class="nav-logo" href="servicos.html">MeuPimenta</a>
+        <a href="servicos.html" class="nav-logo">MeuPimenta</a>
+        <nav class="nav-links">
+            <a href="servicos.html" class="nav-item">Buscar Serviços</a>
+            <a href="meus_servicos.html" class="nav-item">Meus Serviços</a>
+            <a href="perfil.html" class="nav-item">Perfil</a>
+        </nav>
         <div class="nav-actions">
-            <button id="btn-voltar" class="btn btn-outline btn-sm">Voltar para Serviços</button>
-            <button id="btn-home" class="btn btn-outline btn-sm">Ir para Perfil</button>
+            <button id="btn-voltar" class="btn btn-outline btn-sm">← Voltar para Serviços</button>
         </div>
     </header>
 
     <main class="container-servico">
         <section id="servico-detalhe" class="card-servico">
-            <span id="servico-postador" class="postador-badge hidden"></span>
+            <div class="card-header-top">
+                <span id="servico-postador" class="postador-badge hidden"></span>
+            </div>
             <div class="hero">
                 <img id="servico-foto" src="" alt="Foto do serviço">
             </div>
@@ -35,19 +42,21 @@
                 <h2 class="section-title">Descrição</h2>
                 <p id="servico-descricao" class="descricao-detalhada"></p>
 
-                <div class="contato">
-                    <a id="servico-whatsapp" href="#" target="_blank" rel="noopener noreferrer">WhatsApp</a>
-                    <a id="servico-bairro" href="#">Bairro</a>
-                </div>
-
                 <div class="actions">
-                    <button id="btn-avaliar" class="btn btn-primary">Avaliar Serviço</button>
-                    <button id="btn-compartilhar" class="btn btn-outline">Compartilhar</button>
+                    <button id="btn-avaliar" class="btn btn-primary btn-action">
+                        <span>⭐</span> Avaliar Serviço
+                    </button>
+                    <button id="btn-compartilhar" class="btn btn-outline btn-action">
+                        <span>🔗</span> Compartilhar
+                    </button>
+                    <a id="servico-whatsapp" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-action btn-whatsapp">
+                        <span>💬</span> Abrir WhatsApp
+                    </a>
                 </div>
 
                 <div class="avaliacao-panel">
                     <h2 class="section-title">Avaliações</h2>
-                    <p id="texto-avaliacao">Carregando...</p>
+                    <p id="texto-avaliacao" class="texto-avaliacao">Carregando...</p>
                     <div id="feedback-avaliacoes" class="feedback-msg hidden" aria-live="polite"></div>
                     <div id="avaliacoes-list" class="avaliacoes-list">
                         <!-- avaliações serão renderizadas aqui -->
