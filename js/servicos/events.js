@@ -2,20 +2,20 @@ function configurarFiltros(token, elements) {
     if (elements.formFiltros) {
         elements.formFiltros.addEventListener("submit", (event) => {
             event.preventDefault();
-            const bairro = elements.filtroBairro ? elements.filtroBairro.value : "";
             const top = elements.filtroTop ? elements.filtroTop.checked : false;
-            carregarServicos(token, elements, bairro, top);
+            const busca = elements.filtroBusca ? elements.filtroBusca.value : "";
+            carregarServicos(token, elements, top, busca);
         });
     }
 
     if (elements.btnLimparFiltros) {
         elements.btnLimparFiltros.addEventListener("click", () => {
-            if (elements.filtroBairro) {
-                elements.filtroBairro.value = "";
-            }
-
             if (elements.filtroTop) {
                 elements.filtroTop.checked = false;
+            }
+
+            if (elements.filtroBusca) {
+                elements.filtroBusca.value = "";
             }
 
             carregarServicos(token, elements);

@@ -43,15 +43,15 @@ function carregarPerfilUsuario(token, estadoConta) {
         .catch((err) => console.error("Erro ao buscar usuário:", err));
 }
 
-function carregarServicos(token, elements, bairro = "", top = false) {
+function carregarServicos(token, elements, top = false, busca = "") {
     const url = new URL("http://localhost:8080/connecta-api/servicos");
-
-    if (bairro) {
-        url.searchParams.set("bairro", bairro);
-    }
 
     if (top) {
         url.searchParams.set("top", "true");
+    }
+
+    if (busca) {
+        url.searchParams.set("busca", busca);
     }
 
     fetch(url, {

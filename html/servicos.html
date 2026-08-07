@@ -30,25 +30,8 @@
             <h3>Filtrar Serviços</h3>
             <form id="form-filtros">
                 <div class="form-group">
-                    <label for="filtro-bairro">Filtrar por Bairro</label>
-                        <select id="filtro-bairro" name="bairro">
-                            <option value="">Todos os bairros</option>
-                            <option value="Alvorada">Alvorada</option>
-                            <option value="Apediá">Apediá</option>
-                            <option value="Beira Rio">Beira Rio</option>
-                            <option value="BNH">BNH</option>
-                            <option value="CTG">CTG</option>
-                            <option value="Encontro das Águas">Encontro das Águas</option>
-                            <option value="Jardim das Oliveiras">Jardim das Oliveiras</option>
-                            <option value="Liberdade">Liberdade</option>
-                            <option value="Mutirão">Mutirão</option>
-                            <option value="Nova Pimenta">Nova Pimenta</option>
-                            <option value="Pioneiros">Pioneiros</option>
-                            <option value="Seringal">Seringal</option>
-                            <option value="Triângulo Verde">Triângulo Verde</option>
-                            <option value="Vila Nova">Vila Nova</option>
-                            <option value="Setor Industrial">Setor Industrial</option>
-                        </select>
+                    <label for="filtro-busca">Buscar por palavra-chave</label>
+                    <input type="text" id="filtro-busca" name="busca" placeholder="O que você procura?">
                 </div>
                 <div class="form-group">
                     <label class="rating-toggle-label">
@@ -104,27 +87,6 @@
                     <input type="text" id="telefone" name="telefone" required>
                 </div>
                 <div class="form-group">
-                <label for="bairro">Bairro</label>
-                    <select id="bairro" name="bairro" required>
-                        <option value="" disabled selected>Selecione o bairro</option>
-                        <option value="Alvorada">Alvorada</option>
-                        <option value="Apediá">Apediá</option>
-                        <option value="Beira Rio">Beira Rio</option>
-                        <option value="BNH">BNH</option>
-                        <option value="CTG">CTG</option>
-                        <option value="Encontro das Águas">Encontro das Águas</option>
-                        <option value="Jardim das Oliveiras">Jardim das Oliveiras</option>
-                        <option value="Liberdade">Liberdade</option>
-                        <option value="Mutirão">Mutirão</option>
-                        <option value="Nova Pimenta">Nova Pimenta</option>
-                        <option value="Pioneiros">Pioneiros</option>
-                        <option value="Seringal">Seringal</option>
-                        <option value="Triângulo Verde">Triângulo Verde</option>
-                        <option value="Vila Nova">Vila Nova</option>
-                        <option value="Setor Industrial">Setor Industrial</option>
-                    </select>
-            </div>
-                <div class="form-group">
                     <label for="fotoUrl">Link da Foto (Opcional)</label>
                     <input type="url" id="fotoUrl" name="fotoUrl" placeholder="https://...">
                 </div>
@@ -142,4 +104,4 @@
     <script src="../js/servicos/events.js"></script>
     <script src="../js/servicos/main.js"></script>
 </body>
-</html>
+</html>  

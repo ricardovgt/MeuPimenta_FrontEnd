@@ -23,7 +23,16 @@ document.addEventListener("DOMContentLoaded", () => {
         bairro: document.getElementById("servico-bairro"),
         postador: document.getElementById("servico-postador"),
         feedback: document.getElementById("feedback-servico"),
-        avaliacaoTexto: document.getElementById("texto-avaliacao"),
+        resumoNota: document.getElementById("resumo-nota"),
+        resumoEstrelas: document.getElementById("resumo-estrelas"),
+        resumoTotal: document.getElementById("resumo-total"),
+        barras: {
+            5: { fill: document.getElementById("barra-fill-5"), count: document.getElementById("barra-count-5") },
+            4: { fill: document.getElementById("barra-fill-4"), count: document.getElementById("barra-count-4") },
+            3: { fill: document.getElementById("barra-fill-3"), count: document.getElementById("barra-count-3") },
+            2: { fill: document.getElementById("barra-fill-2"), count: document.getElementById("barra-count-2") },
+            1: { fill: document.getElementById("barra-fill-1"), count: document.getElementById("barra-count-1") }
+        },
         btnAvaliar: document.getElementById("btn-avaliar"),
         btnCompartilhar: document.getElementById("btn-compartilhar"),
         btnVoltar: document.getElementById("btn-voltar"),
@@ -82,4 +91,4 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
-});
+}); 

@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const elements = {
         formFiltros: document.getElementById("form-filtros"),
-        filtroBairro: document.getElementById("filtro-bairro"),
+        filtroBusca: document.getElementById("filtro-busca"),
         filtroTop: document.getElementById("filtro-top"),
         btnLimparFiltros: document.getElementById("btn-limpar-filtros"),
         gridServicos: document.getElementById("grid-servicos"),

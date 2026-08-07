@@ -70,8 +70,43 @@ function popularServico(servico, elements) {
         elements.bairro.textContent = servico.bairro ? `Bairro: ${servico.bairro}` : "Bairro não informado";
     }
 
-    if (elements.avaliacaoTexto) {
-        elements.avaliacaoTexto.textContent = `${avaliacaoMedia.toFixed(1)} de 5 · ${totalAvaliacoes} ${totalAvaliacoes === 1 ? "avaliação" : "avaliações"}`;
+    if (elements.resumoNota) {
+        elements.resumoNota.textContent = avaliacaoMedia.toFixed(1);
+    }
+
+    if (elements.resumoEstrelas) {
+        elements.resumoEstrelas.innerHTML = "";
+        const notaArredondada = Math.round(avaliacaoMedia);
+
+        for (let i = 1; i <= 5; i++) {
+            const estrela = document.createElement("span");
+            estrela.className = `estrela${i <= notaArredondada ? " cheia" : ""}`;
+            estrela.textContent = "★";
+            elements.resumoEstrelas.appendChild(estrela);
+        }
+    }
+
+    if (elements.resumoTotal) {
+        elements.resumoTotal.textContent = `${totalAvaliacoes} ${totalAvaliacoes === 1 ? "avaliação" : "avaliações"}`;
+    }
+
+    if (elements.barras) {
+        const totaisPorEstrela = {
+            5: Number(servico.total5Estrelas || 0),
+            4: Number(servico.total4Estrelas || 0),
+            3: Number(servico.total3Estrelas || 0),
+            2: Number(servico.total2Estrelas || 0),
+            1: Number(servico.total1Estrelas || 0)
+        };
+
+        Object.keys(elements.barras).forEach((estrela) => {
+            const { fill, count } = elements.barras[estrela];
+            const quantidade = totaisPorEstrela[estrela] || 0;
+            const porcentagem = totalAvaliacoes > 0 ? (quantidade / totalAvaliacoes) * 100 : 0;
+
+            if (fill) fill.style.width = `${porcentagem}%`;
+            if (count) count.textContent = quantidade;
+        });
     }
 }
 
