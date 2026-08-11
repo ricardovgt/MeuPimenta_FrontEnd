@@ -18,9 +18,12 @@ document.addEventListener("DOMContentLoaded", () => {
         resumo: document.getElementById("servico-resumo"),
         descricao: document.getElementById("servico-descricao"),
         foto: document.getElementById("servico-foto"),
+        btnFotoAnterior: document.getElementById("btn-foto-anterior"),
+        btnFotoProxima: document.getElementById("btn-foto-proxima"),
+        fotoContador: document.getElementById("foto-contador"),
+        fotoThumbs: document.getElementById("foto-thumbs"),
         badges: document.getElementById("servico-badges"),
         whatsapp: document.getElementById("servico-whatsapp"),
-        bairro: document.getElementById("servico-bairro"),
         postador: document.getElementById("servico-postador"),
         feedback: document.getElementById("feedback-servico"),
         resumoNota: document.getElementById("resumo-nota"),
@@ -40,6 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
     };
 
     configurarNavegacao(elements);
+    configurarGaleriaFotos(elements);
     carregarServicoCompleto(token, idServico, elements);
     configurarAvaliacoes(token, idServico, elements);
 
@@ -63,7 +67,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 const resp = body || {};
 
-                // atualizar estado
                 avaliacoesState.paginaAtual = Number(resp.paginaAtual || paginaReq);
                 avaliacoesState.totalPaginas = Number(resp.totalPaginas || 1);
 

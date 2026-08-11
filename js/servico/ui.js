@@ -1,3 +1,74 @@
+// Estado do carrossel de fotos do serviço (trocar de foto só troca o src, sem recarregar nada)
+let fotosServicoAtual = [];
+let indiceFotoAtual = 0;
+
+function renderizarFotoAtual(elements) {
+    const fallback = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
+
+    if (elements.foto) {
+        const fotoAtual = fotosServicoAtual[indiceFotoAtual];
+        elements.foto.src = (fotoAtual && fotoAtual.fotoBase64) || fallback;
+    }
+
+    const temVariasFotos = fotosServicoAtual.length > 1;
+
+    if (elements.btnFotoAnterior) {
+        elements.btnFotoAnterior.classList.toggle("hidden", !temVariasFotos);
+    }
+
+    if (elements.btnFotoProxima) {
+        elements.btnFotoProxima.classList.toggle("hidden", !temVariasFotos);
+    }
+
+    if (elements.fotoContador) {
+        if (temVariasFotos) {
+            elements.fotoContador.textContent = `${indiceFotoAtual + 1} / ${fotosServicoAtual.length}`;
+            elements.fotoContador.classList.remove("hidden");
+        } else {
+            elements.fotoContador.classList.add("hidden");
+        }
+    }
+
+    renderizarThumbs(elements);
+}
+
+function renderizarThumbs(elements) {
+    if (!elements.fotoThumbs) return;
+
+    elements.fotoThumbs.innerHTML = "";
+
+    if (fotosServicoAtual.length <= 1) {
+        elements.fotoThumbs.classList.add("hidden");
+        return;
+    }
+
+    elements.fotoThumbs.classList.remove("hidden");
+
+    fotosServicoAtual.forEach((foto, index) => {
+        const thumb = document.createElement("img");
+        thumb.className = `foto-thumb${index === indiceFotoAtual ? " ativa" : ""}`;
+        thumb.src = foto.fotoBase64 || "";
+        thumb.alt = `Foto ${index + 1}`;
+        thumb.addEventListener("click", () => {
+            indiceFotoAtual = index;
+            renderizarFotoAtual(elements);
+        });
+        elements.fotoThumbs.appendChild(thumb);
+    });
+}
+
+function mostrarFotoAnterior(elements) {
+    if (fotosServicoAtual.length === 0) return;
+    indiceFotoAtual = (indiceFotoAtual - 1 + fotosServicoAtual.length) % fotosServicoAtual.length;
+    renderizarFotoAtual(elements);
+}
+
+function mostrarFotoProxima(elements) {
+    if (fotosServicoAtual.length === 0) return;
+    indiceFotoAtual = (indiceFotoAtual + 1) % fotosServicoAtual.length;
+    renderizarFotoAtual(elements);
+}
+
 function mostrarFeedback(elemento, mensagem, tipo = "error") {
     if (!elemento) return;
 
@@ -13,7 +84,6 @@ function mostrarFeedback(elemento, mensagem, tipo = "error") {
 }
 
 function popularServico(servico, elements) {
-    const foto = servico.fotoUrl || "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
     const avaliacaoMedia = Number(servico.avaliacaoMedia || 0);
     const totalAvaliacoes = Number(servico.totalAvaliacoes || 0);
 
@@ -40,15 +110,17 @@ function popularServico(servico, elements) {
         elements.descricao.textContent = servico.descricaoDetalhada || "Mais detalhes em breve.";
     }
 
+    fotosServicoAtual = Array.isArray(servico.fotos) ? servico.fotos : [];
+    indiceFotoAtual = 0;
+    renderizarFotoAtual(elements);
+
     if (elements.foto) {
-        elements.foto.src = foto;
         elements.foto.alt = servico.nome || "Serviço";
     }
 
     if (elements.badges) {
         elements.badges.innerHTML = "";
         const badges = [
-            { label: `📍 ${servico.bairro || "Bairro não informado"}` },
             { label: `📞 ${servico.telefone || "Telefone não informado"}` },
             { label: `⭐ ${avaliacaoMedia.toFixed(1)} - ${totalAvaliacoes} ${totalAvaliacoes === 1 ? "avaliação" : "avaliações"}`, className: "avaliacao" }
         ];
@@ -64,10 +136,6 @@ function popularServico(servico, elements) {
     if (elements.whatsapp) {
         elements.whatsapp.href = `https://wa.me/${(servico.telefone || "").replace(/\D/g, "")}`;
         elements.whatsapp.innerHTML = `<span>💬</span> ${servico.telefone ? "Abrir WhatsApp" : "Telefone indisponível"}`;
-    }
-
-    if (elements.bairro) {
-        elements.bairro.textContent = servico.bairro ? `Bairro: ${servico.bairro}` : "Bairro não informado";
     }
 
     if (elements.resumoNota) {
@@ -166,13 +234,11 @@ function mostrarModalAvaliacao(token, idServico, elements) {
                     if (status === 201 || status === 200) {
                         mostrarFeedback(feedback, body?.mensagem || "Avaliação enviada com sucesso!", "success");
 
-                        // Refresh avaliações list (reload first page) and serviço resumo
                         if (typeof window.carregarAvaliacoesPagina === "function") {
                             window.carregarAvaliacoesPagina(1);
                         }
 
                         if (typeof carregarServicoCompleto === "function") {
-                            // attempt to refresh service summary; elements must be available in scope where this function was called
                             carregarServicoCompleto(token, idServico, elements);
                         }
 

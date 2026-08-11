@@ -25,6 +25,8 @@ document.addEventListener("DOMContentLoaded", () => {
         modalAviso: document.getElementById("modal-aviso-conta"),
         modalServico: document.getElementById("modal-cadastro-servico"),
         formServico: document.getElementById("form-servico"),
+        inputFotos: document.getElementById("fotos-input"),
+        fotosPreview: document.getElementById("fotos-preview"),
         feedbackServico: document.getElementById("feedback-servico"),
         inputTelefone: document.getElementById("telefone")
     };

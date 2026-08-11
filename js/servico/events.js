@@ -1,3 +1,13 @@
+function configurarGaleriaFotos(elements) {
+    if (elements.btnFotoAnterior) {
+        elements.btnFotoAnterior.addEventListener("click", () => mostrarFotoAnterior(elements));
+    }
+
+    if (elements.btnFotoProxima) {
+        elements.btnFotoProxima.addEventListener("click", () => mostrarFotoProxima(elements));
+    }
+}
+
 function configurarNavegacao(elements) {
     if (elements.btnVoltar) {
         elements.btnVoltar.addEventListener("click", () => {

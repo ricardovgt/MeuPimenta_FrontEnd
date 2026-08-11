@@ -1,203 +1,104 @@
-/* Estilos dos modais */
+/* ============================================================
+   Meus Serviços — Modais (Base, Edição & Exclusão)
+   ============================================================ */
+
+/* — Modal Genérico — */
 .modal {
     position: fixed;
     inset: 0;
-    background-color: rgba(0, 0, 0, 0.72);
-    backdrop-filter: blur(6px);
-    display: flex;
-    justify-content: center;
-    align-items: center;
     z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 1rem;
-    opacity: 1;
-    transition: opacity 0.25s ease;
+    background: rgba(0, 0, 0, 0.72);
+    backdrop-filter: blur(6px);
 }
 
 .modal.hidden {
-    display: none;
-    opacity: 0;
+    display: none !important;
 }
 
-.modal-content {
-    background-color: var(--surface-color);
-    padding: 2rem;
-    border-radius: var(--border-radius);
-    width: 100%;
-    max-width: 450px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-    transform: translateY(30px);
-    animation: modalEntrada 0.3s ease forwards;
-}
-
-.modal-content.modal-detalhes {
-    max-width: 760px;
-    width: min(760px, 100%);
-    max-height: 90vh;
+.modal .modal-content {
+    width: min(100%, 620px);
+    max-height: calc(100vh - 2rem);
     overflow-y: auto;
-    overscroll-behavior: contain;
-    scrollbar-width: thin;
-    scrollbar-color: rgba(250, 204, 21, 0.5) #18181b;
+    padding: 2rem;
+    background: var(--surface-color);
+    border: 1px solid #3f3f46;
+    border-radius: var(--border-radius);
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.5);
 }
 
-/* Barra de rolagem do conteúdo detalhado do serviço */
-.modal-content.modal-detalhes::-webkit-scrollbar {
-    width: 10px;
+.modal h2 {
+    color: var(--primary-color);
+    margin-bottom: 1.25rem;
 }
 
-.modal-content.modal-detalhes::-webkit-scrollbar-track {
-    background: #18181b;
-    border-radius: 999px;
+.modal p,
+.modal label {
+    color: var(--text-secondary);
+    line-height: 1.5;
 }
 
-.modal-content.modal-detalhes::-webkit-scrollbar-thumb {
-    background-color: rgba(250, 204, 21, 0.5);
-    border: 2px solid transparent;
-    border-radius: 999px;
-    background-clip: content-box;
-}
-
-.modal-content.modal-detalhes::-webkit-scrollbar-thumb:hover {
-    background-color: var(--primary-color);
-}
-
-.modal-content h2 {
+.modal label {
+    display: block;
     margin-bottom: 1rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.modal input[type="text"],
+.modal input[type="email"],
+.modal textarea {
+    width: 100%;
+    margin-top: 0.45rem;
+    padding: 0.85rem 1rem;
     color: var(--text-primary);
+    background: var(--bg-color);
+    border: 1px solid #3f3f46;
+    border-radius: 8px;
+    outline: none;
+    resize: vertical;
 }
 
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1rem;
+.modal input:focus,
+.modal textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.12);
 }
 
 .modal-actions {
     display: flex;
-    gap: 10px;
+    justify-content: flex-end;
+    gap: 0.75rem;
     margin-top: 1.5rem;
 }
 
-.btn-fechar {
-    width: auto;
-    margin-top: 0;
-    padding: 0.75rem 1rem;
-}
-
-.servico-detalhe-card {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.servico-detalhe-image img {
-    width: 100%;
-    height: 260px;
-    object-fit: cover;
-    border-radius: var(--border-radius);
-    background-color: #3f3f46;
-}
-
-.servico-detalhe-content {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.servico-detalhe-resumo {
-    color: var(--primary-color);
-    font-weight: 600;
-    font-size: 1rem;
-}
-
-.servico-detalhe-descricao {
-    color: var(--text-secondary);
-    line-height: 1.6;
-    white-space: pre-line;
-}
-
-.servico-detalhe-info {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-}
-
-.servico-detalhe-pill {
-    background-color: #3f3f46;
-    border-radius: 999px;
-    padding: 0.6rem 0.9rem;
-    font-size: 0.9rem;
-}
-
-.servico-detalhe-pill.avaliacao {
-    background-color: rgba(250, 204, 21, 0.16);
-    color: var(--primary-color);
-    font-weight: 600;
-}
-
-.modal-content.modal-avaliacao {
-    max-width: 420px;
-    text-align: center;
-}
-
-.estrelas-avaliacao {
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    margin: 1.25rem 0 1rem;
-}
-
-.estrela-btn {
-    background: transparent;
-    border: none;
-    color: #6b7280;
-    font-size: 2rem;
+.modal-actions button {
+    padding: 0.7rem 1rem;
+    color: #18181b;
+    font: inherit;
+    font-weight: 700;
+    background: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    border-radius: 8px;
     cursor: pointer;
-    transition: transform 0.2s ease, color 0.2s ease;
 }
 
-.estrela-btn:hover,
-.estrela-btn.active {
-    color: var(--primary-color);
-    transform: scale(1.06);
+.modal-actions #btn-cancelar-edicao,
+.modal-actions #btn-cancelar-excluir {
+    color: var(--text-primary);
+    background: transparent;
+    border-color: #3f3f46;
 }
 
-.texto-nota {
-    color: var(--text-secondary);
-    margin-bottom: 0.5rem;
+.modal-actions button:hover {
+    filter: brightness(1.06);
 }
 
-.btn-enviar-avaliacao {
-    margin-top: 0.5rem;
-}
-
-.feedback-msg.success {
-    color: var(--accent-color);
-    background-color: rgba(16, 185, 129, 0.12);
-}
-
-.feedback-msg.error {
-    color: #f87171;
-    background-color: rgba(248, 113, 113, 0.12);
-}
-
-@keyframes modalEntrada {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* ============================================================
-   Modal de Cadastro de Serviço — Design Premium
-   ============================================================ */
-
-.modal-content.modal-cadastro {
+/* — Modal de Edição Premium — */
+.modal-content.modal-edicao {
     max-width: 520px;
     width: 100%;
     max-height: 92vh;
@@ -211,8 +112,8 @@
         0 0 0 1px rgba(255, 255, 255, 0.04) inset;
 }
 
-/* — Header — */
-.modal-cadastro-header {
+/* Header */
+.modal-edicao-header {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -220,13 +121,13 @@
     gap: 1rem;
 }
 
-.modal-cadastro-header-left {
+.modal-edicao-header-left {
     display: flex;
     align-items: center;
     gap: 0.9rem;
 }
 
-.modal-cadastro-icon-badge {
+.modal-edicao-icon-badge {
     width: 48px;
     height: 48px;
     min-width: 48px;
@@ -238,20 +139,20 @@
     color: var(--primary-color);
 }
 
-.modal-cadastro-header h2 {
+.modal-edicao-header h2 {
     font-size: 1.35rem;
     font-weight: 700;
     margin-bottom: 0;
     letter-spacing: -0.3px;
 }
 
-.modal-cadastro-subtitle {
+.modal-edicao-subtitle {
     font-size: 0.82rem;
     color: var(--text-secondary);
     margin-top: 2px;
 }
 
-.modal-cadastro-close {
+.modal-edicao-close {
     background: transparent;
     border: none;
     color: var(--text-secondary);
@@ -265,17 +166,16 @@
     flex-shrink: 0;
 }
 
-.modal-cadastro-close:hover {
+.modal-edicao-close:hover {
     background-color: rgba(255, 255, 255, 0.08);
     color: var(--text-primary);
 }
 
-/* — Form body — */
-.modal-cadastro-form {
+/* Formulário & Seções */
+.modal-edicao-form {
     padding: 1.5rem 2rem 2rem;
 }
 
-/* — Seções de campo — */
 .modal-campo {
     margin-bottom: 1.25rem;
     padding-bottom: 1.25rem;
@@ -320,7 +220,6 @@
     color: #25d366;
 }
 
-/* Input & Textarea dentro do modal */
 .modal-campo input,
 .modal-campo textarea {
     background-color: #17171b;
@@ -351,7 +250,7 @@
     line-height: 1.5;
 }
 
-/* Hint text */
+/* Hints e Contadores de Caracteres */
 .modal-campo-hint {
     font-size: 0.78rem;
     color: #71717a;
@@ -360,7 +259,6 @@
     line-height: 1.4;
 }
 
-/* Footer de campo (hint + counter) */
 .modal-campo-footer {
     display: flex;
     justify-content: space-between;
@@ -381,12 +279,84 @@
     color: var(--primary-color);
 }
 
-/* — Área de fotos — */
+/* Área de Fotos */
+/* — Área & Botão de Adicionar Fotos (Alinhamento Corrigido) — */
 .modal-fotos-area {
     display: flex;
     gap: 0.65rem;
     flex-wrap: wrap;
-    align-items: flex-start;
+    align-items: center;
+}
+
+.modal-fotos-trigger {
+    width: 88px;
+    height: 88px;
+    margin: 0 !important; /* Reseta margem herdada do .modal label */
+    padding: 0.5rem;
+    border-radius: 12px;
+    border: 2px dashed rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.03);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.modal-fotos-trigger:hover {
+    border-color: rgba(250, 204, 21, 0.4);
+    background: rgba(250, 204, 21, 0.06);
+}
+
+.modal-fotos-trigger-icon {
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 0;
+    line-height: 1;
+}
+
+.modal-fotos-trigger-icon svg {
+    display: block;
+    width: 22px;
+    height: 22px;
+}
+
+.modal-fotos-trigger-text {
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-align: center;
+    line-height: 1.15;
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+
+/* Previews de fotos */
+.fotos-preview {
+    display: flex;
+    gap: 0.65rem;
+    flex-wrap: wrap;
+}
+
+.foto-preview-item {
+    position: relative;
+    width: 88px;
+    height: 88px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    flex-shrink: 0;
+    animation: fotoFadeIn 0.3s ease;
 }
 
 .modal-fotos-input-hidden {
@@ -400,70 +370,18 @@
     white-space: nowrap;
     border: 0;
 }
-
-.modal-fotos-trigger {
-    width: 88px;
-    height: 88px;
-    border-radius: 12px;
-    border: 2px dashed rgba(255, 255, 255, 0.12);
-    background: rgba(255, 255, 255, 0.03);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 4px;
-    cursor: pointer;
-    transition: border-color 0.2s, background 0.2s;
-    flex-shrink: 0;
-}
-
-.modal-fotos-trigger:hover {
-    border-color: rgba(250, 204, 21, 0.4);
-    background: rgba(250, 204, 21, 0.06);
-}
-
-.modal-fotos-trigger-icon {
-    color: var(--primary-color);
-    display: flex;
-}
-
-.modal-fotos-trigger-text {
-    font-size: 0.68rem;
-    color: var(--text-secondary);
-    text-align: center;
-    line-height: 1.2;
-}
-
-/* Preview de fotos dentro do modal */
-.modal-cadastro .fotos-preview {
-    display: flex;
-    gap: 0.65rem;
-    flex-wrap: wrap;
-}
-
-.modal-cadastro .foto-preview-item {
-    position: relative;
-    width: 88px;
-    height: 88px;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    flex-shrink: 0;
-    animation: fotoFadeIn 0.3s ease;
-}
-
 @keyframes fotoFadeIn {
     from { opacity: 0; transform: scale(0.92); }
     to   { opacity: 1; transform: scale(1); }
 }
 
-.modal-cadastro .foto-preview-item img {
+.foto-preview-item img {
     width: 100%;
     height: 100%;
     object-fit: cover;
 }
 
-.modal-cadastro .foto-preview-remover {
+.foto-preview-remover {
     position: absolute;
     top: 3px;
     right: 3px;
@@ -482,11 +400,11 @@
     transition: background 0.2s;
 }
 
-.modal-cadastro .foto-preview-remover:hover {
+.foto-preview-remover:hover {
     background: rgba(239, 68, 68, 0.85);
 }
 
-.modal-cadastro .foto-preview-capa {
+.foto-preview-capa {
     position: absolute;
     bottom: 4px;
     left: 4px;
@@ -501,8 +419,8 @@
     letter-spacing: 0.5px;
 }
 
-/* — Actions do modal cadastro — */
-.modal-cadastro-actions {
+/* Ações dos modais */
+.modal-edicao-actions {
     margin-top: 1.5rem;
     padding-top: 1.25rem;
     border-top: 1px solid rgba(255, 255, 255, 0.06);
@@ -511,24 +429,37 @@
     gap: 0.75rem;
 }
 
-.modal-cadastro-actions .btn {
+.modal-edicao-actions button {
     width: auto;
     padding: 0.7rem 1.5rem;
     font-size: 0.9rem;
     margin-top: 0;
-}
-
-.modal-cadastro-actions .btn-outline {
-    border-color: rgba(255, 255, 255, 0.1);
+    color: #18181b;
+    font: inherit;
+    font-weight: 700;
+    background: var(--primary-color);
+    border: 1px solid var(--primary-color);
     border-radius: 10px;
+    cursor: pointer;
+    transition: filter 0.2s;
 }
 
-.modal-cadastro-actions .btn-outline:hover {
+.modal-edicao-actions button:hover {
+    filter: brightness(1.06);
+}
+
+.modal-edicao-actions #btn-cancelar-edicao {
+    color: var(--text-primary);
+    background: transparent;
+    border-color: #3f3f46;
+}
+
+.modal-edicao-actions #btn-cancelar-edicao:hover {
     border-color: rgba(255, 255, 255, 0.2);
     background-color: rgba(255, 255, 255, 0.04);
 }
 
-.modal-btn-publicar {
+.modal-btn-salvar {
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
@@ -536,55 +467,54 @@
     font-weight: 700;
 }
 
-.modal-btn-publicar svg {
+.modal-btn-salvar svg {
     flex-shrink: 0;
 }
 
+/* Modais — Responsividade */
 @media (max-width: 768px) {
-    .container-servicos {
-        flex-direction: column;
-    }
-
-    .filtros-section {
-        width: 100%;
-    }
-
-    .modal-content.modal-detalhes {
-        max-width: 100%;
-    }
-
-    .servico-detalhe-image img {
-        height: 220px;
-    }
-
-    .modal-content.modal-cadastro {
+    .modal-content.modal-edicao {
         max-width: 100%;
         max-height: 100vh;
         border-radius: 16px;
     }
 
-    .modal-cadastro-header {
+    .modal-edicao-header {
         padding: 1.25rem 1.25rem 0;
     }
 
-    .modal-cadastro-form {
+    .modal-edicao-form {
         padding: 1.25rem;
     }
 
-    .modal-cadastro-icon-badge {
+    .modal-edicao-icon-badge {
         width: 40px;
         height: 40px;
         min-width: 40px;
         border-radius: 10px;
     }
 
-    .modal-cadastro-header h2 {
+    .modal-edicao-header h2 {
         font-size: 1.15rem;
     }
 
     .modal-fotos-trigger,
-    .modal-cadastro .foto-preview-item {
+    .foto-preview-item {
         width: 74px;
         height: 74px;
+    }
+}
+
+@media (max-width: 600px) {
+    .modal .modal-content {
+        padding: 1.25rem;
+    }
+
+    .modal-actions {
+        flex-direction: column-reverse;
+    }
+
+    .modal-actions button {
+        width: 100%;
     }
 }

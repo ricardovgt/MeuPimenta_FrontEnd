@@ -4,9 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meus Serviços - MeuPimenta</title>
+    
     <link rel="stylesheet" href="../css/global.css">
     <link rel="stylesheet" href="../css/meus_servicos/meus_servicos-base.css">
+    <link rel="stylesheet" href="../css/meus_servicos/meus_servicos-layout.css">
     <link rel="stylesheet" href="../css/meus_servicos/meus_servicos-cards.css">
+    <link rel="stylesheet" href="../css/meus_servicos/meus_servicos-modals.css">
 </head>
 <body>
 
@@ -32,19 +35,106 @@
 
     <!-- Modal Editar Serviço -->
     <div id="modal-editar-servico" class="modal hidden">
-        <div class="modal-content">
-            <h2>Editar Serviço</h2>
-            <form id="form-editar-servico">
+        <div class="modal-content modal-edicao">
+            <!-- Header do modal -->
+            <div class="modal-edicao-header">
+                <div class="modal-edicao-header-left">
+                    <div class="modal-edicao-icon-badge">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                    </div>
+                    <div>
+                        <h2>Editar Serviço</h2>
+                        <p class="modal-edicao-subtitle">Atualize as informações do seu serviço.</p>
+                    </div>
+                </div>
+                <button type="button" id="btn-fechar-edicao" class="modal-edicao-close" aria-label="Fechar modal">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+
+            <form id="form-editar-servico" class="modal-edicao-form">
                 <input type="hidden" id="editar-id" name="id">
-                <label>Nome do Serviço: <input type="text" id="editar-nome" name="nome" required></label>
-                <label>Telefone: <input type="text" id="editar-telefone" name="telefone" required></label>
-                <label>Bairro: <input type="text" id="editar-bairro" name="bairro" required></label>
-                <label>URL da Foto: <input type="text" id="editar-fotoUrl" name="fotoUrl"></label>
-                <label>Descrição Curta: <input type="text" id="editar-descricao" name="descricao"></label>
-                <label>Descrição Detalhada: <textarea id="editar-descricaoDetalhada" name="descricaoDetalhada"></textarea></label>
-                <div class="modal-actions">
+
+                <!-- Campo: Nome -->
+                <div class="modal-campo">
+                    <div class="modal-campo-label">
+                        <span class="modal-campo-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                        </span>
+                        <label for="editar-nome">Nome do Serviço *</label>
+                    </div>
+                    <input type="text" id="editar-nome" name="nome" placeholder="Ex.: Design de Sobrancelhas" required>
+                    <span class="modal-campo-hint">O nome visível para seus clientes.</span>
+                </div>
+
+                <!-- Campo: Telefone -->
+                <div class="modal-campo">
+                    <div class="modal-campo-label">
+                        <span class="modal-campo-icon modal-campo-icon--whatsapp">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                        </span>
+                        <label for="editar-telefone">Telefone (WhatsApp) *</label>
+                    </div>
+                    <input type="text" id="editar-telefone" name="telefone" placeholder="(11) 99999-9999" required>
+                    <span class="modal-campo-hint">Número de contato via WhatsApp.</span>
+                </div>
+
+                <!-- Campo: Descrição curta -->
+                <div class="modal-campo">
+                    <div class="modal-campo-label">
+                        <span class="modal-campo-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                        </span>
+                        <label for="editar-descricao">Descrição curta</label>
+                    </div>
+                    <input type="text" id="editar-descricao" name="descricao" placeholder="O que você faz?" maxlength="120">
+                    <div class="modal-campo-footer">
+                        <span class="modal-campo-hint">Resumo rápido do seu serviço.</span>
+                        <span class="modal-campo-counter" data-target="editar-descricao" data-max="120">0/120</span>
+                    </div>
+                </div>
+
+                <!-- Campo: Descrição detalhada -->
+                <div class="modal-campo">
+                    <div class="modal-campo-label">
+                        <span class="modal-campo-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                        </span>
+                        <label for="editar-descricaoDetalhada">Descrição detalhada</label>
+                    </div>
+                    <textarea id="editar-descricaoDetalhada" name="descricaoDetalhada" rows="4" placeholder="Horários, diferenciais e detalhes importantes." maxlength="1000"></textarea>
+                    <div class="modal-campo-footer">
+                        <span class="modal-campo-hint">Detalhes que ajudam o cliente a escolher você.</span>
+                        <span class="modal-campo-counter" data-target="editar-descricaoDetalhada" data-max="1000">0/1000</span>
+                    </div>
+                </div>
+
+                <!-- Campo: Fotos -->
+                <div class="modal-campo">
+                    <div class="modal-campo-label">
+                        <span class="modal-campo-icon">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                        </span>
+                        <label for="editar-fotos">Fotos do Serviço (até 5)</label>
+                    </div>
+                    <div class="modal-fotos-area">
+                        <label for="editar-fotos" class="modal-fotos-trigger">
+                            <span class="modal-fotos-trigger-icon">
+                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            </span>
+                            <span class="modal-fotos-trigger-text">Adicionar fotos</span>
+                        </label>
+                        <input type="file" id="editar-fotos" name="fotos" accept="image/*" multiple class="modal-fotos-input-hidden">
+                        <div id="editar-fotos-preview" class="fotos-preview"></div>
+                    </div>
+                </div>
+
+                <div class="modal-actions modal-edicao-actions">
                     <button type="button" id="btn-cancelar-edicao">Cancelar</button>
-                    <button type="submit" id="btn-salvar-edicao">Salvar Alterações</button>
+                    <button type="submit" id="btn-salvar-edicao" class="modal-btn-salvar">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                        Salvar Alterações
+                    </button>
                 </div>
             </form>
         </div>
@@ -65,6 +155,44 @@
     </div>
 
     <script src="../js/meus_servicos/api.js"></script>
+    <script src="../js/meus_servicos/ui.js"></script>
+    <script src="../js/meus_servicos/events.js"></script>
     <script src="../js/meus_servicos/main.js"></script>
+    <script>
+        // Botão X de fechar o modal de edição
+        document.addEventListener("DOMContentLoaded", () => {
+            const btnFechar = document.getElementById("btn-fechar-edicao");
+            const modal = document.getElementById("modal-editar-servico");
+            if (btnFechar && modal) {
+                btnFechar.addEventListener("click", () => modal.classList.add("hidden"));
+            }
+
+            // Contadores de caracteres
+            document.querySelectorAll(".modal-campo-counter").forEach(counter => {
+                const targetId = counter.dataset.target;
+                const maxLen = parseInt(counter.dataset.max, 10);
+                const input = document.getElementById(targetId);
+                if (!input) return;
+                const update = () => {
+                    const len = input.value.length;
+                    counter.textContent = `${len}/${maxLen}`;
+                    counter.classList.toggle("modal-campo-counter--warn", len >= maxLen * 0.9);
+                };
+                input.addEventListener("input", update);
+                // Observar mudanças programáticas (quando o modal de edição preenche os campos)
+                const observer = new MutationObserver(update);
+                observer.observe(input, { attributes: true });
+                // Atualizar quando o modal de edição é aberto (via value set)
+                const modalEl = document.getElementById("modal-editar-servico");
+                if (modalEl) {
+                    const mo = new MutationObserver(() => {
+                        if (!modalEl.classList.contains("hidden")) update();
+                    });
+                    mo.observe(modalEl, { attributes: true, attributeFilter: ["class"] });
+                }
+                update();
+            });
+        });
+    </script>
 </body>
 </html>

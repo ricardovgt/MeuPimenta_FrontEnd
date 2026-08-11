@@ -104,6 +104,12 @@ function configurarModais(token, estadoConta, elements) {
 function configurarCadastroServico(token, elements) {
     if (!elements.formServico) return;
 
+    if (elements.inputFotos) {
+        elements.inputFotos.addEventListener("change", () => {
+            processarFotosSelecionadas(elements.inputFotos, elements.fotosPreview, elements.feedbackServico);
+        });
+    }
+
     elements.formServico.addEventListener("submit", (event) => {
         event.preventDefault();
 
@@ -118,14 +124,23 @@ function configurarCadastroServico(token, elements) {
             submitButton.textContent = isSubmitting ? "Publicando..." : labelOriginal;
         };
 
+        const dadosServico = {
+            nome: formData.get("nome") || "",
+            descricao: formData.get("descricao") || "",
+            descricaoDetalhada: formData.get("descricaoDetalhada") || "",
+            telefone: formData.get("telefone") || "",
+            fotos: fotosSelecionadas
+        };
+
         mostrarFeedback(elements.feedbackServico, "Salvando...", "error");
         setSubmitting(true);
 
-        criarServico(token, elements, formData)
+        criarServico(token, elements, dadosServico)
             .then(({ status, body }) => {
                 if (status === 201) {
                     mostrarFeedback(elements.feedbackServico, "Serviço publicado com sucesso!", "success");
                     form.reset();
+                    limparFotosSelecionadas(elements.fotosPreview);
                     carregarServicos(token, elements);
 
                     setTimeout(() => {

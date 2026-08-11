@@ -26,20 +26,96 @@
 }
 
 .card-servico .hero {
+    position: relative;
     display: flex;
     justify-content: center;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 .card-servico .hero img {
     width: 100%;
     max-width: 580px;
     height: 300px;
-    object-fit: contain;
-    background-color: #ffffff;
+    object-fit: cover;
     border-radius: 14px;
-    padding: 1.25rem;
     border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.foto-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgba(250, 204, 21, 0.35);
+    background: rgba(250, 204, 21, 0.10);
+    color: var(--primary-color);
+    font-size: 2rem;
+    font-family: Arial, sans-serif;
+    font-weight: 400;
+    line-height: 0.75;
+    padding: 0 0 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+    z-index: 2;
+}
+
+.foto-nav-btn:hover {
+    background: rgba(250, 204, 21, 0.18);
+    border-color: rgba(250, 204, 21, 0.55);
+    transform: translateY(-50%) scale(1.04);
+}
+
+.foto-nav-anterior {
+    left: calc(50% - 342px);
+}
+
+.foto-nav-proxima {
+    right: calc(50% - 342px);
+}
+
+.foto-contador {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background: rgba(0, 0, 0, 0.55);
+    color: var(--text-primary);
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    z-index: 2;
+}
+
+.foto-thumbs {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 1.75rem;
+}
+
+.foto-thumb {
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+    border-radius: 10px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    opacity: 0.7;
+    transition: opacity 0.2s ease, border-color 0.2s ease;
+}
+
+.foto-thumb:hover {
+    opacity: 1;
+}
+
+.foto-thumb.ativa {
+    border-color: var(--primary-color);
+    opacity: 1;
 }
 
 .card-servico .content {
@@ -174,6 +250,25 @@
 
     .card-servico .hero img {
         height: 220px;
+    }
+
+    .foto-nav-btn {
+        width: 34px;
+        height: 34px;
+        font-size: 1.6rem;
+    }
+
+    .foto-nav-anterior {
+        left: 12px;
+    }
+
+    .foto-nav-proxima {
+        right: 12px;
+    }
+
+    .foto-thumb {
+        width: 52px;
+        height: 52px;
     }
 
     .actions {

@@ -89,16 +89,14 @@ function carregarServicos(token, elements, top = false, busca = "") {
         .catch((err) => console.error("Erro ao buscar serviços:", err));
 }
 
-function criarServico(token, elements, formData) {
-    const dadosFormatados = new URLSearchParams(formData);
-
+function criarServico(token, elements, dadosServico) {
     return fetch("http://localhost:8080/connecta-api/servicos", {
         method: "POST",
         headers: {
             ...obterHeadersAutorizacao(token),
-            "Content-Type": "application/x-www-form-urlencoded"
+            "Content-Type": "application/json"
         },
-        body: dadosFormatados
+        body: JSON.stringify(dadosServico)
     })
         .then(async (res) => {
             const body = await lerResposta(res);
