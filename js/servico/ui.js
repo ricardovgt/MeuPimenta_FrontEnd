@@ -3,11 +3,26 @@ let fotosServicoAtual = [];
 let indiceFotoAtual = 0;
 
 function renderizarFotoAtual(elements) {
-    const fallback = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
+    const temFoto = fotosServicoAtual.length > 0;
+
+    if (elements.hero) {
+        elements.hero.classList.toggle("hidden", !temFoto);
+    }
 
     if (elements.foto) {
         const fotoAtual = fotosServicoAtual[indiceFotoAtual];
-        elements.foto.src = (fotoAtual && fotoAtual.fotoBase64) || fallback;
+        if (temFoto) {
+            elements.foto.onerror = () => {
+                elements.foto.onerror = null;
+                fotosServicoAtual.splice(indiceFotoAtual, 1);
+                indiceFotoAtual = Math.max(0, Math.min(indiceFotoAtual, fotosServicoAtual.length - 1));
+                renderizarFotoAtual(elements);
+            };
+            elements.foto.src = fotoAtual.fotoBase64;
+        } else {
+            elements.foto.onerror = null;
+            elements.foto.removeAttribute("src");
+        }
     }
 
     const temVariasFotos = fotosServicoAtual.length > 1;
@@ -83,6 +98,23 @@ function mostrarFeedback(elemento, mensagem, tipo = "error") {
     }
 }
 
+function resumirNome(nomeCompleto) {
+    if (typeof nomeCompleto !== "string") return "";
+    return nomeCompleto.trim().split(/\s+/).filter(Boolean).slice(0, 3).join(" ");
+}
+
+function exibirFotoDono(fotoPerfilUsuario, elementoFoto) {
+    if (!elementoFoto) return;
+
+    const fotoPadrao = "../img/default-profile.png";
+    const fotoPerfil = typeof fotoPerfilUsuario === "string" ? fotoPerfilUsuario.trim() : "";
+    elementoFoto.src = fotoPerfil && fotoPerfil.toLowerCase() !== "null" ? fotoPerfil : fotoPadrao;
+    elementoFoto.onerror = () => {
+        elementoFoto.onerror = null;
+        elementoFoto.src = fotoPadrao;
+    };
+}
+
 function popularServico(servico, elements) {
     const avaliacaoMedia = Number(servico.avaliacaoMedia || 0);
     const totalAvaliacoes = Number(servico.totalAvaliacoes || 0);
@@ -92,10 +124,11 @@ function popularServico(servico, elements) {
     }
 
     if (elements.postador) {
-        const nomePostador = servico.nomeUsuario;
+        const nomePostador = resumirNome(servico.nomeUsuario);
 
         if (nomePostador) {
-            elements.postador.textContent = nomePostador;
+            elements.postadorNome.textContent = nomePostador;
+            exibirFotoDono(servico.fotoPerfilUsuario, elements.postadorFoto);
             elements.postador.classList.remove("hidden");
         } else {
             elements.postador.classList.add("hidden");
@@ -110,7 +143,12 @@ function popularServico(servico, elements) {
         elements.descricao.textContent = servico.descricaoDetalhada || "Mais detalhes em breve.";
     }
 
-    fotosServicoAtual = Array.isArray(servico.fotos) ? servico.fotos : [];
+    fotosServicoAtual = Array.isArray(servico.fotos)
+        ? servico.fotos.filter((foto) => {
+            const valor = typeof foto?.fotoBase64 === "string" ? foto.fotoBase64.trim() : "";
+            return valor && valor.toLowerCase() !== "null";
+        })
+        : [];
     indiceFotoAtual = 0;
     renderizarFotoAtual(elements);
 
@@ -253,26 +291,104 @@ function mostrarModalAvaliacao(token, idServico, elements) {
     }
 }
 
-function criarAvaliacaoElemento(avaliacao) {
-    const container = document.createElement("div");
-    container.className = "avaliacao-item card";
+function criarAvaliacaoElemento(avaliacao, opcoes = {}) {
+    const FOTO_USUARIO_PADRAO = "../img/default-profile.png";
+    const container = document.createElement("article");
+    container.className = "avaliacao-item";
 
-    const cabecalho = document.createElement("div");
-    cabecalho.className = "avaliacao-cabecalho";
-    cabecalho.textContent = `${avaliacao.nomeUsuario || 'Usuário'} · ${avaliacao.dataAvaliacao || ''}`;
+    const avatar = document.createElement("img");
+    avatar.className = "avaliacao-avatar";
+    avatar.alt = `Foto de perfil de ${avaliacao.nomeUsuario || "Usuário"}`;
+    const fotoPerfil = typeof avaliacao.fotoPerfilUsuario === "string"
+        ? avaliacao.fotoPerfilUsuario.trim()
+        : "";
+    avatar.src = fotoPerfil && fotoPerfil.toLowerCase() !== "null"
+        ? fotoPerfil
+        : FOTO_USUARIO_PADRAO;
+    avatar.onerror = () => {
+        avatar.onerror = null;
+        avatar.src = FOTO_USUARIO_PADRAO;
+    };
 
-    const nota = document.createElement("div");
-    nota.className = "avaliacao-nota";
-    nota.textContent = `Nota: ${Number(avaliacao.nota || 0).toFixed(1)}/5`;
+    const conteudo = document.createElement("div");
+    conteudo.className = "avaliacao-conteudo";
 
-    container.appendChild(cabecalho);
-    container.appendChild(nota);
+    const nome = document.createElement("h3");
+    nome.className = "avaliacao-usuario";
+    nome.textContent = avaliacao.nomeUsuario || "Usuário";
+
+    const notaValor = Math.max(0, Math.min(5, Number(avaliacao.nota) || 0));
+    const notaLinha = document.createElement("div");
+    notaLinha.className = "avaliacao-nota";
+    notaLinha.setAttribute("aria-label", `Nota ${notaValor.toFixed(1)} de 5`);
+
+    const estrelas = document.createElement("span");
+    estrelas.className = "avaliacao-estrelas";
+    estrelas.setAttribute("aria-hidden", "true");
+    for (let numero = 1; numero <= 5; numero++) {
+        const estrela = document.createElement("span");
+        estrela.className = numero <= Math.round(notaValor) ? "avaliacao-estrela ativa" : "avaliacao-estrela";
+        estrela.textContent = "★";
+        estrelas.appendChild(estrela);
+    }
+
+    const notaNumero = document.createElement("span");
+    notaNumero.className = "avaliacao-nota-numero";
+    notaNumero.textContent = notaValor.toFixed(1);
+    notaLinha.append(estrelas, notaNumero);
+
+    const data = document.createElement("time");
+    data.className = "avaliacao-data";
+    data.textContent = avaliacao.dataAvaliacao || "";
+
+    conteudo.append(nome, notaLinha);
+    container.append(avatar, conteudo, data);
 
     if (avaliacao.comentario) {
         const texto = document.createElement("p");
         texto.className = "avaliacao-texto";
         texto.textContent = avaliacao.comentario;
-        container.appendChild(texto);
+        conteudo.appendChild(texto);
+    }
+
+    const pertenceAoUsuario = pertenceAoUsuarioAutenticado(
+        avaliacao,
+        opcoes.idUsuarioAutenticado
+    );
+
+    if (pertenceAoUsuario) {
+        const excluir = document.createElement("button");
+        excluir.type = "button";
+        excluir.className = "avaliacao-excluir";
+        excluir.textContent = "Excluir";
+        excluir.setAttribute("aria-label", "Excluir minha avaliação");
+
+        excluir.addEventListener("click", async () => {
+            if (!confirm("Deseja excluir esta avaliação? Esta ação não pode ser desfeita.")) return;
+
+            excluir.disabled = true;
+            excluir.textContent = "Excluindo...";
+
+            try {
+                const { status, body } = await excluirAvaliacao(opcoes.token, avaliacao.id);
+                if (status === 200) {
+                    if (typeof opcoes.aoExcluir === "function") opcoes.aoExcluir();
+                    return;
+                }
+
+                const mensagemPadrao = status === 404
+                    ? "A avaliação não existe ou não pertence a você."
+                    : "Não foi possível excluir a avaliação.";
+                alert(body?.erro || body?.mensagem || mensagemPadrao);
+            } catch {
+                alert("Erro de comunicação com o servidor.");
+            } finally {
+                excluir.disabled = false;
+                excluir.textContent = "Excluir";
+            }
+        });
+
+        conteudo.appendChild(excluir);
     }
 
     return container;
@@ -287,23 +403,32 @@ function temComentarioValido(avaliacao) {
     return typeof avaliacao?.comentario === "string" && avaliacao.comentario.trim().length > 0;
 }
 
-function appendAvaliacoes(avaliacoes) {
+function pertenceAoUsuarioAutenticado(avaliacao, idUsuarioAutenticado) {
+    return idUsuarioAutenticado !== null
+        && idUsuarioAutenticado !== undefined
+        && Number(avaliacao?.idUsuario) === Number(idUsuarioAutenticado);
+}
+
+function appendAvaliacoes(avaliacoes, opcoes = {}) {
     const list = document.getElementById("avaliacoes-list");
     if (!list) return;
 
-    const comentarios = Array.isArray(avaliacoes)
-        ? avaliacoes.filter(temComentarioValido)
+    const avaliacoesVisiveis = Array.isArray(avaliacoes)
+        ? avaliacoes.filter((avaliacao) =>
+            temComentarioValido(avaliacao)
+            || pertenceAoUsuarioAutenticado(avaliacao, opcoes.idUsuarioAutenticado)
+        )
         : [];
 
-    if (comentarios.length === 0) {
+    if (avaliacoesVisiveis.length === 0) {
         if (list.children.length === 0) {
             list.innerHTML = '<p class="avaliacao-vazia">Ainda não há comentários para este serviço.</p>';
         }
         return;
     }
 
-    comentarios.forEach((av) => {
-        const el = criarAvaliacaoElemento(av);
+    avaliacoesVisiveis.forEach((av) => {
+        const el = criarAvaliacaoElemento(av, opcoes);
         list.appendChild(el);
     });
 }

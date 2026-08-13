@@ -17,7 +17,7 @@
         <a href="servicos.html" class="nav-logo">MeuPimenta</a>
         <nav class="nav-links">
             <a href="servicos.html" class="nav-item active">Buscar Serviços</a>
-            <a href="meus_servicos.html" class="nav-item">Meus Serviços</a>
+            <a href="meus_servicos.html" class="nav-item hidden" data-conta-comercial>Meus Serviços</a>
             <a href="perfil.html" class="nav-item">Perfil</a>
         </nav>
         <div class="nav-actions">
@@ -55,12 +55,11 @@
     <div id="modal-aviso-conta" class="modal hidden">
         <div class="modal-content">
             <h2>Atenção!</h2>
-            <p>Para expor seu serviço e alcançar mais clientes, você precisa mudar sua conta para <strong>Comercial</strong>.</p>
+            <p>Para anunciar um serviço, vá até as configurações e altere seu tipo de conta para <strong>Comercial</strong>.</p>
             <div class="modal-actions">
-                <button id="btn-cancelar-aviso" class="btn btn-outline">Cancelar</button>
-                <button id="btn-mudar-conta" class="btn btn-primary">Mudar para Comercial Agora</button>
+                <button type="button" id="btn-cancelar-aviso" class="btn btn-outline">Cancelar</button>
+                <button type="button" id="btn-ir-configuracoes" class="btn btn-primary">Ir para as configurações</button>
             </div>
-            <div id="feedback-mudar-conta" class="feedback-msg hidden" style="margin-top: 15px;" aria-live="polite"></div>
         </div>
     </div>
 
@@ -170,6 +169,7 @@
         </div>
     </div>
 
+    <script src="../js/nav-conta.js"></script>
     <script src="../js/servicos/api.js"></script>
     <script src="../js/servicos/ui.js"></script>
     <script src="../js/servicos/events.js"></script>

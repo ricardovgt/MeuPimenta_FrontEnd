@@ -8,56 +8,113 @@
     <link rel="stylesheet" href="../css/perfil/perfil.css">
 </head>
 <body>
-
     <header class="top-nav">
         <a href="servicos.html" class="nav-logo">MeuPimenta</a>
-        <nav class="nav-links">
+        <nav class="nav-links" aria-label="Navegação principal">
             <a href="servicos.html" class="nav-item">Buscar Serviços</a>
-            <a href="meus_servicos.html" class="nav-item">Meus Serviços</a>
-            <a href="perfil.html" class="nav-item active">Perfil</a>
+            <a href="meus_servicos.html" class="nav-item hidden" data-conta-comercial>Meus Serviços</a>
+            <a href="perfil.html" class="nav-item active" aria-current="page">Perfil</a>
         </nav>
-        <div class="nav-actions">
-        </div>
+        <div class="nav-actions"></div>
     </header>
 
     <main class="container perfil-container">
-        <div class="perfil-header">
+        <header class="perfil-header">
             <div class="perfil-top">
-                <div class="perfil-avatar" aria-hidden="true">PC</div>
+                <div class="perfil-avatar-wrapper">
+                    <img id="perfil-avatar-img" class="perfil-avatar perfil-avatar-img" src="../img/default-profile.png" alt="Foto de perfil">
+                    <label for="input-foto-perfil" class="perfil-avatar-editar" title="Alterar foto de perfil" aria-label="Alterar foto de perfil">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                    </label>
+                    <input type="file" id="input-foto-perfil" accept="image/*" class="hidden-input">
+                </div>
                 <div class="perfil-title">
-                    <p class="perfil-welcome" id="perfil-tipo-conta">Carregando...</p>
-                    <h1><span id="perfil-nome">Carregando...</span></h1>
-                    <p class="perfil-subtitle">Seu perfil está pronto para receber atualizações futuras, como foto e outras informações profissionais.</p>
+                    <p id="perfil-tipo-conta">Carregando...</p>
+                    <h1 id="perfil-nome">Carregando...</h1>
+                    <p class="perfil-subtitle">Gerencie cada informação da sua conta separadamente.</p>
                 </div>
             </div>
-        </div>
+            <div id="feedback-foto-perfil" class="feedback-msg hidden" aria-live="polite"></div>
+        </header>
 
-        <section class="perfil-panel">
+        <section class="perfil-panel perfil-summary" aria-labelledby="resumo-title">
+            <div><p class="section-eyebrow">Sua conta</p><h2 id="resumo-title">Resumo do perfil</h2></div>
             <div class="user-info">
-                <div class="user-info-item">
-                    <span>Nome</span>
-                    <p id="info-nome">Carregando...</p>
-                </div>
-                <div class="user-info-item">
-                    <span>E-mail</span>
-                    <p id="info-email">Carregando...</p>
-                </div>
-                <div class="user-info-item">
-                    <span>Tipo de conta</span>
-                    <p id="info-tipo">Carregando...</p>
-                </div>
-            </div>
-
-            <div class="perfil-actions">
-                <button type="button" class="btn btn-danger" id="btn-sair">Sair da Conta</button>
+                <div class="user-info-item"><span>Nome</span><p id="info-nome">Carregando...</p></div>
+                <div class="user-info-item"><span>E-mail</span><p id="info-email">Carregando...</p></div>
+                <div class="user-info-item"><span>Tipo de conta</span><p id="info-tipo">Carregando...</p></div>
             </div>
         </section>
 
-        <a href="servicos.html" class="btn btn-primary btn-servicos-outside" id="btn-servicos">Ver Serviços</a>
+        <section class="settings-grid" aria-label="Configurações do perfil">
+            <form id="form-nome" class="setting-card">
+                <div><p class="section-eyebrow">Identidade</p><h2>Alterar nome</h2><p>Use entre 3 e 30 caracteres.</p></div>
+                <div class="form-group"><label for="input-nome">Nome</label><input id="input-nome" name="nome" type="text" minlength="3" maxlength="30" autocomplete="name" required></div>
+                <div id="feedback-nome" class="feedback-msg hidden" aria-live="polite"></div>
+                <button class="btn btn-primary" type="submit">Salvar nome</button>
+            </form>
+
+            <form id="form-email" class="setting-card">
+                <div><p class="section-eyebrow">Acesso</p><h2>Alterar e-mail</h2><p>Você confirmará sua senha antes de salvar.</p></div>
+                <div class="form-group"><label for="input-email">Novo e-mail</label><input id="input-email" name="email" type="email" autocomplete="email" required></div>
+                <div id="feedback-email" class="feedback-msg hidden" aria-live="polite"></div>
+                <button class="btn btn-primary" type="submit">Continuar</button>
+            </form>
+
+            <form id="form-tipo-conta" class="setting-card">
+                <div><p class="section-eyebrow">Plano</p><h2>Alterar tipo de conta</h2><p>Essa mudança afeta os serviços publicados.</p></div>
+                <div class="form-group"><label for="input-tipo-conta">Tipo de conta</label><select id="input-tipo-conta" name="tipoConta" required><option value="COMUM">Conta comum</option><option value="COMERCIAL">Conta comercial</option></select></div>
+                <div id="feedback-tipo-conta" class="feedback-msg hidden" aria-live="polite"></div>
+                <button class="btn btn-primary" type="submit">Continuar</button>
+            </form>
+
+            <form id="form-senha" class="setting-card">
+                <div><p class="section-eyebrow">Segurança</p><h2>Alterar senha</h2><p>A nova senha e a confirmação devem ser iguais.</p></div>
+                <div class="form-group"><label for="input-nova-senha">Nova senha</label><input id="input-nova-senha" name="novaSenha" type="password" autocomplete="new-password" required></div>
+                <div class="form-group"><label for="input-confirmar-senha">Confirmar nova senha</label><input id="input-confirmar-senha" name="confirmarNovaSenha" type="password" autocomplete="new-password" required></div>
+                <div id="feedback-senha" class="feedback-msg hidden" aria-live="polite"></div>
+                <button class="btn btn-primary" type="submit">Continuar</button>
+            </form>
+        </section>
+
+        <section class="danger-zone" aria-labelledby="danger-title">
+            <div><p class="section-eyebrow">Zona de perigo</p><h2 id="danger-title">Excluir conta</h2><p>Esta ação também exclui todos os seus serviços e não pode ser desfeita.</p></div>
+            <button type="button" class="btn btn-danger" id="btn-abrir-exclusao">Excluir minha conta</button>
+        </section>
+        <div class="perfil-actions"><button type="button" class="btn btn-outline" id="btn-sair">Sair da conta</button></div>
     </main>
 
+    <div id="modal-senha" class="profile-modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-senha-titulo">
+        <div class="profile-modal-content">
+            <h2 id="modal-senha-titulo">Confirme sua senha</h2>
+            <p id="modal-senha-descricao">Digite sua senha atual para continuar.</p>
+            <p id="modal-tipo-aviso" class="modal-warning hidden">Changing account type will permanently delete all your published services.</p>
+            <form id="form-modal-senha">
+                <div class="form-group"><label for="modal-senha-atual">Senha atual</label><input id="modal-senha-atual" type="password" autocomplete="current-password" required></div>
+                <div id="feedback-modal-senha" class="feedback-msg hidden" aria-live="polite"></div>
+                <div class="modal-actions"><button type="button" class="btn btn-outline" id="btn-cancelar-senha">Cancelar</button><button type="submit" class="btn btn-primary" id="btn-confirmar-senha">Confirmar</button></div>
+            </form>
+        </div>
+    </div>
+
+    <div id="modal-exclusao" class="profile-modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-exclusao-titulo">
+        <div class="profile-modal-content profile-modal-danger">
+            <p class="danger-kicker">Irreversible action.</p>
+            <h2 id="modal-exclusao-titulo">Excluir conta permanentemente?</h2>
+            <p>Digite manualmente o e-mail da conta e sua senha atual. Todos os seus serviços também serão excluídos.</p>
+            <form id="form-exclusao">
+                <div class="form-group"><label for="exclusao-email">E-mail da conta</label><input id="exclusao-email" type="email" autocomplete="off" placeholder="seu@email.com" required></div>
+                <div class="form-group"><label for="exclusao-senha">Senha atual</label><input id="exclusao-senha" type="password" autocomplete="current-password" required></div>
+                <div id="feedback-exclusao" class="feedback-msg hidden" aria-live="polite"></div>
+                <div class="modal-actions"><button type="button" class="btn btn-outline" id="btn-cancelar-exclusao">Cancelar</button><button type="submit" class="btn btn-danger-solid" id="btn-confirmar-exclusao" disabled>Excluir permanentemente</button></div>
+            </form>
+        </div>
+    </div>
+
+    <script src="../js/nav-conta.js"></script>
     <script src="../js/perfil/utils.js"></script>
     <script src="../js/perfil/api.js"></script>
+    <script src="../js/perfil/ui.js"></script>
     <script src="../js/perfil/events.js"></script>
     <script src="../js/perfil/main.js"></script>
 </body>

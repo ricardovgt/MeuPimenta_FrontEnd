@@ -20,8 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
         btnNovoServico: document.getElementById("btn-novo-servico"),
         btnCancelarAviso: document.getElementById("btn-cancelar-aviso"),
         btnCancelarServico: document.getElementById("btn-cancelar-servico"),
-        btnMudarConta: document.getElementById("btn-mudar-conta"),
-        feedbackAviso: document.getElementById("feedback-mudar-conta"),
+        btnIrConfiguracoes: document.getElementById("btn-ir-configuracoes"),
         modalAviso: document.getElementById("modal-aviso-conta"),
         modalServico: document.getElementById("modal-cadastro-servico"),
         formServico: document.getElementById("form-servico"),
@@ -33,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     carregarPerfilUsuario(token, estadoConta);
     configurarFiltros(token, elements);
-    configurarModais(token, estadoConta, elements);
+    configurarModais(estadoConta, elements);
     configurarCadastroServico(token, elements);
     configurarMascaraTelefone(elements.inputTelefone);
 });

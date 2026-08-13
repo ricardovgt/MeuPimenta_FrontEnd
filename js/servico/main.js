@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
         resumo: document.getElementById("servico-resumo"),
         descricao: document.getElementById("servico-descricao"),
         foto: document.getElementById("servico-foto"),
+        hero: document.getElementById("servico-hero"),
         btnFotoAnterior: document.getElementById("btn-foto-anterior"),
         btnFotoProxima: document.getElementById("btn-foto-proxima"),
         fotoContador: document.getElementById("foto-contador"),
@@ -25,6 +26,8 @@ document.addEventListener("DOMContentLoaded", () => {
         badges: document.getElementById("servico-badges"),
         whatsapp: document.getElementById("servico-whatsapp"),
         postador: document.getElementById("servico-postador"),
+        postadorFoto: document.getElementById("servico-postador-foto"),
+        postadorNome: document.getElementById("servico-postador-nome"),
         feedback: document.getElementById("feedback-servico"),
         resumoNota: document.getElementById("resumo-nota"),
         resumoEstrelas: document.getElementById("resumo-estrelas"),
@@ -51,8 +54,24 @@ document.addEventListener("DOMContentLoaded", () => {
     const avaliacoesState = {
         paginaAtual: 1,
         totalPaginas: 1,
-        limite: 10
+        limite: 10,
+        idUsuarioAutenticado: null
     };
+
+    function obterIdUsuarioDoToken(jwt) {
+        try {
+            let payloadBase64 = jwt.split(".")[1]
+                .replace(/-/g, "+")
+                .replace(/_/g, "/");
+            payloadBase64 = payloadBase64.padEnd(Math.ceil(payloadBase64.length / 4) * 4, "=");
+            const payload = JSON.parse(decodeURIComponent(Array.from(atob(payloadBase64))
+                .map((caractere) => `%${caractere.charCodeAt(0).toString(16).padStart(2, "0")}`)
+                .join("")));
+            return Number(payload.idUsuario ?? payload.id ?? payload.userId) || null;
+        } catch {
+            return null;
+        }
+    }
 
     // Função exposta para recarregar uma página específica (usada pelo modal após postar)
     window.carregarAvaliacoesPagina = function (pagina) {
@@ -74,7 +93,14 @@ document.addEventListener("DOMContentLoaded", () => {
                     limparAvaliacoes();
                 }
 
-                appendAvaliacoes(resp.avaliacoes || []);
+                appendAvaliacoes(resp.avaliacoes || [], {
+                    token,
+                    idUsuarioAutenticado: avaliacoesState.idUsuarioAutenticado,
+                    aoExcluir: () => {
+                        window.carregarAvaliacoesPagina(1);
+                        carregarServicoCompleto(token, idServico, elements);
+                    }
+                });
                 atualizarBotaoCarregarMais(avaliacoesState.paginaAtual, avaliacoesState.totalPaginas);
             })
             .catch(() => {
@@ -82,8 +108,21 @@ document.addEventListener("DOMContentLoaded", () => {
             });
     };
 
-    // carregar primeira página
-    window.carregarAvaliacoesPagina(1);
+    // Carrega a identidade antes das avaliações para mostrar Excluir
+    // somente nos comentários pertencentes ao usuário autenticado.
+    obterUsuarioAutenticado(token)
+        .then(({ status, body }) => {
+            if (status === 200) {
+                avaliacoesState.idUsuarioAutenticado = Number(body?.idUsuario ?? body?.id)
+                    || obterIdUsuarioDoToken(token);
+            } else {
+                avaliacoesState.idUsuarioAutenticado = obterIdUsuarioDoToken(token);
+            }
+        })
+        .catch(() => {
+            avaliacoesState.idUsuarioAutenticado = obterIdUsuarioDoToken(token);
+        })
+        .finally(() => window.carregarAvaliacoesPagina(1));
 
     const btnCarregarMais = document.getElementById('btn-carregar-mais');
     if (btnCarregarMais) {
@@ -94,4 +133,4 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
-}); 
+});

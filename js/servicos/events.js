@@ -25,7 +25,7 @@ function configurarFiltros(token, elements) {
     carregarServicos(token, elements);
 }
 
-function configurarModais(token, estadoConta, elements) {
+function configurarModais(estadoConta, elements) {
     if (elements.btnVoltarHome) {
         elements.btnVoltarHome.addEventListener("click", () => {
             window.location.assign("perfil.html");
@@ -60,43 +60,9 @@ function configurarModais(token, estadoConta, elements) {
         });
     }
 
-    if (elements.btnMudarConta) {
-        elements.btnMudarConta.addEventListener("click", () => {
-            if (!elements.feedbackAviso) return;
-
-            const botaoOriginal = elements.btnMudarConta.textContent;
-            elements.btnMudarConta.disabled = true;
-            elements.btnMudarConta.textContent = "Atualizando...";
-            mostrarFeedback(elements.feedbackAviso, "Processando...", "error");
-
-            mudarContaParaComercial(token)
-                .then(({ status, body }) => {
-                    if (status === 200) {
-                        estadoConta.isContaComercial = true;
-                        mostrarFeedback(elements.feedbackAviso, "Sucesso! Pode cadastrar seu serviço.", "success");
-
-                        setTimeout(() => {
-                            if (elements.modalAviso) {
-                                elements.modalAviso.classList.add("hidden");
-                            }
-                            if (elements.modalServico) {
-                                elements.modalServico.classList.remove("hidden");
-                            }
-                            if (elements.feedbackAviso) {
-                                elements.feedbackAviso.classList.add("hidden");
-                            }
-                        }, 1500);
-                    } else {
-                        mostrarFeedback(elements.feedbackAviso, body?.erro || "Erro ao atualizar conta.", "error");
-                    }
-                })
-                .catch(() => {
-                    mostrarFeedback(elements.feedbackAviso, "Erro de conexão com o servidor.", "error");
-                })
-                .finally(() => {
-                    elements.btnMudarConta.disabled = false;
-                    elements.btnMudarConta.textContent = botaoOriginal;
-                });
+    if (elements.btnIrConfiguracoes) {
+        elements.btnIrConfiguracoes.addEventListener("click", () => {
+            window.location.assign("perfil.html");
         });
     }
 }

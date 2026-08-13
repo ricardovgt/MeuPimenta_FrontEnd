@@ -16,7 +16,7 @@
         <a href="servicos.html" class="nav-logo">MeuPimenta</a>
         <nav class="nav-links">
             <a href="servicos.html" class="nav-item">Buscar Serviços</a>
-            <a href="meus_servicos.html" class="nav-item">Meus Serviços</a>
+            <a href="meus_servicos.html" class="nav-item hidden" data-conta-comercial>Meus Serviços</a>
             <a href="perfil.html" class="nav-item">Perfil</a>
         </nav>
         <div class="nav-actions">
@@ -27,9 +27,15 @@
     <main class="container-servico">
         <section id="servico-detalhe" class="card-servico">
             <div class="card-header-top">
-                <span id="servico-postador" class="postador-badge hidden"></span>
+                <div id="servico-postador" class="servico-dono hidden">
+                    <img id="servico-postador-foto" class="servico-dono-avatar" src="../img/default-profile.png" alt="Foto do dono do serviço">
+                    <div class="servico-dono-identidade">
+                        <span id="servico-postador-nome" class="servico-dono-nome"></span>
+                        <span class="servico-dono-tag" aria-label="Dono do serviço"><span aria-hidden="true">★</span> Dono</span>
+                    </div>
+                </div>
             </div>
-            <div class="hero">
+            <div id="servico-hero" class="hero hidden">
                 <button id="btn-foto-anterior" class="foto-nav-btn foto-nav-anterior hidden" type="button" aria-label="Foto anterior">‹</button>
                 <img id="servico-foto" src="" alt="Foto do serviço">
                 <button id="btn-foto-proxima" class="foto-nav-btn foto-nav-proxima hidden" type="button" aria-label="Próxima foto">›</button>
@@ -106,6 +112,7 @@
         </section>
     </main>
 
+    <script src="../js/nav-conta.js"></script>
     <script src="../js/servico/api.js"></script>
     <script src="../js/servico/events.js"></script>
     <script src="../js/servico/main.js"></script>

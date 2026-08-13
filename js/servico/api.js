@@ -81,3 +81,27 @@ function listarAvaliacoes(idServico, pagina = 1, limite = 10) {
             return { status: res.status, body: data.body };
         });
 }
+
+function obterUsuarioAutenticado(token) {
+    return fetch("http://localhost:8080/connecta-api/usuario", {
+        method: "GET",
+        headers: obterHeadersAutorizacao(token)
+    }).then(async (res) => {
+        const data = await lerResposta(res);
+        return { status: res.status, body: data.body };
+    });
+}
+
+function excluirAvaliacao(token, idAvaliacao) {
+    return fetch("http://localhost:8080/connecta-api/avaliacoes", {
+        method: "DELETE",
+        headers: {
+            ...obterHeadersAutorizacao(token),
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ idAvaliacao: Number(idAvaliacao) })
+    }).then(async (res) => {
+        const data = await lerResposta(res);
+        return { status: res.status, body: data.body };
+    });
+}

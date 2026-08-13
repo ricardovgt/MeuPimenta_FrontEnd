@@ -103,14 +103,3 @@ function criarServico(token, elements, dadosServico) {
             return { status: res.status, body: body.body };
         });
 }
-
-function mudarContaParaComercial(token) {
-    return fetch("http://localhost:8080/connecta-api/usuario?tipoConta=COMERCIAL", {
-        method: "PUT",
-        headers: obterHeadersAutorizacao(token)
-    })
-        .then(async (res) => {
-            const body = await lerResposta(res);
-            return { status: res.status, body: body.body };
-        });
-}
