@@ -1,9 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    const token = sessionStorage.getItem("tokenConnectaRO");
-    if (!token) {
-        window.location.assign("login.html");
-        return;
-    }
+    const token = Connecta.auth.exigirToken();
+    if (!token) return;
 
     const id = (valor) => document.getElementById(valor);
     const elements = {
@@ -24,23 +21,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
     const state = { usuario: {} };
 
-    try {
-        const { status, body } = await obterUsuario(token);
-        if (status === 401 || status === 403) {
-            fazerLogout();
-            return;
-        }
-        if (status !== 200) {
-            elements.nome.textContent = mensagemErro(body, "Não foi possível carregar o perfil.");
-            return;
-        }
-        state.usuario = body;
-        renderizarUsuario(body, elements);
-    } catch (erro) {
-        console.error("Erro ao carregar perfil:", erro);
-        elements.nome.textContent = "Erro de conexão";
-        return;
-    }
+    const perfilCarregado = await carregarPerfil(token, state, elements);
+    if (!perfilCarregado) return;
 
     configurarBotaoSair(elements.btnSair);
     configurarUploadFotoPerfil(token, elements);

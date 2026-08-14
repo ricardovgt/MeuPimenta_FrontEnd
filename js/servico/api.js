@@ -1,107 +1,43 @@
-function obterHeadersAutorizacao(token) {
-    return {
-        Authorization: "Bearer " + token
-    };
-}
+const ENDPOINT_SERVICOS = "servicos";
+const ENDPOINT_AVALIACOES = "avaliacoes";
+const ENDPOINT_USUARIO = "usuario";
 
-async function lerResposta(response) {
-    const text = await response.text();
-
-    if (!text) {
-        return { status: response.status, body: {} };
-    }
-
-    try {
-        return { status: response.status, body: JSON.parse(text) };
-    } catch {
-        return { status: response.status, body: { mensagem: text } };
-    }
-}
-
-function carregarServicoCompleto(token, idServico, elements) {
-    fetch(`http://localhost:8080/connecta-api/servicos?id=${encodeURIComponent(idServico)}`, {
+function obterServicoCompleto(token, idServico) {
+    return Connecta.api.requisicao(ENDPOINT_SERVICOS, {
         method: "GET",
-        headers: obterHeadersAutorizacao(token)
-    })
-        .then(async (res) => {
-            const { status, body } = await lerResposta(res);
-
-            if (status !== 200) {
-                mostrarFeedback(elements.feedback, body?.erro || body?.mensagem || "Não foi possível carregar este serviço.", "error");
-                return;
-            }
-
-            popularServico(body, elements);
-        })
-        .catch((err) => {
-            console.error("Erro ao carregar serviço:", err);
-            mostrarFeedback(elements.feedback, "Erro de conexão com o servidor.", "error");
-        });
-}
-
-function enviarAvaliacao(token, feedbackElement, idServico, nota, comentario) {
-    if (!idServico || !nota) {
-        mostrarFeedback(feedbackElement, "Selecione uma nota antes de enviar.", "error");
-        return Promise.resolve({ status: 400, body: { erro: "Selecione uma nota antes de enviar." } });
-    }
-
-    const params = {
-        idServico: String(idServico),
-        nota: String(nota)
-    };
-
-    if (comentario !== undefined && comentario !== null) {
-        params.comentario = String(comentario);
-    }
-
-    const body = new URLSearchParams(params);
-
-    return fetch("http://localhost:8080/connecta-api/avaliacoes", {
-        method: "POST",
-        headers: {
-            ...obterHeadersAutorizacao(token),
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body
-    })
-        .then(async (res) => {
-            const data = await lerResposta(res);
-            return { status: res.status, body: data.body };
-        });
-}
-
-function listarAvaliacoes(idServico, pagina = 1, limite = 10) {
-    const qs = new URLSearchParams({ idServico: String(idServico), pagina: String(pagina), limite: String(limite) });
-
-    return fetch(`http://localhost:8080/connecta-api/avaliacoes?${qs.toString()}`, {
-        method: "GET"
-    })
-        .then(async (res) => {
-            const data = await lerResposta(res);
-            return { status: res.status, body: data.body };
-        });
-}
-
-function obterUsuarioAutenticado(token) {
-    return fetch("http://localhost:8080/connecta-api/usuario", {
-        method: "GET",
-        headers: obterHeadersAutorizacao(token)
-    }).then(async (res) => {
-        const data = await lerResposta(res);
-        return { status: res.status, body: data.body };
+        token,
+        parametros: { id: idServico }
     });
 }
 
+function enviarAvaliacao(token, idServico, nota, comentario) {
+    const body = new URLSearchParams({ idServico: String(idServico), nota: String(nota) });
+    if (comentario !== undefined && comentario !== null) body.set("comentario", String(comentario));
+
+    return Connecta.api.requisicao(ENDPOINT_AVALIACOES, {
+        method: "POST",
+        token,
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body
+    });
+}
+
+function listarAvaliacoes(idServico, pagina = 1, limite = 10) {
+    return Connecta.api.requisicao(ENDPOINT_AVALIACOES, {
+        method: "GET",
+        parametros: { idServico, pagina, limite }
+    });
+}
+
+function obterUsuarioAutenticado(token) {
+    return Connecta.api.requisicao(ENDPOINT_USUARIO, { method: "GET", token });
+}
+
 function excluirAvaliacao(token, idAvaliacao) {
-    return fetch("http://localhost:8080/connecta-api/avaliacoes", {
+    return Connecta.api.requisicao(ENDPOINT_AVALIACOES, {
         method: "DELETE",
-        headers: {
-            ...obterHeadersAutorizacao(token),
-            "Content-Type": "application/json"
-        },
+        token,
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ idAvaliacao: Number(idAvaliacao) })
-    }).then(async (res) => {
-        const data = await lerResposta(res);
-        return { status: res.status, body: data.body };
     });
 }

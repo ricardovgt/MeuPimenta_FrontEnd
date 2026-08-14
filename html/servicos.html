@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="../css/servicos/servicos-layout.css">
     <link rel="stylesheet" href="../css/servicos/servicos-filtros.css">
     <link rel="stylesheet" href="../css/servicos/servicos-cards.css">
-    <link rel="stylesheet" href="../css/servicos/servicos-modals.css">
 </head>
 <body>
 
@@ -20,9 +19,7 @@
             <a href="meus_servicos.html" class="nav-item hidden" data-conta-comercial>Meus Serviços</a>
             <a href="perfil.html" class="nav-item">Perfil</a>
         </nav>
-        <div class="nav-actions">
-            <button id="btn-novo-servico" class="btn btn-primary btn-sm">Anunciar Serviço</button>
-        </div>
+        <div class="nav-actions"></div>
     </header>
 
     <main class="container-servicos">
@@ -52,152 +49,11 @@
         </section>
     </main>
 
-    <div id="modal-aviso-conta" class="modal hidden">
-        <div class="modal-content">
-            <h2>Atenção!</h2>
-            <p>Para anunciar um serviço, vá até as configurações e altere seu tipo de conta para <strong>Comercial</strong>.</p>
-            <div class="modal-actions">
-                <button type="button" id="btn-cancelar-aviso" class="btn btn-outline">Cancelar</button>
-                <button type="button" id="btn-ir-configuracoes" class="btn btn-primary">Ir para as configurações</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="modal-cadastro-servico" class="modal hidden">
-        <div class="modal-content modal-cadastro">
-            <!-- Header do modal -->
-            <div class="modal-cadastro-header">
-                <div class="modal-cadastro-header-left">
-                    <div class="modal-cadastro-icon-badge">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-                    </div>
-                    <div>
-                        <h2>Anunciar Serviço</h2>
-                        <p class="modal-cadastro-subtitle">Preencha os dados abaixo para publicar seu serviço.</p>
-                    </div>
-                </div>
-                <button type="button" id="btn-fechar-cadastro" class="modal-cadastro-close" aria-label="Fechar modal">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-                </button>
-            </div>
-
-            <div id="feedback-servico" class="feedback-msg hidden" aria-live="polite"></div>
-            
-            <form id="form-servico" class="modal-cadastro-form">
-                <!-- Campo: Nome -->
-                <div class="form-group modal-campo">
-                    <div class="modal-campo-label">
-                        <span class="modal-campo-icon">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-                        </span>
-                        <label for="nome">Nome do Serviço/Profissional *</label>
-                    </div>
-                    <input type="text" id="nome" name="nome" placeholder="Ex.: Design de Sobrancelhas" required>
-                    <span class="modal-campo-hint">Seja claro e direto no nome do seu serviço.</span>
-                </div>
-
-                <!-- Campo: Descrição curta -->
-                <div class="form-group modal-campo">
-                    <div class="modal-campo-label">
-                        <span class="modal-campo-icon">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-                        </span>
-                        <label for="descricao">Descrição curta</label>
-                    </div>
-                    <input type="text" id="descricao" name="descricao" placeholder="O que você faz?" maxlength="120">
-                    <div class="modal-campo-footer">
-                        <span class="modal-campo-hint">Ex.: Realço a beleza do seu olhar com técnicas personalizadas.</span>
-                        <span class="modal-campo-counter" data-target="descricao" data-max="120">0/120</span>
-                    </div>
-                </div>
-
-                <!-- Campo: Descrição detalhada -->
-                <div class="form-group modal-campo">
-                    <div class="modal-campo-label">
-                        <span class="modal-campo-icon">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-                        </span>
-                        <label for="descricaoDetalhada">Descrição detalhada</label>
-                    </div>
-                    <textarea id="descricaoDetalhada" name="descricaoDetalhada" rows="4" placeholder="Conte mais sobre o serviço, horários, diferenciais e detalhes importantes." maxlength="1000" required></textarea>
-                    <div class="modal-campo-footer">
-                        <span class="modal-campo-hint">Inclua informações que ajudem o cliente a te escolher.</span>
-                        <span class="modal-campo-counter" data-target="descricaoDetalhada" data-max="1000">0/1000</span>
-                    </div>
-                </div>
-
-                <!-- Campo: Telefone -->
-                <div class="form-group modal-campo">
-                    <div class="modal-campo-label">
-                        <span class="modal-campo-icon modal-campo-icon--whatsapp">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                        </span>
-                        <label for="telefone">Telefone (WhatsApp) *</label>
-                    </div>
-                    <input type="text" id="telefone" name="telefone" placeholder="(11) 99999-9999" required>
-                    <span class="modal-campo-hint">Seu número será exibido para contatos via WhatsApp.</span>
-                </div>
-
-                <!-- Campo: Fotos -->
-                <div class="form-group modal-campo">
-                    <div class="modal-campo-label">
-                        <span class="modal-campo-icon">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                        </span>
-                        <label for="fotos-input">Fotos do Serviço (até 5)</label>
-                    </div>
-                    <div class="modal-fotos-area">
-                        <label for="fotos-input" class="modal-fotos-trigger">
-                            <span class="modal-fotos-trigger-icon">
-                                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                            </span>
-                            <span class="modal-fotos-trigger-text">Adicionar fotos</span>
-                        </label>
-                        <input type="file" id="fotos-input" name="fotos" accept="image/*" multiple class="modal-fotos-input-hidden">
-                        <div id="fotos-preview" class="fotos-preview"></div>
-                    </div>
-                </div>
-                
-                <div class="modal-actions modal-cadastro-actions">
-                    <button type="button" id="btn-cancelar-servico" class="btn btn-outline">Cancelar</button>
-                    <button type="submit" class="btn btn-primary modal-btn-publicar">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                        Publicar Serviço
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
+    <script src="../js/global.js"></script>
     <script src="../js/nav-conta.js"></script>
     <script src="../js/servicos/api.js"></script>
     <script src="../js/servicos/ui.js"></script>
     <script src="../js/servicos/events.js"></script>
     <script src="../js/servicos/main.js"></script>
-    <script>
-        // Botão X de fechar o modal de cadastro
-        document.addEventListener("DOMContentLoaded", () => {
-            const btnFechar = document.getElementById("btn-fechar-cadastro");
-            const modal = document.getElementById("modal-cadastro-servico");
-            if (btnFechar && modal) {
-                btnFechar.addEventListener("click", () => modal.classList.add("hidden"));
-            }
-
-            // Contadores de caracteres
-            document.querySelectorAll(".modal-campo-counter").forEach(counter => {
-                const targetId = counter.dataset.target;
-                const maxLen = parseInt(counter.dataset.max, 10);
-                const input = document.getElementById(targetId);
-                if (!input) return;
-                const update = () => {
-                    const len = input.value.length;
-                    counter.textContent = `${len}/${maxLen}`;
-                    counter.classList.toggle("modal-campo-counter--warn", len >= maxLen * 0.9);
-                };
-                input.addEventListener("input", update);
-                update();
-            });
-        });
-    </script>
 </body>
 </html>

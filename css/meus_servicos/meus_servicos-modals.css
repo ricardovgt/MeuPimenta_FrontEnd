@@ -35,6 +35,20 @@
     margin-bottom: 1.25rem;
 }
 
+.modal-cadastro #feedback-servico {
+    margin: 1.25rem 2rem 0;
+}
+
+.feedback-msg.success {
+    color: var(--accent-color);
+    background-color: rgba(16, 185, 129, 0.12);
+}
+
+.feedback-msg.error {
+    color: #f87171;
+    background-color: rgba(248, 113, 113, 0.12);
+}
+
 .modal p,
 .modal label {
     color: var(--text-secondary);
@@ -87,6 +101,7 @@
 }
 
 .modal-actions #btn-cancelar-edicao,
+.modal-actions #btn-cancelar-servico,
 .modal-actions #btn-cancelar-excluir {
     color: var(--text-primary);
     background: transparent;
@@ -448,13 +463,15 @@
     filter: brightness(1.06);
 }
 
-.modal-edicao-actions #btn-cancelar-edicao {
+.modal-edicao-actions #btn-cancelar-edicao,
+.modal-edicao-actions #btn-cancelar-servico {
     color: var(--text-primary);
     background: transparent;
     border-color: #3f3f46;
 }
 
-.modal-edicao-actions #btn-cancelar-edicao:hover {
+.modal-edicao-actions #btn-cancelar-edicao:hover,
+.modal-edicao-actions #btn-cancelar-servico:hover {
     border-color: rgba(255, 255, 255, 0.2);
     background-color: rgba(255, 255, 255, 0.04);
 }
@@ -517,4 +534,11 @@
     .modal-actions button {
         width: 100%;
     }
+}
+
+.modal-btn-publicar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.45rem;
 }

@@ -1,136 +1,50 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const token = sessionStorage.getItem("tokenConnectaRO");
-
-    if (!token) {
-        window.location.assign("login.html");
-        return;
-    }
+    const token = Connecta.auth.exigirToken();
+    if (!token) return;
 
     const idServico = new URLSearchParams(window.location.search).get("id");
-
     if (!idServico) {
-        window.location.href = "servicos.html";
+        window.location.assign("servicos.html");
         return;
     }
 
+    const id = (valor) => document.getElementById(valor);
     const elements = {
-        nome: document.getElementById("servico-nome"),
-        resumo: document.getElementById("servico-resumo"),
-        descricao: document.getElementById("servico-descricao"),
-        foto: document.getElementById("servico-foto"),
-        hero: document.getElementById("servico-hero"),
-        btnFotoAnterior: document.getElementById("btn-foto-anterior"),
-        btnFotoProxima: document.getElementById("btn-foto-proxima"),
-        fotoContador: document.getElementById("foto-contador"),
-        fotoThumbs: document.getElementById("foto-thumbs"),
-        badges: document.getElementById("servico-badges"),
-        whatsapp: document.getElementById("servico-whatsapp"),
-        postador: document.getElementById("servico-postador"),
-        postadorFoto: document.getElementById("servico-postador-foto"),
-        postadorNome: document.getElementById("servico-postador-nome"),
-        feedback: document.getElementById("feedback-servico"),
-        resumoNota: document.getElementById("resumo-nota"),
-        resumoEstrelas: document.getElementById("resumo-estrelas"),
-        resumoTotal: document.getElementById("resumo-total"),
+        nome: id("servico-nome"),
+        resumo: id("servico-resumo"),
+        descricao: id("servico-descricao"),
+        foto: id("servico-foto"),
+        hero: id("servico-hero"),
+        btnFotoAnterior: id("btn-foto-anterior"),
+        btnFotoProxima: id("btn-foto-proxima"),
+        fotoContador: id("foto-contador"),
+        fotoThumbs: id("foto-thumbs"),
+        badges: id("servico-badges"),
+        whatsapp: id("servico-whatsapp"),
+        postador: id("servico-postador"),
+        postadorFoto: id("servico-postador-foto"),
+        postadorNome: id("servico-postador-nome"),
+        feedback: id("feedback-servico"),
+        resumoNota: id("resumo-nota"),
+        resumoEstrelas: id("resumo-estrelas"),
+        resumoTotal: id("resumo-total"),
         barras: {
-            5: { fill: document.getElementById("barra-fill-5"), count: document.getElementById("barra-count-5") },
-            4: { fill: document.getElementById("barra-fill-4"), count: document.getElementById("barra-count-4") },
-            3: { fill: document.getElementById("barra-fill-3"), count: document.getElementById("barra-count-3") },
-            2: { fill: document.getElementById("barra-fill-2"), count: document.getElementById("barra-count-2") },
-            1: { fill: document.getElementById("barra-fill-1"), count: document.getElementById("barra-count-1") }
+            5: { fill: id("barra-fill-5"), count: id("barra-count-5") },
+            4: { fill: id("barra-fill-4"), count: id("barra-count-4") },
+            3: { fill: id("barra-fill-3"), count: id("barra-count-3") },
+            2: { fill: id("barra-fill-2"), count: id("barra-count-2") },
+            1: { fill: id("barra-fill-1"), count: id("barra-count-1") }
         },
-        btnAvaliar: document.getElementById("btn-avaliar"),
-        btnCompartilhar: document.getElementById("btn-compartilhar"),
-        btnVoltar: document.getElementById("btn-voltar"),
-        btnHome: document.getElementById("btn-home")
+        btnAvaliar: id("btn-avaliar"),
+        btnCompartilhar: id("btn-compartilhar"),
+        btnCarregarMais: id("btn-carregar-mais"),
+        btnVoltar: id("btn-voltar"),
+        btnHome: id("btn-home")
     };
 
     configurarNavegacao(elements);
     configurarGaleriaFotos(elements);
-    carregarServicoCompleto(token, idServico, elements);
     configurarAvaliacoes(token, idServico, elements);
-
-    // Estado de paginação para avaliações
-    const avaliacoesState = {
-        paginaAtual: 1,
-        totalPaginas: 1,
-        limite: 10,
-        idUsuarioAutenticado: null
-    };
-
-    function obterIdUsuarioDoToken(jwt) {
-        try {
-            let payloadBase64 = jwt.split(".")[1]
-                .replace(/-/g, "+")
-                .replace(/_/g, "/");
-            payloadBase64 = payloadBase64.padEnd(Math.ceil(payloadBase64.length / 4) * 4, "=");
-            const payload = JSON.parse(decodeURIComponent(Array.from(atob(payloadBase64))
-                .map((caractere) => `%${caractere.charCodeAt(0).toString(16).padStart(2, "0")}`)
-                .join("")));
-            return Number(payload.idUsuario ?? payload.id ?? payload.userId) || null;
-        } catch {
-            return null;
-        }
-    }
-
-    // Função exposta para recarregar uma página específica (usada pelo modal após postar)
-    window.carregarAvaliacoesPagina = function (pagina) {
-        const paginaReq = Number(pagina || 1);
-
-        listarAvaliacoes(idServico, paginaReq, avaliacoesState.limite)
-            .then(({ status, body }) => {
-                if (status !== 200) {
-                    mostrarErroAvaliacoes(body?.erro || body?.mensagem || 'Não foi possível carregar avaliações.');
-                    return;
-                }
-
-                const resp = body || {};
-
-                avaliacoesState.paginaAtual = Number(resp.paginaAtual || paginaReq);
-                avaliacoesState.totalPaginas = Number(resp.totalPaginas || 1);
-
-                if (paginaReq === 1) {
-                    limparAvaliacoes();
-                }
-
-                appendAvaliacoes(resp.avaliacoes || [], {
-                    token,
-                    idUsuarioAutenticado: avaliacoesState.idUsuarioAutenticado,
-                    aoExcluir: () => {
-                        window.carregarAvaliacoesPagina(1);
-                        carregarServicoCompleto(token, idServico, elements);
-                    }
-                });
-                atualizarBotaoCarregarMais(avaliacoesState.paginaAtual, avaliacoesState.totalPaginas);
-            })
-            .catch(() => {
-                mostrarErroAvaliacoes('Erro de comunicação com o servidor.');
-            });
-    };
-
-    // Carrega a identidade antes das avaliações para mostrar Excluir
-    // somente nos comentários pertencentes ao usuário autenticado.
-    obterUsuarioAutenticado(token)
-        .then(({ status, body }) => {
-            if (status === 200) {
-                avaliacoesState.idUsuarioAutenticado = Number(body?.idUsuario ?? body?.id)
-                    || obterIdUsuarioDoToken(token);
-            } else {
-                avaliacoesState.idUsuarioAutenticado = obterIdUsuarioDoToken(token);
-            }
-        })
-        .catch(() => {
-            avaliacoesState.idUsuarioAutenticado = obterIdUsuarioDoToken(token);
-        })
-        .finally(() => window.carregarAvaliacoesPagina(1));
-
-    const btnCarregarMais = document.getElementById('btn-carregar-mais');
-    if (btnCarregarMais) {
-        btnCarregarMais.addEventListener('click', () => {
-            if (avaliacoesState.paginaAtual < avaliacoesState.totalPaginas) {
-                const proxima = avaliacoesState.paginaAtual + 1;
-                window.carregarAvaliacoesPagina(proxima);
-            }
-        });
-    }
+    configurarListaAvaliacoes(token, idServico, elements);
+    carregarServicoCompleto(token, idServico, elements);
 });

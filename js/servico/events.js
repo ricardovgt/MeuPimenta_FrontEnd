@@ -33,7 +33,12 @@ function configurarAvaliacoes(token, idServico, elements) {
             return;
         }
 
-        mostrarModalAvaliacao(token, idServico, elements);
+        mostrarModalAvaliacao(token, idServico, elements, {
+            aoEnviar: () => {
+                elements.carregarAvaliacoesPagina?.(1);
+                carregarServicoCompleto(token, idServico, elements);
+            }
+        });
     });
 
     if (elements.btnCompartilhar) {
@@ -51,14 +56,80 @@ function configurarAvaliacoes(token, idServico, elements) {
 
                 if (navigator.clipboard?.writeText) {
                     await navigator.clipboard.writeText(url);
-                    mostrarFeedback(elements.feedback, "Link copiado para a área de transferência.", "success");
+                    Connecta.ui.mostrarFeedback(elements.feedback, "Link copiado para a área de transferência.", "success");
                     return;
                 }
 
                 throw new Error("Compartilhamento indisponível");
             } catch {
-                mostrarFeedback(elements.feedback, "Não foi possível compartilhar o link automaticamente.", "error");
+                Connecta.ui.mostrarFeedback(elements.feedback, "Não foi possível compartilhar o link automaticamente.", "error");
             }
         });
     }
+}
+
+function carregarServicoCompleto(token, idServico, elements) {
+    return obterServicoCompleto(token, idServico)
+        .then(({ status, body }) => {
+            if (status === 200) {
+                popularServico(body, elements);
+                return;
+            }
+            Connecta.ui.mostrarFeedback(
+                elements.feedback,
+                body?.erro || body?.mensagem || "Não foi possível carregar este serviço.",
+                "error"
+            );
+        })
+        .catch((erro) => {
+            console.error("Erro ao carregar serviço:", erro);
+            Connecta.ui.mostrarFeedback(elements.feedback, "Erro de conexão com o servidor.", "error");
+        });
+}
+
+function configurarListaAvaliacoes(token, idServico, elements) {
+    const state = { paginaAtual: 1, totalPaginas: 1, limite: 10, idUsuarioAutenticado: null };
+
+    function carregarPagina(pagina = 1) {
+        const paginaRequisitada = Number(pagina);
+        listarAvaliacoes(idServico, paginaRequisitada, state.limite)
+            .then(({ status, body }) => {
+                if (status !== 200) {
+                    mostrarErroAvaliacoes(body?.erro || body?.mensagem || "Não foi possível carregar avaliações.");
+                    return;
+                }
+
+                state.paginaAtual = Number(body?.paginaAtual || paginaRequisitada);
+                state.totalPaginas = Number(body?.totalPaginas || 1);
+                if (paginaRequisitada === 1) limparAvaliacoes();
+
+                appendAvaliacoes(body?.avaliacoes || [], {
+                    token,
+                    idUsuarioAutenticado: state.idUsuarioAutenticado,
+                    aoExcluir: () => {
+                        carregarPagina(1);
+                        carregarServicoCompleto(token, idServico, elements);
+                    }
+                });
+                atualizarBotaoCarregarMais(state.paginaAtual, state.totalPaginas);
+            })
+            .catch(() => mostrarErroAvaliacoes("Erro de comunicação com o servidor."));
+    }
+
+    obterUsuarioAutenticado(token)
+        .then(({ status, body }) => {
+            state.idUsuarioAutenticado = status === 200
+                ? Number(body?.idUsuario ?? body?.id) || obterIdUsuarioDoToken(token)
+                : obterIdUsuarioDoToken(token);
+        })
+        .catch(() => {
+            state.idUsuarioAutenticado = obterIdUsuarioDoToken(token);
+        })
+        .finally(() => carregarPagina(1));
+
+    elements.btnCarregarMais?.addEventListener("click", () => {
+        if (state.paginaAtual < state.totalPaginas) carregarPagina(state.paginaAtual + 1);
+    });
+
+    elements.carregarAvaliacoesPagina = carregarPagina;
 }

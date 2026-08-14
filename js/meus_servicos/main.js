@@ -1,13 +1,19 @@
 document.addEventListener("DOMContentLoaded", () => {
-    const token = sessionStorage.getItem("tokenConnectaRO");
-
-    if (!token) {
-        window.location.assign("login.html");
-        return;
-    }
+    const token = Connecta.auth.exigirToken();
+    if (!token) return;
 
     const elements = {
         grid: document.getElementById("grid-meus-servicos"),
+
+        btnNovoServico: document.getElementById("btn-novo-servico"),
+        modalServico: document.getElementById("modal-cadastro-servico"),
+        formServico: document.getElementById("form-servico"),
+        inputTelefoneCadastro: document.getElementById("telefone"),
+        inputFotosCadastro: document.getElementById("fotos-input"),
+        fotosCadastroPreview: document.getElementById("fotos-preview"),
+        feedbackServico: document.getElementById("feedback-servico"),
+        btnCancelarServico: document.getElementById("btn-cancelar-servico"),
+        btnFecharCadastro: document.getElementById("btn-fechar-cadastro"),
 
         modalEditar: document.getElementById("modal-editar-servico"),
         formEditar: document.getElementById("form-editar-servico"),
@@ -19,6 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
         inputDescricao: document.getElementById("editar-descricao"),
         inputDescricaoDetalhada: document.getElementById("editar-descricaoDetalhada"),
         btnCancelarEdicao: document.getElementById("btn-cancelar-edicao"),
+        btnFecharEdicao: document.getElementById("btn-fechar-edicao"),
 
         modalExcluir: document.getElementById("modal-excluir-servico"),
         excluirId: document.getElementById("excluir-id"),
@@ -27,7 +34,12 @@ document.addEventListener("DOMContentLoaded", () => {
         btnConfirmarExcluir: document.getElementById("btn-confirmar-excluir")
     };
 
+    configurarListaServicos(token, elements);
+    configurarCadastroServico(token, elements);
     configurarEdicaoServico(token, elements);
     configurarExclusaoServico(token, elements);
-    configurarListaServicos(token, elements);
+    configurarFechamentoEdicao(elements);
+    configurarMascaraTelefone(elements.inputTelefoneCadastro);
+    configurarMascaraTelefone(elements.inputTelefone);
+    Connecta.ui.configurarContadoresCaracteres();
 });

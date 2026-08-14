@@ -7,21 +7,15 @@ function atualizarVisibilidadeMeusServicos(tipoConta) {
 }
 
 async function configurarNavegacaoPorTipoConta() {
-    const token = sessionStorage.getItem("tokenConnectaRO");
+    const token = Connecta.auth.obterToken();
     if (!token) return;
 
     try {
-        const response = await fetch("http://localhost:8080/connecta-api/usuario", {
+        const { status, body } = await Connecta.api.requisicao("usuario", {
             method: "GET",
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
+            token
         });
-
-        if (!response.ok) return;
-
-        const usuario = await response.json();
-        atualizarVisibilidadeMeusServicos(usuario?.tipoConta);
+        if (status === 200) atualizarVisibilidadeMeusServicos(body?.tipoConta);
     } catch (erro) {
         console.error("Erro ao verificar o tipo de conta para a navegação:", erro);
     }

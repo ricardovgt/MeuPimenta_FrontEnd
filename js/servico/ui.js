@@ -84,20 +84,6 @@ function mostrarFotoProxima(elements) {
     renderizarFotoAtual(elements);
 }
 
-function mostrarFeedback(elemento, mensagem, tipo = "error") {
-    if (!elemento) return;
-
-    elemento.textContent = mensagem;
-    elemento.classList.remove("hidden");
-    elemento.className = "feedback-msg";
-
-    if (tipo === "success") {
-        elemento.classList.add("success");
-    } else {
-        elemento.classList.add("error");
-    }
-}
-
 function resumirNome(nomeCompleto) {
     if (typeof nomeCompleto !== "string") return "";
     return nomeCompleto.trim().split(/\s+/).filter(Boolean).slice(0, 3).join(" ");
@@ -216,7 +202,7 @@ function popularServico(servico, elements) {
     }
 }
 
-function mostrarModalAvaliacao(token, idServico, elements) {
+function mostrarModalAvaliacao(token, idServico, elements, opcoes = {}) {
     const painel = document.createElement("div");
     painel.className = "avaliacao-panel avaliacao-form-panel";
     painel.innerHTML = `
@@ -259,33 +245,27 @@ function mostrarModalAvaliacao(token, idServico, elements) {
     if (btnEnviar) {
         btnEnviar.addEventListener("click", () => {
             if (!notaSelecionada) {
-                mostrarFeedback(feedback, "Selecione uma nota antes de enviar.", "error");
+                Connecta.ui.mostrarFeedback(feedback, "Selecione uma nota antes de enviar.", "error");
                 return;
             }
 
             const comentario = painel.querySelector("#comentario-avaliacao").value.trim();
 
-            mostrarFeedback(feedback, "Enviando avaliação...", "error");
+            Connecta.ui.mostrarFeedback(feedback, "Enviando avaliação...", "error");
 
-            enviarAvaliacao(token, feedback, idServico, notaSelecionada, comentario)
+            enviarAvaliacao(token, idServico, notaSelecionada, comentario)
                 .then(({ status, body }) => {
                     if (status === 201 || status === 200) {
-                        mostrarFeedback(feedback, body?.mensagem || "Avaliação enviada com sucesso!", "success");
+                        Connecta.ui.mostrarFeedback(feedback, body?.mensagem || "Avaliação enviada com sucesso!", "success");
 
-                        if (typeof window.carregarAvaliacoesPagina === "function") {
-                            window.carregarAvaliacoesPagina(1);
-                        }
-
-                        if (typeof carregarServicoCompleto === "function") {
-                            carregarServicoCompleto(token, idServico, elements);
-                        }
+                        opcoes.aoEnviar?.();
 
                         return;
                     }
-                    mostrarFeedback(feedback, body?.erro || body?.mensagem || "Não foi possível enviar a avaliação.", "error");
+                    Connecta.ui.mostrarFeedback(feedback, body?.erro || body?.mensagem || "Não foi possível enviar a avaliação.", "error");
                 })
                 .catch(() => {
-                    mostrarFeedback(feedback, "Erro de comunicação com o servidor.", "error");
+                    Connecta.ui.mostrarFeedback(feedback, "Erro de comunicação com o servidor.", "error");
                 });
         });
     }
@@ -446,5 +426,5 @@ function atualizarBotaoCarregarMais(paginaAtual, totalPaginas) {
 
 function mostrarErroAvaliacoes(mensagem) {
     const feedback = document.getElementById("feedback-avaliacoes");
-    if (feedback) mostrarFeedback(feedback, mensagem, "error");
+    if (feedback) Connecta.ui.mostrarFeedback(feedback, mensagem, "error");
 }

@@ -2,9 +2,31 @@ function mensagemErro(body, fallback) {
     return body?.erro || body?.mensagem || fallback;
 }
 
+async function carregarPerfil(token, state, elements) {
+    try {
+        const { status, body } = await obterUsuario(token);
+        if (status === 401 || status === 403) {
+            Connecta.auth.fazerLogout();
+            return false;
+        }
+        if (status !== 200) {
+            elements.nome.textContent = mensagemErro(body, "Não foi possível carregar o perfil.");
+            return false;
+        }
+
+        state.usuario = body;
+        renderizarUsuario(body, elements);
+        return true;
+    } catch (erro) {
+        console.error("Erro ao carregar perfil:", erro);
+        elements.nome.textContent = "Erro de conexão";
+        return false;
+    }
+}
+
 function configurarBotaoSair(btnSair) {
     btnSair.addEventListener("click", () => {
-        if (confirm("Tem certeza que deseja sair?")) fazerLogout();
+        if (confirm("Tem certeza que deseja sair?")) Connecta.auth.fazerLogout();
     });
 }
 
@@ -177,8 +199,7 @@ function configurarExclusaoConta(token, state, elements) {
         try {
             const { status, body } = await excluirUsuario(token, email, senhaAtual);
             if (status === 200) {
-                sessionStorage.removeItem("tokenConnectaRO");
-                window.location.assign("login.html");
+                Connecta.auth.fazerLogout();
                 return;
             }
             mostrarFeedback(elements.feedbackExclusao, status === 401 ? mensagemErro(body, "E-mail ou senha inválidos.") : mensagemErro(body, "Não foi possível excluir a conta."), "error");
