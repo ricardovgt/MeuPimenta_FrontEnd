@@ -1,45 +1,255 @@
-/* Estilos dos filtros */
+/* ============================================================
+   Card / Modal de Filtros de Serviços (Estilo Figma)
+   ============================================================ */
+
 .filtros-section {
     background-color: var(--surface-color);
-    padding: 1.5rem;
-    border-radius: var(--border-radius);
-    width: 300px;
+    border: 1px solid #2f2f36;
+    border-radius: 20px;
+    padding: 1.75rem 1.75rem 1.5rem;
+    width: 360px;
     flex-shrink: 0;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
 }
 
-.filtros-section h3 {
-    margin-bottom: 1rem;
+.filtros-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.filtros-header h3 {
+    font-size: 1.45rem;
+    font-weight: 800;
     color: var(--primary-color);
+    margin-bottom: 0.25rem;
+    letter-spacing: -0.3px;
 }
 
+.filtros-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.4;
+}
+
+/* Formulário e Campos */
+.filtros-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.filtros-form .form-group {
+    margin-bottom: 1.35rem;
+}
+
+.filtros-form label:not(.rating-toggle-label) {
+    color: var(--text-primary);
+    font-weight: 700;
+    font-size: 0.92rem;
+    margin-bottom: 0.6rem;
+    display: block;
+}
+
+.filtros-grupo-label {
+    color: var(--text-primary);
+    font-weight: 700;
+    font-size: 0.92rem;
+    margin-bottom: 0.6rem;
+    display: block;
+}
+
+/* Campo de busca com Ícone */
+.filtros-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.filtros-search-icon {
+    position: absolute;
+    left: 1rem;
+    color: #FACC15;
+    pointer-events: none;
+}
+
+.filtros-input-wrapper input {
+    width: 100%;
+    background-color: #17171b;
+    border: 1px solid #3f3f46;
+    color: var(--text-primary);
+    padding: 0.85rem 1rem 0.85rem 2.8rem;
+    border-radius: 12px;
+    font-size: 0.92rem;
+    outline: none;
+    transition: border-color 0.25s, box-shadow 0.25s;
+}
+
+.filtros-input-wrapper input::placeholder {
+    color: #71717a;
+}
+
+.filtros-input-wrapper input:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(250, 204, 21, 0.12);
+}
+
+.filtros-hint {
+    font-size: 0.78rem;
+    color: #71717a;
+    margin-top: 0.45rem;
+    display: block;
+}
+
+/* Botão Card Selecionável - Melhores Avaliações */
 .hidden-checkbox {
     position: absolute;
     opacity: 0;
     width: 0;
     height: 0;
+    pointer-events: none;
+}
+
+.rating-toggle-label {
+    display: block;
+    cursor: pointer;
+    margin-bottom: 0 !important;
 }
 
 .custom-rating-btn {
-    display: inline-block;
-    background-color: #2a2a2e;
-    color: var(--text-secondary);
-    padding: 0.75rem 1rem;
-    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #17171b;
+    color: var(--text-primary);
+    padding: 0.9rem 1.1rem;
+    border-radius: 14px;
     border: 1px solid #3f3f46;
     cursor: pointer;
     transition: all 0.2s ease;
-    text-align: center;
-    width: 100%;
-    font-weight: 500;
+    user-select: none;
+}
+
+.rating-btn-text {
+    font-weight: 600;
+    font-size: 0.92rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.rating-btn-check {
+    width: 22px;
+    height: 22px;
+    min-width: 22px;
+    border-radius: 50%;
+    background: transparent;
+    border: 1.5px solid #52525b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: transparent;
+    transition: all 0.2s ease;
 }
 
 .hidden-checkbox:checked + .custom-rating-btn {
-    background-color: rgba(250, 204, 21, 0.15);
+    background-color: #17171b;
     border-color: var(--primary-color);
-    color: var(--primary-color);
-    font-weight: bold;
+    box-shadow: 0 0 0 1px var(--primary-color);
+}
+
+.hidden-checkbox:checked + .custom-rating-btn .rating-btn-check {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: #121214;
 }
 
 .custom-rating-btn:hover {
-    border-color: var(--text-secondary);
+    border-color: #71717a;
+}
+
+.hidden-checkbox:checked + .custom-rating-btn:hover {
+    border-color: var(--primary-color);
+}
+
+/* Botões de Ação */
+.btn-filtros-buscar {
+    width: 100%;
+    padding: 0.9rem 1.5rem;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    background-color: var(--primary-color);
+    color: #121214;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.15s, opacity 0.2s, box-shadow 0.2s;
+}
+
+.btn-filtros-buscar:hover {
+    opacity: 0.95;
+    box-shadow: 0 4px 16px rgba(250, 204, 21, 0.28);
+}
+
+/* Divisória "ou" */
+.filtros-divider {
+    position: relative;
+    text-align: center;
+    margin: 1.25rem 0;
+}
+
+.filtros-divider::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 1px;
+    background-color: #2f2f36;
+    z-index: 1;
+}
+
+.filtros-divider span {
+    position: relative;
+    z-index: 2;
+    background-color: var(--surface-color);
+    padding: 0.15rem 0.65rem;
+    color: #71717a;
+    font-size: 0.78rem;
+    border-radius: 999px;
+    border: 1px solid #2f2f36;
+    text-transform: lowercase;
+}
+
+/* Botão Limpar Filtros */
+.btn-filtros-limpar {
+    width: 100%;
+    padding: 0.8rem 1.5rem;
+    border-radius: 999px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-top: 0;
+    background-color: transparent;
+    color: var(--text-secondary);
+    border: 1px solid #3f3f46;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-filtros-limpar:hover {
+    color: var(--text-primary);
+    border-color: #71717a;
+    background-color: rgba(255, 255, 255, 0.04);
+}
+
+@media (max-width: 768px) {
+    .filtros-section {
+        width: 100%;
+    }
 }

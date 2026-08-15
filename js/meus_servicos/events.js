@@ -1,6 +1,10 @@
-function tratarErroAutenticacao(body) {
+async function tratarErroAutenticacao(body) {
     try {
-        alert(body?.erro || body?.mensagem || "Token inválido ou expirado.");
+        await Connecta.ui.alerta({
+            titulo: "Autenticação Expirada",
+            mensagem: body?.erro || body?.mensagem || "Token inválido ou expirado.",
+            kicker: "Atenção"
+        });
     } catch (e) {
         // ignore
     }
@@ -71,7 +75,11 @@ function configurarListaServicos(token, elements) {
                     return;
                 }
 
-                alert(body?.erro || "Erro ao carregar seus serviços.");
+                Connecta.ui.alerta({
+                    titulo: "Erro de Carregamento",
+                    mensagem: body?.erro || "Erro ao carregar seus serviços.",
+                    kicker: "Erro"
+                });
             })
             .catch((err) => console.error(err));
     }
@@ -165,14 +173,22 @@ function configurarEdicaoServico(token, elements) {
         };
 
         if (!dados.nome || !dados.telefone) {
-            alert("Nome e telefone são obrigatórios.");
+            Connecta.ui.alerta({
+                titulo: "Campos Obrigatórios",
+                mensagem: "Nome e telefone são obrigatórios.",
+                kicker: "Atenção"
+            });
             return;
         }
 
         atualizarServico(token, dados)
-            .then(({ status, body }) => {
+            .then(async ({ status, body }) => {
                 if (status === 200) {
-                    alert(body?.mensagem || "Serviço atualizado com sucesso.");
+                    await Connecta.ui.alerta({
+                        titulo: "Serviço Atualizado",
+                        mensagem: body?.mensagem || "Serviço atualizado com sucesso.",
+                        kicker: "Sucesso"
+                    });
                     esconderModal(elements.modalEditar);
                     if (elements.recarregarLista) elements.recarregarLista();
                     return;
@@ -183,7 +199,11 @@ function configurarEdicaoServico(token, elements) {
                     return;
                 }
 
-                alert(body?.erro || "Erro ao atualizar serviço.");
+                Connecta.ui.alerta({
+                    titulo: "Erro na Edição",
+                    mensagem: body?.erro || "Erro ao atualizar serviço.",
+                    kicker: "Erro"
+                });
             })
             .catch((err) => console.error(err));
     });
@@ -197,14 +217,22 @@ function configurarExclusaoServico(token, elements) {
         const email = elements.inputEmailConfirm.value.trim();
 
         if (!email) {
-            alert("Digite seu e-mail para confirmar a exclusão.");
+            Connecta.ui.alerta({
+                titulo: "Confirmação Obrigatória",
+                mensagem: "Digite seu e-mail para confirmar a exclusão.",
+                kicker: "Atenção"
+            });
             return;
         }
 
         excluirServico(token, id, email)
-            .then(({ status, body }) => {
+            .then(async ({ status, body }) => {
                 if (status === 200) {
-                    alert(body?.mensagem || "Serviço excluído com sucesso.");
+                    await Connecta.ui.alerta({
+                        titulo: "Serviço Excluído",
+                        mensagem: body?.mensagem || "Serviço excluído com sucesso!",
+                        kicker: "Sucesso"
+                    });
                     esconderModal(elements.modalExcluir);
                     if (elements.recarregarLista) elements.recarregarLista();
                     return;
@@ -215,7 +243,11 @@ function configurarExclusaoServico(token, elements) {
                     return;
                 }
 
-                alert(body?.erro || "Erro ao excluir serviço.");
+                Connecta.ui.alerta({
+                    titulo: "Erro na Exclusão",
+                    mensagem: body?.erro || "Erro ao excluir serviço.",
+                    kicker: "Erro"
+                });
             })
             .catch((err) => console.error(err));
     });

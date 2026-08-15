@@ -542,3 +542,35 @@
     justify-content: center;
     gap: 0.45rem;
 }
+
+/* Modal Excluir Serviço - Estilo Vermelho e Preto */
+#modal-excluir-servico .modal-content {
+    background: #18181b;
+    border: 1px solid rgba(239, 68, 68, 0.6);
+    border-radius: 18px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), 0 0 25px rgba(220, 38, 38, 0.15);
+}
+
+#modal-excluir-servico h2 {
+    color: #f87171;
+}
+
+#modal-excluir-servico #btn-confirmar-excluir {
+    color: #ffffff;
+    background: #dc2626;
+    border: 1px solid #ef4444;
+    border-radius: 10px;
+    font-weight: 700;
+    transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+#modal-excluir-servico #btn-confirmar-excluir:hover {
+    background: #b91c1c;
+    border-color: #f87171;
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35);
+}
+
+#modal-excluir-servico #btn-cancelar-excluir {
+    border-radius: 10px;
+}
+

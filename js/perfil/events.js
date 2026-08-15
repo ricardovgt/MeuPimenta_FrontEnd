@@ -10,8 +10,15 @@ function carregarPerfil(sessao, state, elements) {
 }
 
 function configurarBotaoSair(btnSair) {
-    btnSair.addEventListener("click", () => {
-        if (confirm("Tem certeza que deseja sair?")) Connecta.auth.fazerLogout();
+    btnSair.addEventListener("click", async () => {
+        const confirmado = await Connecta.ui.confirmar({
+            titulo: "Sair da conta",
+            mensagem: "Tem certeza que deseja sair?",
+            textoConfirmar: "Sair",
+            textoCancelar: "Cancelar",
+            kicker: "Ação Sensível"
+        });
+        if (confirmado) Connecta.auth.fazerLogout();
     });
 }
 

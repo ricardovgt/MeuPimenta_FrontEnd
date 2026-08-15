@@ -344,7 +344,14 @@ function criarAvaliacaoElemento(avaliacao, opcoes = {}) {
         excluir.setAttribute("aria-label", "Excluir minha avaliação");
 
         excluir.addEventListener("click", async () => {
-            if (!confirm("Deseja excluir esta avaliação? Esta ação não pode ser desfeita.")) return;
+            const confirmado = await Connecta.ui.confirmar({
+                titulo: "Excluir Avaliação",
+                mensagem: "Deseja excluir esta avaliação? Esta ação não pode ser desfeita.",
+                textoConfirmar: "Excluir",
+                textoCancelar: "Cancelar",
+                kicker: "Ação Irreversível"
+            });
+            if (!confirmado) return;
 
             excluir.disabled = true;
             excluir.textContent = "Excluindo...";
@@ -359,9 +366,17 @@ function criarAvaliacaoElemento(avaliacao, opcoes = {}) {
                 const mensagemPadrao = status === 404
                     ? "A avaliação não existe ou não pertence a você."
                     : "Não foi possível excluir a avaliação.";
-                alert(body?.erro || body?.mensagem || mensagemPadrao);
+                await Connecta.ui.alerta({
+                    titulo: "Não foi possível excluir",
+                    mensagem: body?.erro || body?.mensagem || mensagemPadrao,
+                    kicker: "Aviso"
+                });
             } catch {
-                alert("Erro de comunicação com o servidor.");
+                await Connecta.ui.alerta({
+                    titulo: "Erro de Conexão",
+                    mensagem: "Erro de comunicação com o servidor.",
+                    kicker: "Erro"
+                });
             } finally {
                 excluir.disabled = false;
                 excluir.textContent = "Excluir";

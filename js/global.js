@@ -209,6 +209,123 @@
         });
     }
 
+    function criarOuObterModalEstilizado() {
+        let overlay = document.getElementById("connecta-custom-modal");
+        if (overlay) return overlay;
+
+        overlay = document.createElement("div");
+        overlay.id = "connecta-custom-modal";
+        overlay.className = "connecta-modal-overlay hidden";
+        overlay.setAttribute("role", "dialog");
+        overlay.setAttribute("aria-modal", "true");
+        overlay.innerHTML = `
+            <div class="connecta-modal-card">
+                <p id="connecta-modal-kicker" class="connecta-modal-kicker"></p>
+                <h2 id="connecta-modal-title" class="connecta-modal-title"></h2>
+                <p id="connecta-modal-message" class="connecta-modal-message"></p>
+                <div class="connecta-modal-actions">
+                    <button type="button" id="connecta-modal-btn-cancel" class="btn-connecta-modal-cancel"></button>
+                    <button type="button" id="connecta-modal-btn-confirm" class="btn-connecta-modal-confirm"></button>
+                </div>
+            </div>
+        `;
+        document.body.appendChild(overlay);
+        return overlay;
+    }
+
+    function confirmar(opcoes) {
+        const config = typeof opcoes === "string" ? { mensagem: opcoes } : (opcoes || {});
+        const titulo = config.titulo || "Confirmação";
+        const mensagem = config.mensagem || "Tem certeza que deseja prosseguir?";
+        const textoConfirmar = config.textoConfirmar || "Confirmar";
+        const textoCancelar = config.textoCancelar || "Cancelar";
+        const kicker = config.kicker || "Ação Sensível";
+
+        const modal = criarOuObterModalEstilizado();
+        const kickerEl = modal.querySelector("#connecta-modal-kicker");
+        const titleEl = modal.querySelector("#connecta-modal-title");
+        const messageEl = modal.querySelector("#connecta-modal-message");
+        const btnCancel = modal.querySelector("#connecta-modal-btn-cancel");
+        const btnConfirm = modal.querySelector("#connecta-modal-btn-confirm");
+
+        kickerEl.textContent = kicker;
+        titleEl.textContent = titulo;
+        messageEl.textContent = mensagem;
+        btnCancel.textContent = textoCancelar;
+        btnConfirm.textContent = textoConfirmar;
+        btnCancel.style.display = "";
+
+        modal.classList.remove("hidden");
+        btnConfirm.focus();
+
+        return new Promise((resolve) => {
+            function fechar(resultado) {
+                modal.classList.add("hidden");
+                btnConfirm.removeEventListener("click", onConfirm);
+                btnCancel.removeEventListener("click", onCancel);
+                modal.removeEventListener("click", onOverlayClick);
+                document.removeEventListener("keydown", onKeyDown);
+                resolve(resultado);
+            }
+
+            function onConfirm() { fechar(true); }
+            function onCancel() { fechar(false); }
+            function onOverlayClick(e) { if (e.target === modal) fechar(false); }
+            function onKeyDown(e) {
+                if (e.key === "Escape") fechar(false);
+            }
+
+            btnConfirm.addEventListener("click", onConfirm);
+            btnCancel.addEventListener("click", onCancel);
+            modal.addEventListener("click", onOverlayClick);
+            document.addEventListener("keydown", onKeyDown);
+        });
+    }
+
+    function alerta(opcoes) {
+        const config = typeof opcoes === "string" ? { mensagem: opcoes } : (opcoes || {});
+        const titulo = config.titulo || "Aviso";
+        const mensagem = config.mensagem || "";
+        const textoBotao = config.textoBotao || "OK";
+        const kicker = config.kicker || "Notificação";
+
+        const modal = criarOuObterModalEstilizado();
+        const kickerEl = modal.querySelector("#connecta-modal-kicker");
+        const titleEl = modal.querySelector("#connecta-modal-title");
+        const messageEl = modal.querySelector("#connecta-modal-message");
+        const btnCancel = modal.querySelector("#connecta-modal-btn-cancel");
+        const btnConfirm = modal.querySelector("#connecta-modal-btn-confirm");
+
+        kickerEl.textContent = kicker;
+        titleEl.textContent = titulo;
+        messageEl.textContent = mensagem;
+        btnConfirm.textContent = textoBotao;
+        btnCancel.style.display = "none";
+
+        modal.classList.remove("hidden");
+        btnConfirm.focus();
+
+        return new Promise((resolve) => {
+            function fechar() {
+                modal.classList.add("hidden");
+                btnConfirm.removeEventListener("click", onConfirm);
+                modal.removeEventListener("click", onOverlayClick);
+                document.removeEventListener("keydown", onKeyDown);
+                resolve();
+            }
+
+            function onConfirm() { fechar(); }
+            function onOverlayClick(e) { if (e.target === modal) fechar(); }
+            function onKeyDown(e) {
+                if (e.key === "Escape" || e.key === "Enter") fechar();
+            }
+
+            btnConfirm.addEventListener("click", onConfirm);
+            modal.addEventListener("click", onOverlayClick);
+            document.addEventListener("keydown", onKeyDown);
+        });
+    }
+
     window.Connecta = Object.freeze({
         config: Object.freeze({ API_BASE_URL, TOKEN_STORAGE_KEY }),
         api: Object.freeze({ criarUrl, requisicao }),
@@ -222,6 +339,6 @@
             validarSessao
         }),
         imagem: Object.freeze({ comprimir: comprimirImagem }),
-        ui: Object.freeze({ configurarContadoresCaracteres, limparFeedback, mostrarFeedback })
+        ui: Object.freeze({ alerta, confirmar, configurarContadoresCaracteres, limparFeedback, mostrarFeedback })
     });
 }(window));

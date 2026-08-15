@@ -178,12 +178,20 @@ async function adicionarFotosSelecionadas(inputFotos, elementoPreview) {
     const espacoDisponivel = LIMITE_FOTOS - fotosEdicaoAtual.length;
 
     if (espacoDisponivel <= 0) {
-        alert(`Você já atingiu o limite de ${LIMITE_FOTOS} fotos. Remova alguma antes de adicionar outra.`);
+        Connecta.ui.alerta({
+            titulo: "Limite Atingido",
+            mensagem: `Você já atingiu o limite de ${LIMITE_FOTOS} fotos. Remova alguma antes de adicionar outra.`,
+            kicker: "Atenção"
+        });
         inputFotos.value = "";
         return;
     }
     if (arquivos.length > espacoDisponivel) {
-        alert(`Só cabem mais ${espacoDisponivel} foto(s). As demais foram ignoradas.`);
+        Connecta.ui.alerta({
+            titulo: "Limite de Fotos",
+            mensagem: `Só cabem mais ${espacoDisponivel} foto(s). As demais foram ignoradas.`,
+            kicker: "Atenção"
+        });
         arquivos = arquivos.slice(0, espacoDisponivel);
     }
 
@@ -193,7 +201,11 @@ async function adicionarFotosSelecionadas(inputFotos, elementoPreview) {
         renderizarPreviewFotosEdicao(elementoPreview);
     } catch (erro) {
         console.error("Erro ao processar fotos:", erro);
-        alert("Não foi possível processar uma das fotos selecionadas.");
+        Connecta.ui.alerta({
+            titulo: "Erro de Imagem",
+            mensagem: "Não foi possível processar uma das fotos selecionadas.",
+            kicker: "Erro"
+        });
     } finally {
         inputFotos.value = "";
     }
