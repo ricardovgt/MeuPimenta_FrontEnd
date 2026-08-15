@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    const token = Connecta.auth.exigirToken();
-    if (!token) return;
+    const sessao = await Connecta.auth.exigirSessao();
+    if (!sessao) return;
+    const token = sessao.token;
 
     const id = (valor) => document.getElementById(valor);
     const elements = {
@@ -21,7 +22,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     };
     const state = { usuario: {} };
 
-    const perfilCarregado = await carregarPerfil(token, state, elements);
+    const perfilCarregado = carregarPerfil(sessao, state, elements);
     if (!perfilCarregado) return;
 
     configurarBotaoSair(elements.btnSair);

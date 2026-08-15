@@ -1,80 +1,53 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const form = document.getElementById("form-login");
-    const feedbackDiv = document.getElementById("login-feedback");
+document.addEventListener("DOMContentLoaded", async () => {
+    if (await Connecta.auth.validarSessao()) {
+        window.location.assign("perfil.html");
+        return;
+    }
 
-    if (!form || !feedbackDiv) return;
+    const form = document.getElementById("form-login");
+    const feedback = document.getElementById("login-feedback");
+    if (!form || !feedback) return;
 
     const submitButton = form.querySelector('button[type="submit"]');
-    const labelOriginal = submitButton ? submitButton.textContent : "Entrar";
+    const labelOriginal = submitButton?.textContent || "Entrar";
 
-    const setSubmitting = (isSubmitting) => {
+    function definirEnvio(emAndamento) {
         if (!submitButton) return;
-        submitButton.disabled = isSubmitting;
-        submitButton.textContent = isSubmitting ? "Entrando..." : labelOriginal;
-    };
+        submitButton.disabled = emAndamento;
+        submitButton.textContent = emAndamento ? "Entrando..." : labelOriginal;
+    }
 
     form.addEventListener("submit", async (event) => {
         event.preventDefault();
-
         if (submitButton?.disabled) return;
 
-        const formData = new FormData(form);
-        const dadosFormatados = new URLSearchParams(formData);
-
-        limparFeedback(feedbackDiv);
-        setSubmitting(true);
+        Connecta.ui.limparFeedback(feedback);
+        definirEnvio(true);
 
         try {
-            const response = await fetch("http://localhost:8080/connecta-api/login", {
+            const { status, body } = await Connecta.api.requisicao("login", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded"
-                },
-                body: dadosFormatados
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams(new FormData(form))
             });
 
-            const { status, body } = await lerResposta(response);
-
             if (status === 200 && body?.token) {
-                sessionStorage.setItem("tokenConnectaRO", body.token);
+                Connecta.auth.salvarToken(body.token);
                 form.reset();
                 window.location.assign("perfil.html");
                 return;
             }
 
-            mostrarFeedback(feedbackDiv, body?.erro || body?.mensagem || "Falha na autenticação.", false);
+            Connecta.ui.mostrarFeedback(
+                feedback,
+                body?.erro || body?.mensagem || "Falha na autenticação.",
+                "error"
+            );
         } catch (erro) {
             console.error("Erro na requisição:", erro);
-            mostrarFeedback(feedbackDiv, "Não foi possível se comunicar com o servidor.", false);
+            Connecta.ui.mostrarFeedback(feedback, "Não foi possível se comunicar com o servidor.", "error");
         } finally {
-            setSubmitting(false);
+            definirEnvio(false);
         }
     });
 });
-
-async function lerResposta(response) {
-    const text = await response.text();
-
-    if (!text) {
-        return { status: response.status, body: {} };
-    }
-
-    try {
-        return { status: response.status, body: JSON.parse(text) };
-    } catch {
-        return { status: response.status, body: { mensagem: text } };
-    }
-}
-
-function limparFeedback(elemento) {
-    elemento.className = "feedback-msg";
-    elemento.classList.add("hidden");
-    elemento.textContent = "";
-}
-
-function mostrarFeedback(elemento, mensagem, sucesso) {
-    elemento.textContent = mensagem;
-    elemento.className = "feedback-msg";
-    elemento.classList.remove("hidden");
-    elemento.classList.add(sucesso ? "success" : "error");
-}

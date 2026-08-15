@@ -11,10 +11,6 @@ function requisicaoUsuario(token, options = {}) {
     });
 }
 
-function obterUsuario(token) {
-    return requisicaoUsuario(token, { method: "GET" });
-}
-
 function atualizarUsuario(token, payloadAtomico) {
     return requisicaoUsuario(token, {
         method: "PUT",

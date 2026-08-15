@@ -1,84 +1,58 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const form = document.getElementById("form-cadastro");
-    const feedbackDiv = document.getElementById("cadastro-feedback");
+document.addEventListener("DOMContentLoaded", async () => {
+    if (await Connecta.auth.validarSessao()) {
+        window.location.assign("perfil.html");
+        return;
+    }
 
-    if (!form || !feedbackDiv) return;
+    const form = document.getElementById("form-cadastro");
+    const feedback = document.getElementById("cadastro-feedback");
+    if (!form || !feedback) return;
 
     const submitButton = form.querySelector('button[type="submit"]');
-    const labelOriginal = submitButton ? submitButton.textContent : "Cadastrar";
+    const labelOriginal = submitButton?.textContent || "Cadastrar";
 
-    const setSubmitting = (isSubmitting) => {
+    function definirEnvio(emAndamento) {
         if (!submitButton) return;
-        submitButton.disabled = isSubmitting;
-        submitButton.textContent = isSubmitting ? "Cadastrando..." : labelOriginal;
-    };
+        submitButton.disabled = emAndamento;
+        submitButton.textContent = emAndamento ? "Cadastrando..." : labelOriginal;
+    }
 
-    form.addEventListener("submit", async function(event) {
+    form.addEventListener("submit", async (event) => {
         event.preventDefault();
-
         if (submitButton?.disabled) return;
 
-        const formData = new FormData(form);
-        const dadosFormatados = new URLSearchParams(formData);
-
-        limparFeedback(feedbackDiv);
-        setSubmitting(true);
+        Connecta.ui.limparFeedback(feedback);
+        definirEnvio(true);
 
         try {
-            const response = await fetch("http://localhost:8080/connecta-api/usuario", {
+            const { status, body } = await Connecta.api.requisicao("usuario", {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded"
-                },
-                body: dadosFormatados
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams(new FormData(form))
             });
 
-            const { status, body } = await lerResposta(response);
-
             if (status === 201 && body?.token) {
-                sessionStorage.setItem("tokenConnectaRO", body.token);
-                mostrarFeedback(feedbackDiv, "Conta criada com sucesso! Redirecionando...", true);
+                Connecta.auth.salvarToken(body.token);
+                Connecta.ui.mostrarFeedback(
+                    feedback,
+                    "Conta criada com sucesso! Redirecionando...",
+                    "success"
+                );
                 form.reset();
-
-                setTimeout(() => {
-                    window.location.assign("perfil.html");
-                }, 1500);
+                setTimeout(() => window.location.assign("perfil.html"), 1500);
                 return;
             }
 
-            mostrarFeedback(feedbackDiv, body?.erro || body?.mensagem || "Falha ao cadastrar.", false);
+            Connecta.ui.mostrarFeedback(
+                feedback,
+                body?.erro || body?.mensagem || "Falha ao cadastrar.",
+                "error"
+            );
         } catch (erro) {
             console.error("Erro na requisição:", erro);
-            mostrarFeedback(feedbackDiv, "Não foi possível se comunicar com o servidor.", false);
+            Connecta.ui.mostrarFeedback(feedback, "Não foi possível se comunicar com o servidor.", "error");
         } finally {
-            setSubmitting(false);
+            definirEnvio(false);
         }
     });
 });
-
-async function lerResposta(response) {
-    const text = await response.text();
-
-    if (!text) {
-        return { status: response.status, body: {} };
-    }
-
-    try {
-        return { status: response.status, body: JSON.parse(text) };
-    } catch {
-        return { status: response.status, body: { mensagem: text } };
-    }
-}
-
-function limparFeedback(elemento) {
-    elemento.className = "feedback-msg";
-    elemento.classList.add("hidden");
-    elemento.textContent = "";
-}
-
-function mostrarFeedback(elemento, mensagem, sucesso) {
-    elemento.textContent = mensagem;
-    elemento.className = "feedback-msg";
-    elemento.classList.remove("hidden");
-    elemento.classList.add(sucesso ? "success" : "error");
-}

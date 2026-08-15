@@ -1,6 +1,7 @@
-document.addEventListener("DOMContentLoaded", () => {
-    const token = Connecta.auth.exigirToken();
-    if (!token) return;
+document.addEventListener("DOMContentLoaded", async () => {
+    const sessao = await Connecta.auth.exigirSessao();
+    if (!sessao) return;
+    const token = sessao.token;
 
     const idServico = new URLSearchParams(window.location.search).get("id");
     if (!idServico) {
@@ -45,6 +46,6 @@ document.addEventListener("DOMContentLoaded", () => {
     configurarNavegacao(elements);
     configurarGaleriaFotos(elements);
     configurarAvaliacoes(token, idServico, elements);
-    configurarListaAvaliacoes(token, idServico, elements);
+    configurarListaAvaliacoes(token, idServico, elements, sessao.usuario);
     carregarServicoCompleto(token, idServico, elements);
 });

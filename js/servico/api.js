@@ -1,6 +1,5 @@
 const ENDPOINT_SERVICOS = "servicos";
 const ENDPOINT_AVALIACOES = "avaliacoes";
-const ENDPOINT_USUARIO = "usuario";
 
 function obterServicoCompleto(token, idServico) {
     return Connecta.api.requisicao(ENDPOINT_SERVICOS, {
@@ -27,10 +26,6 @@ function listarAvaliacoes(idServico, pagina = 1, limite = 10) {
         method: "GET",
         parametros: { idServico, pagina, limite }
     });
-}
-
-function obterUsuarioAutenticado(token) {
-    return Connecta.api.requisicao(ENDPOINT_USUARIO, { method: "GET", token });
 }
 
 function excluirAvaliacao(token, idAvaliacao) {

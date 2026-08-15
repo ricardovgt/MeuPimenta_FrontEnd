@@ -7,15 +7,9 @@ function atualizarVisibilidadeMeusServicos(tipoConta) {
 }
 
 async function configurarNavegacaoPorTipoConta() {
-    const token = Connecta.auth.obterToken();
-    if (!token) return;
-
     try {
-        const { status, body } = await Connecta.api.requisicao("usuario", {
-            method: "GET",
-            token
-        });
-        if (status === 200) atualizarVisibilidadeMeusServicos(body?.tipoConta);
+        const sessao = await Connecta.auth.validarSessao();
+        if (sessao) atualizarVisibilidadeMeusServicos(sessao.usuario?.tipoConta);
     } catch (erro) {
         console.error("Erro ao verificar o tipo de conta para a navegação:", erro);
     }

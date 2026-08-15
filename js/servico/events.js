@@ -87,8 +87,13 @@ function carregarServicoCompleto(token, idServico, elements) {
         });
 }
 
-function configurarListaAvaliacoes(token, idServico, elements) {
-    const state = { paginaAtual: 1, totalPaginas: 1, limite: 10, idUsuarioAutenticado: null };
+function configurarListaAvaliacoes(token, idServico, elements, usuarioAutenticado) {
+    const state = {
+        paginaAtual: 1,
+        totalPaginas: 1,
+        limite: 10,
+        idUsuarioAutenticado: Number(usuarioAutenticado?.idUsuario ?? usuarioAutenticado?.id) || null
+    };
 
     function carregarPagina(pagina = 1) {
         const paginaRequisitada = Number(pagina);
@@ -116,16 +121,10 @@ function configurarListaAvaliacoes(token, idServico, elements) {
             .catch(() => mostrarErroAvaliacoes("Erro de comunicação com o servidor."));
     }
 
-    obterUsuarioAutenticado(token)
-        .then(({ status, body }) => {
-            state.idUsuarioAutenticado = status === 200
-                ? Number(body?.idUsuario ?? body?.id) || obterIdUsuarioDoToken(token)
-                : obterIdUsuarioDoToken(token);
-        })
-        .catch(() => {
-            state.idUsuarioAutenticado = obterIdUsuarioDoToken(token);
-        })
-        .finally(() => carregarPagina(1));
+    if (!state.idUsuarioAutenticado) {
+        state.idUsuarioAutenticado = obterIdUsuarioDoToken(token);
+    }
+    carregarPagina(1);
 
     elements.btnCarregarMais?.addEventListener("click", () => {
         if (state.paginaAtual < state.totalPaginas) carregarPagina(state.paginaAtual + 1);

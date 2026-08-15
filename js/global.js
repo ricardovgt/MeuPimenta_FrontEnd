@@ -3,6 +3,8 @@
 
     const API_BASE_URL = "http://localhost:8080/connecta-api";
     const TOKEN_STORAGE_KEY = "tokenConnectaRO";
+    let sessaoValidada = null;
+    let validacaoSessaoPendente = null;
 
     function criarUrl(caminho, parametros = {}) {
         const url = new URL(`${API_BASE_URL}/${String(caminho).replace(/^\/+/, "")}`);
@@ -18,21 +20,102 @@
         return String(token || "").trim().replace(/^Bearer\s+/i, "");
     }
 
-    function obterToken() {
-        return normalizarToken(sessionStorage.getItem(TOKEN_STORAGE_KEY));
+    function tokenExpirado(token) {
+        try {
+            let payloadBase64 = token.split(".")[1]
+                .replace(/-/g, "+")
+                .replace(/_/g, "/");
+            payloadBase64 = payloadBase64.padEnd(Math.ceil(payloadBase64.length / 4) * 4, "=");
+            const payload = JSON.parse(atob(payloadBase64));
+            return Boolean(payload.exp) && Date.now() >= Number(payload.exp) * 1000;
+        } catch {
+            return false;
+        }
     }
 
-    function exigirToken() {
+    function salvarToken(token) {
+        const tokenNormalizado = normalizarToken(token);
+        if (!tokenNormalizado) return null;
+        if (tokenExpirado(tokenNormalizado)) {
+            removerToken();
+            return null;
+        }
+        localStorage.setItem(TOKEN_STORAGE_KEY, tokenNormalizado);
+        sessionStorage.removeItem(TOKEN_STORAGE_KEY);
+        sessaoValidada = null;
+        validacaoSessaoPendente = null;
+        return tokenNormalizado;
+    }
+
+    function obterToken() {
+        const tokenPersistente = normalizarToken(localStorage.getItem(TOKEN_STORAGE_KEY));
+        if (tokenPersistente) {
+            if (tokenExpirado(tokenPersistente)) {
+                removerToken();
+                return null;
+            }
+            return tokenPersistente;
+        }
+
+        const tokenLegado = normalizarToken(sessionStorage.getItem(TOKEN_STORAGE_KEY));
+        return tokenLegado ? salvarToken(tokenLegado) : null;
+    }
+
+    function removerToken() {
+        localStorage.removeItem(TOKEN_STORAGE_KEY);
+        sessionStorage.removeItem(TOKEN_STORAGE_KEY);
+        sessaoValidada = null;
+        validacaoSessaoPendente = null;
+    }
+
+    function respostaUsuarioValida(status, body) {
+        return status === 200
+            && body
+            && typeof body === "object"
+            && !body.erro
+            && typeof body.email === "string"
+            && body.email.trim() !== "";
+    }
+
+    async function validarSessao() {
         const token = obterToken();
-        if (!token) {
+        if (!token) return null;
+        if (sessaoValidada?.token === token) return sessaoValidada;
+        if (validacaoSessaoPendente) return validacaoSessaoPendente;
+
+        validacaoSessaoPendente = requisicao("usuario", { method: "GET", token })
+            .then(({ status, body }) => {
+                if (respostaUsuarioValida(status, body)) {
+                    sessaoValidada = { token, usuario: body };
+                    return sessaoValidada;
+                }
+
+                const respostaInvalidaDoUsuario = status === 200;
+                if ((status >= 400 && status < 500) || respostaInvalidaDoUsuario) removerToken();
+                return null;
+            })
+            .catch((erro) => {
+                console.error("Não foi possível validar a sessão:", erro);
+                return null;
+            })
+            .finally(() => {
+                validacaoSessaoPendente = null;
+            });
+
+        return validacaoSessaoPendente;
+    }
+
+    async function exigirSessao() {
+        const sessao = await validarSessao();
+        if (!sessao) {
             window.location.assign("login.html");
             return null;
         }
-        return token;
+        return sessao;
     }
 
     function fazerLogout() {
-        sessionStorage.removeItem(TOKEN_STORAGE_KEY);
+        removerToken();
         window.location.assign("login.html");
     }
 
@@ -129,7 +212,15 @@
     window.Connecta = Object.freeze({
         config: Object.freeze({ API_BASE_URL, TOKEN_STORAGE_KEY }),
         api: Object.freeze({ criarUrl, requisicao }),
-        auth: Object.freeze({ exigirToken, fazerLogout, obterHeadersAutorizacao, obterToken }),
+        auth: Object.freeze({
+            exigirSessao,
+            fazerLogout,
+            obterHeadersAutorizacao,
+            obterToken,
+            removerToken,
+            salvarToken,
+            validarSessao
+        }),
         imagem: Object.freeze({ comprimir: comprimirImagem }),
         ui: Object.freeze({ configurarContadoresCaracteres, limparFeedback, mostrarFeedback })
     });
