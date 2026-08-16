@@ -1,0 +1,96 @@
+/* ============================================================
+   Perfil — Estrutura de Layout
+   ============================================================ */
+
+.perfil-container {
+    max-width: 980px;
+    margin: 6.5rem 1rem 3rem;
+    padding: 2.5rem;
+    background: transparent;
+    box-shadow: none;
+}
+
+.perfil-header {
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid #2a2a2e;
+}
+
+.perfil-top {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.perfil-avatar-wrapper {
+    position: relative;
+    flex: 0 0 auto;
+}
+
+.perfil-avatar {
+    width: 76px;
+    height: 76px;
+    background: #27272a;
+    border-radius: 50%;
+    box-shadow: 0 16px 35px rgba(0, 0, 0, 0.25);
+}
+
+.perfil-avatar-img {
+    display: block;
+    object-fit: cover;
+}
+
+.perfil-avatar-editar {
+    position: absolute;
+    right: -3px;
+    bottom: -3px;
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    color: #121214;
+    background: var(--primary-color);
+    border: 3px solid #202024;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.hidden-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+}
+
+.perfil-title > p:first-child,
+.perfil-subtitle {
+    color: var(--text-secondary);
+}
+
+.perfil-title h1 {
+    margin: 0.2rem 0;
+    font-size: clamp(1.7rem, 4vw, 2.35rem);
+}
+
+.perfil-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 1rem;
+}
+
+.perfil-actions .btn {
+    width: auto;
+}
+
+@media (max-width: 720px) {
+    .perfil-container {
+        margin-top: 7.5rem;
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .perfil-top {
+        align-items: flex-start;
+    }
+}
