@@ -27,7 +27,7 @@ function renderizarUsuario(usuario, elements) {
     elements.tipo.textContent = tipo;
     elements.tipoPerfil.textContent = tipo;
     elements.inputNome.value = usuario.nome || "";
-    elements.inputEmail.value = usuario.email || "";
+    elements.inputEmail.value = ocultarEmail(usuario.email || "");
     elements.inputTipoConta.value = usuario.tipoConta === "COMERCIAL" ? "COMERCIAL" : "COMUM";
     exibirFotoPerfil(usuario.fotoPerfil, elements);
 }
