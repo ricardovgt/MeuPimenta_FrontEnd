@@ -1,8 +1,8 @@
-function atualizarListaServicos(token, elements, top = false, busca = "") {
+function atualizarListaServicos(token, elements, top = false, busca = "", tipo = "") {
     const grid = elements.gridServicos;
     if (!grid) return Promise.resolve();
 
-    return carregarServicos(token, top, busca)
+    return carregarServicos(token, top, busca, tipo)
         .then(({ status, body }) => {
             grid.innerHTML = "";
             if (status !== 200) {
@@ -31,13 +31,15 @@ function configurarFiltros(token, elements) {
             token,
             elements,
             elements.filtroTop?.checked || false,
-            elements.filtroBusca?.value || ""
+            elements.filtroBusca?.value || "",
+            elements.filtroTipo?.value || ""
         );
     });
 
     elements.btnLimparFiltros?.addEventListener("click", () => {
         if (elements.filtroTop) elements.filtroTop.checked = false;
         if (elements.filtroBusca) elements.filtroBusca.value = "";
+        if (elements.filtroTipo) elements.filtroTipo.value = "";
         atualizarListaServicos(token, elements);
     });
 

@@ -181,14 +181,23 @@ function popularServico(servico, elements) {
         elements.badges.innerHTML = "";
         const badges = [
             { label: servico.tipo === "COMERCIO" ? "Comércio" : servico.tipo === "SERVICO" ? "Serviço" : "Tipo não informado", className: "tipo" },
-            { label: `📞 ${servico.telefone || "Telefone não informado"}` },
+            { label: servico.telefone || "Telefone não informado", className: "telefone-whatsapp", icon: "../img/whatsapp_Icon.svg" },
             { label: `⭐ ${avaliacaoMedia.toFixed(1)} - ${totalAvaliacoes} ${totalAvaliacoes === 1 ? "avaliação" : "avaliações"}`, className: "avaliacao" }
         ];
 
         badges.forEach((badge) => {
             const el = document.createElement("span");
             el.className = `badge${badge.className ? ` ${badge.className}` : ""}`;
-            el.textContent = badge.label;
+            if (badge.icon) {
+                const icon = document.createElement("img");
+                icon.className = "badge-icon";
+                icon.src = badge.icon;
+                icon.alt = "";
+                icon.setAttribute("aria-hidden", "true");
+                el.append(icon, document.createTextNode(badge.label));
+            } else {
+                el.textContent = badge.label;
+            }
             elements.badges.appendChild(el);
         });
     }
@@ -197,7 +206,7 @@ function popularServico(servico, elements) {
         elements.whatsapp.classList.toggle("hidden", ocultarAcoesDoAnuncio);
         elements.whatsapp.href = `https://wa.me/${(servico.telefone || "").replace(/\D/g, "")}`;
         elements.whatsapp.innerHTML = `
-            <img class="btn-icon" src="../img/whatsapp_Icon.png" alt="" aria-hidden="true">
+            <img class="btn-icon" src="../img/whatsapp_Icon.svg" alt="" aria-hidden="true">
             <span>${servico.telefone ? "Abrir WhatsApp" : "Telefone indisponível"}</span>
         `;
     }

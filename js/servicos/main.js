@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const elements = {
         formFiltros: document.getElementById("form-filtros"),
         filtroBusca: document.getElementById("filtro-busca"),
+        filtroTipo: document.getElementById("filtro-tipo"),
         filtroTop: document.getElementById("filtro-top"),
         btnLimparFiltros: document.getElementById("btn-limpar-filtros"),
         gridServicos: document.getElementById("grid-servicos")
