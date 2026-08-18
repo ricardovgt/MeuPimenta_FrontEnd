@@ -345,6 +345,37 @@ body {
     margin-bottom: 1.5rem;
 }
 
+.connecta-modal-confirmacao-digitada {
+    margin-bottom: 1.5rem;
+}
+
+.connecta-modal-confirmacao-digitada.hidden {
+    display: none;
+}
+
+.connecta-modal-confirmacao-digitada label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.connecta-modal-confirmacao-digitada input {
+    width: 100%;
+    padding: 0.75rem 0.85rem;
+    border: 1px solid #52525b;
+    border-radius: 10px;
+    background: #09090b;
+    color: #ffffff;
+    font: inherit;
+}
+
+.connecta-modal-confirmacao-digitada input:focus {
+    outline: 2px solid rgba(239, 68, 68, 0.45);
+    border-color: #ef4444;
+}
+
 .connecta-modal-actions {
     display: flex;
     justify-content: flex-end;
@@ -384,6 +415,12 @@ body {
     background: #b91c1c;
     border-color: #f87171;
     box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35);
+}
+
+.btn-connecta-modal-confirm:disabled {
+    cursor: not-allowed;
+    opacity: 0.45;
+    box-shadow: none;
 }
 
 @keyframes connectaModalFadeIn {

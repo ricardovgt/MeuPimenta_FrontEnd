@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detalhes do Serviço - MeuPimenta</title>
+    <title>Detalhes do Anúncio - MeuPimenta</title>
     <link rel="stylesheet" href="../css/global.css">
     <link rel="stylesheet" href="../css/servicos/servicos-base.css">
     <link rel="stylesheet" href="../css/servico/servico-base.css">
@@ -15,12 +15,12 @@
     <header class="top-nav">
         <a href="servicos.html" class="nav-logo">MeuPimenta</a>
         <nav class="nav-links">
-            <a href="servicos.html" class="nav-item">Buscar Serviços</a>
-            <a href="meus_servicos.html" class="nav-item hidden" data-conta-comercial>Meus Serviços</a>
+            <a href="servicos.html" class="nav-item">Buscar Anúncios</a>
+            <a href="meus_servicos.html" class="nav-item hidden" data-conta-comercial>Meus Anúncios</a>
             <a href="perfil.html" class="nav-item">Perfil</a>
         </nav>
         <div class="nav-actions">
-            <button id="btn-voltar" class="btn btn-outline btn-sm">← Voltar para Serviços</button>
+            <button id="btn-voltar" class="btn btn-outline btn-sm">← Voltar para Anúncios</button>
         </div>
     </header>
 
@@ -28,23 +28,23 @@
         <section id="servico-detalhe" class="card-servico">
             <div class="card-header-top">
                 <div id="servico-postador" class="servico-dono hidden">
-                    <img id="servico-postador-foto" class="servico-dono-avatar" src="../img/default-profile.png" alt="Foto do dono do serviço">
+                    <img id="servico-postador-foto" class="servico-dono-avatar" src="../img/default-profile.png" alt="Foto do dono do anúncio">
                     <div class="servico-dono-identidade">
                         <span id="servico-postador-nome" class="servico-dono-nome"></span>
-                        <span class="servico-dono-tag" aria-label="Dono do serviço"><span aria-hidden="true">★</span> Dono</span>
+                        <span class="servico-dono-tag" aria-label="Dono do anúncio"><span aria-hidden="true">★</span> Dono</span>
                     </div>
                 </div>
             </div>
             <div id="servico-hero" class="hero hidden">
                 <button id="btn-foto-anterior" class="foto-nav-btn foto-nav-anterior hidden" type="button" aria-label="Foto anterior">‹</button>
-                <img id="servico-foto" src="" alt="Foto do serviço">
+                <img id="servico-foto" src="" alt="Foto do anúncio">
                 <button id="btn-foto-proxima" class="foto-nav-btn foto-nav-proxima hidden" type="button" aria-label="Próxima foto">›</button>
                 <span id="foto-contador" class="foto-contador hidden"></span>
             </div>
             <div id="foto-thumbs" class="foto-thumbs hidden"></div>
             <div class="content">
                 <div id="feedback-servico" class="feedback-msg hidden" aria-live="polite"></div>
-                <h1 id="servico-nome">Carregando serviço...</h1>
+                <h1 id="servico-nome">Carregando anúncio...</h1>
                 <p id="servico-resumo" class="resumo"></p>
 
                 <div id="servico-badges" class="badges"></div>
@@ -53,15 +53,20 @@
                 <p id="servico-descricao" class="descricao-detalhada"></p>
 
                 <div class="actions">
-                    <button id="btn-avaliar" class="btn btn-primary btn-action">
-                        <span>⭐</span> Avaliar Serviço
+                    <button id="btn-avaliar" class="btn btn-primary btn-action hidden">
+                        <span>⭐</span> Avaliar Anúncio
                     </button>
                     <button id="btn-compartilhar" class="btn btn-outline btn-action">
                         <span>🔗</span> Compartilhar
                     </button>
-                    <a id="servico-whatsapp" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-outline btn-action btn-whatsapp">
-                        <span>💬</span> Abrir WhatsApp
+                    <a id="servico-whatsapp" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-action btn-whatsapp hidden">
+                        <img class="btn-icon" src="../img/whatsapp_Icon.png" alt="" aria-hidden="true">
+                        <span>Abrir WhatsApp</span>
                     </a>
+                    <button id="btn-denunciar" type="button" class="btn btn-action btn-denunciar hidden">
+                        <img class="btn-icon" src="../img/flag_Icon.png" alt="" aria-hidden="true">
+                        <span>Denunciar anúncio</span>
+                    </button>
                 </div>
 
                 <div class="avaliacao-panel">

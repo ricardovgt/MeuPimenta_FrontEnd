@@ -1,16 +1,22 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    const sessao = await Connecta.auth.exigirSessao();
-    if (!sessao) return;
-    const token = sessao.token;
+    const sessao = await Connecta.auth.validarSessao();
+    const token = sessao?.token || null;
 
-    const idServico = new URLSearchParams(window.location.search).get("id");
-    if (!idServico) {
+    const idAnuncio = new URLSearchParams(window.location.search).get("id");
+    if (!idAnuncio) {
         window.location.assign("servicos.html");
         return;
     }
 
     const id = (valor) => document.getElementById(valor);
+    const idUsuarioAutenticado = Number(
+        sessao?.usuario?.idUsuario
+        ?? sessao?.usuario?.id
+        ?? obterIdUsuarioDoToken(token)
+    ) || null;
     const elements = {
+        idUsuarioAutenticado,
+        detalhe: id("servico-detalhe"),
         nome: id("servico-nome"),
         resumo: id("servico-resumo"),
         descricao: id("servico-descricao"),
@@ -38,6 +44,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         },
         btnAvaliar: id("btn-avaliar"),
         btnCompartilhar: id("btn-compartilhar"),
+        btnDenunciar: id("btn-denunciar"),
         btnCarregarMais: id("btn-carregar-mais"),
         btnVoltar: id("btn-voltar"),
         btnHome: id("btn-home")
@@ -45,7 +52,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     configurarNavegacao(elements);
     configurarGaleriaFotos(elements);
-    configurarAvaliacoes(token, idServico, elements);
-    configurarListaAvaliacoes(token, idServico, elements, sessao.usuario);
-    carregarServicoCompleto(token, idServico, elements);
+    configurarAvaliacoes(token, idAnuncio, elements);
+    configurarDenuncia(token, idAnuncio, elements);
+    configurarListaAvaliacoes(token, idAnuncio, elements, sessao?.usuario);
+    carregarServicoCompleto(token, idAnuncio, elements);
 });

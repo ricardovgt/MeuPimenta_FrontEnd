@@ -3,6 +3,7 @@
 
     const API_BASE_URL = "http://localhost:8080/connecta-api";
     const TOKEN_STORAGE_KEY = "tokenConnectaRO";
+    const MENSAGEM_CONTA_BANIDA = "Sua conta foi banida por violação das regras de conduta.";
     let sessaoValidada = null;
     let validacaoSessaoPendente = null;
 
@@ -68,6 +69,11 @@
         validacaoSessaoPendente = null;
     }
 
+    function respostaContaBanida(status, body) {
+        const mensagem = body?.erro || body?.mensagem;
+        return status === 403 && mensagem === MENSAGEM_CONTA_BANIDA;
+    }
+
     function respostaUsuarioValida(status, body) {
         return status === 200
             && body
@@ -91,7 +97,10 @@
                 }
 
                 const respostaInvalidaDoUsuario = status === 200;
-                if ((status >= 400 && status < 500) || respostaInvalidaDoUsuario) removerToken();
+                const erroClienteNaoProibido = status >= 400 && status < 500 && status !== 403;
+                if (erroClienteNaoProibido || respostaContaBanida(status, body) || respostaInvalidaDoUsuario) {
+                    removerToken();
+                }
                 return null;
             })
             .catch((erro) => {
@@ -146,7 +155,14 @@
             ...fetchOptions,
             headers: requestHeaders
         });
-        return lerResposta(response);
+        const resultado = await lerResposta(response);
+        if (token && respostaContaBanida(resultado.status, resultado.body)) {
+            removerToken();
+            window.dispatchEvent(new CustomEvent("connecta:sessao-encerrada", {
+                detail: { motivo: "CONTA_BANIDA", mensagem: MENSAGEM_CONTA_BANIDA }
+            }));
+        }
+        return resultado;
     }
 
     function limparFeedback(elemento) {
@@ -223,6 +239,10 @@
                 <p id="connecta-modal-kicker" class="connecta-modal-kicker"></p>
                 <h2 id="connecta-modal-title" class="connecta-modal-title"></h2>
                 <p id="connecta-modal-message" class="connecta-modal-message"></p>
+                <div id="connecta-modal-confirmacao-digitada" class="connecta-modal-confirmacao-digitada hidden">
+                    <label for="connecta-modal-confirmacao-input"></label>
+                    <input id="connecta-modal-confirmacao-input" type="text" autocomplete="off" spellcheck="false">
+                </div>
                 <div class="connecta-modal-actions">
                     <button type="button" id="connecta-modal-btn-cancel" class="btn-connecta-modal-cancel"></button>
                     <button type="button" id="connecta-modal-btn-confirm" class="btn-connecta-modal-confirm"></button>
@@ -240,11 +260,15 @@
         const textoConfirmar = config.textoConfirmar || "Confirmar";
         const textoCancelar = config.textoCancelar || "Cancelar";
         const kicker = config.kicker || "Ação Sensível";
+        const textoConfirmacao = String(config.textoConfirmacao || "");
 
         const modal = criarOuObterModalEstilizado();
         const kickerEl = modal.querySelector("#connecta-modal-kicker");
         const titleEl = modal.querySelector("#connecta-modal-title");
         const messageEl = modal.querySelector("#connecta-modal-message");
+        const confirmacaoDigitadaEl = modal.querySelector("#connecta-modal-confirmacao-digitada");
+        const confirmacaoLabel = confirmacaoDigitadaEl.querySelector("label");
+        const confirmacaoInput = modal.querySelector("#connecta-modal-confirmacao-input");
         const btnCancel = modal.querySelector("#connecta-modal-btn-cancel");
         const btnConfirm = modal.querySelector("#connecta-modal-btn-confirm");
 
@@ -254,15 +278,31 @@
         btnCancel.textContent = textoCancelar;
         btnConfirm.textContent = textoConfirmar;
         btnCancel.style.display = "";
+        confirmacaoDigitadaEl.classList.toggle("hidden", !textoConfirmacao);
+        confirmacaoLabel.textContent = textoConfirmacao
+            ? `Digite "${textoConfirmacao}" para confirmar:`
+            : "";
+        confirmacaoInput.value = "";
+        confirmacaoInput.placeholder = textoConfirmacao;
+        btnConfirm.disabled = Boolean(textoConfirmacao);
 
         modal.classList.remove("hidden");
-        btnConfirm.focus();
+        if (textoConfirmacao) {
+            confirmacaoInput.focus();
+        } else {
+            btnConfirm.focus();
+        }
 
         return new Promise((resolve) => {
+            function atualizarConfirmacaoDigitada() {
+                btnConfirm.disabled = confirmacaoInput.value.trim() !== textoConfirmacao;
+            }
+
             function fechar(resultado) {
                 modal.classList.add("hidden");
                 btnConfirm.removeEventListener("click", onConfirm);
                 btnCancel.removeEventListener("click", onCancel);
+                confirmacaoInput.removeEventListener("input", atualizarConfirmacaoDigitada);
                 modal.removeEventListener("click", onOverlayClick);
                 document.removeEventListener("keydown", onKeyDown);
                 resolve(resultado);
@@ -273,10 +313,12 @@
             function onOverlayClick(e) { if (e.target === modal) fechar(false); }
             function onKeyDown(e) {
                 if (e.key === "Escape") fechar(false);
+                if (e.key === "Enter" && textoConfirmacao && !btnConfirm.disabled) fechar(true);
             }
 
             btnConfirm.addEventListener("click", onConfirm);
             btnCancel.addEventListener("click", onCancel);
+            confirmacaoInput.addEventListener("input", atualizarConfirmacaoDigitada);
             modal.addEventListener("click", onOverlayClick);
             document.addEventListener("keydown", onKeyDown);
         });
@@ -293,6 +335,8 @@
         const kickerEl = modal.querySelector("#connecta-modal-kicker");
         const titleEl = modal.querySelector("#connecta-modal-title");
         const messageEl = modal.querySelector("#connecta-modal-message");
+        const confirmacaoDigitadaEl = modal.querySelector("#connecta-modal-confirmacao-digitada");
+        const confirmacaoInput = modal.querySelector("#connecta-modal-confirmacao-input");
         const btnCancel = modal.querySelector("#connecta-modal-btn-cancel");
         const btnConfirm = modal.querySelector("#connecta-modal-btn-confirm");
 
@@ -301,6 +345,9 @@
         messageEl.textContent = mensagem;
         btnConfirm.textContent = textoBotao;
         btnCancel.style.display = "none";
+        confirmacaoDigitadaEl.classList.add("hidden");
+        confirmacaoInput.value = "";
+        btnConfirm.disabled = false;
 
         modal.classList.remove("hidden");
         btnConfirm.focus();
@@ -335,6 +382,7 @@
             obterHeadersAutorizacao,
             obterToken,
             removerToken,
+            respostaContaBanida,
             salvarToken,
             validarSessao
         }),

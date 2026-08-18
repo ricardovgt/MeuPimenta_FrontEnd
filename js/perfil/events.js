@@ -2,6 +2,17 @@ function mensagemErro(body, fallback) {
     return body?.erro || body?.mensagem || fallback;
 }
 
+async function tratarContaBanida(status, body) {
+    if (!Connecta.auth.respostaContaBanida(status, body)) return false;
+    await Connecta.ui.alerta({
+        titulo: "Conta banida",
+        mensagem: mensagemErro(body, "Sua conta foi banida por violação das regras de conduta."),
+        kicker: "Acesso encerrado"
+    });
+    window.location.assign("login.html");
+    return true;
+}
+
 function carregarPerfil(sessao, state, elements) {
     if (!sessao?.usuario) return false;
     state.usuario = sessao.usuario;
@@ -33,6 +44,8 @@ function configurarUploadFotoPerfil(token, elements) {
             if (status === 200) {
                 exibirFotoPerfil(fotoBase64, elements);
                 mostrarFeedback(elements.feedbackFoto, "Foto de perfil atualizada.", "success");
+            } else if (await tratarContaBanida(status, body)) {
+                return;
             } else {
                 mostrarFeedback(elements.feedbackFoto, mensagemErro(body, "Não foi possível atualizar a foto."), "error");
             }
@@ -64,6 +77,8 @@ function configurarFormularioNome(token, state, elements) {
                 elements.nome.textContent = nome;
                 elements.nomePerfil.textContent = nome;
                 mostrarFeedback(elements.feedbackNome, "Nome atualizado com sucesso.", "success");
+            } else if (await tratarContaBanida(status, body)) {
+                return;
             } else {
                 mostrarFeedback(elements.feedbackNome, mensagemErro(body, "Não foi possível atualizar o nome."), "error");
             }
@@ -150,6 +165,8 @@ function configurarAcoesComSenha(token, state, elements) {
                 mostrarFeedback(concluida.feedback, mensagemErro(body, "Alteração realizada com sucesso."), "success");
                 elements.formModalSenha.reset();
                 acaoPendente = null;
+            } else if (await tratarContaBanida(status, body)) {
+                return;
             } else if (status === 401) {
                 mostrarFeedback(elements.feedbackModalSenha, mensagemErro(body, "Senha atual incorreta."), "error");
             } else if (status === 409) {

@@ -7,7 +7,7 @@ function criarCardServico(servico) {
     const fallbackImage = "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
     const img = document.createElement("img");
     img.src = servico.fotoCapa || fallbackImage;
-    img.alt = servico.nome || "Serviço";
+    img.alt = servico.nome || "Anúncio";
     img.className = "servico-foto";
     img.onerror = () => {
         img.onerror = null;
@@ -17,7 +17,7 @@ function criarCardServico(servico) {
     const info = document.createElement("div");
     info.className = "servico-info";
     const title = document.createElement("h4");
-    title.textContent = servico.nome || "Serviço";
+    title.textContent = servico.nome || "Anúncio";
     const description = document.createElement("p");
     description.textContent = servico.descricao || "Sem descrição disponível.";
     const meta = document.createElement("div");
