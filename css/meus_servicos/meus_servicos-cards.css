@@ -9,6 +9,8 @@
 }
 
 .card-servico {
+    position: relative;
+    overflow: hidden;
     min-height: 124px;
     padding: 1.25rem;
     display: flex;
@@ -38,6 +40,7 @@
 
 .card-servico .info {
     flex: 1;
+    min-width: 0;
 }
 
 .card-servico h3 {
@@ -53,10 +56,12 @@
 
 .acoes {
     display: flex;
+    flex-wrap: wrap;
     gap: 0.6rem;
 }
 
-.acoes button {
+.acoes button,
+.card-servico-link {
     background: rgba(255, 255, 255, 0.06);
     color: var(--text-primary);
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -65,13 +70,115 @@
     font-size: 0.88rem;
     font-weight: 600;
     cursor: pointer;
+    text-decoration: none;
     transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
 }
 
-.acoes button:hover {
+.acoes button:hover,
+.card-servico-link:hover {
     border-color: rgba(250, 204, 21, 0.35);
     background-color: rgba(250, 204, 21, 0.12);
     color: var(--primary-color);
+}
+
+.acoes button:disabled {
+    cursor: wait;
+    opacity: 0.65;
+}
+
+.card-servico-metadados {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin-bottom: 0.8rem;
+}
+
+.card-servico-badge {
+    display: inline-flex;
+    align-items: center;
+    min-height: 26px;
+    padding: 0.25rem 0.65rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    color: var(--text-secondary);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.card-servico-badge--ativo {
+    border-color: rgba(34, 197, 94, 0.28);
+    background: rgba(34, 197, 94, 0.1);
+    color: #86efac;
+}
+
+.card-servico-badge--oculto {
+    border-color: rgba(250, 204, 21, 0.3);
+    background: rgba(250, 204, 21, 0.1);
+    color: #fde047;
+}
+
+.card-servico-badge--banido {
+    border-color: rgba(239, 68, 68, 0.35);
+    background: rgba(239, 68, 68, 0.12);
+    color: #fca5a5;
+}
+
+.card-servico--oculto {
+    border-color: rgba(250, 204, 21, 0.23);
+}
+
+.card-servico--banido {
+    min-height: 190px;
+    border-color: rgba(239, 68, 68, 0.4);
+}
+
+.card-servico--banido .thumb,
+.card-servico--banido .info {
+    opacity: 0.5;
+    filter: saturate(0.55);
+}
+
+.card-servico-banido-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    padding: 1.25rem;
+    background: linear-gradient(135deg, rgba(48, 8, 8, 0.62), rgba(12, 12, 14, 0.42));
+    backdrop-filter: blur(1.5px);
+    text-align: center;
+}
+
+.card-servico-banido-overlay strong {
+    color: #fecaca;
+    font-size: clamp(2.8rem, 9vw, 5.75rem);
+    font-weight: 950;
+    letter-spacing: 0.16em;
+    line-height: 0.95;
+    text-indent: 0.16em;
+    text-shadow: 0 8px 30px rgba(127, 29, 29, 0.7);
+}
+
+.card-servico-banido-overlay span {
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+}
+
+.card-servico-link--banido {
+    margin-top: 0.55rem;
+    border-color: rgba(254, 202, 202, 0.45);
+    background: rgba(0, 0, 0, 0.35);
+    color: #fff;
 }
 
 @media (max-width: 600px) {
@@ -89,8 +196,14 @@
         width: 100%;
     }
 
-    .acoes button {
+    .acoes button,
+    .card-servico-link {
         flex: 1;
+        text-align: center;
+    }
+
+    .card-servico-banido-overlay strong {
+        font-size: clamp(2.4rem, 15vw, 4.5rem);
     }
 }
 

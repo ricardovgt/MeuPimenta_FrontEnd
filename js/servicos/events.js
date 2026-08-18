@@ -7,7 +7,7 @@ function atualizarListaServicos(token, elements, top = false, busca = "") {
             grid.innerHTML = "";
             if (status !== 200) {
                 const mensagem = document.createElement("p");
-                mensagem.textContent = body?.erro || "Não foi possível carregar os serviços.";
+                mensagem.textContent = body?.erro || "Não foi possível carregar os anúncios.";
                 grid.appendChild(mensagem);
                 return;
             }
@@ -15,13 +15,13 @@ function atualizarListaServicos(token, elements, top = false, busca = "") {
             const lista = Array.isArray(body) ? body : [];
             if (lista.length === 0) {
                 const mensagem = document.createElement("p");
-                mensagem.textContent = "Nenhum serviço encontrado com esses filtros.";
+                mensagem.textContent = "Nenhum anúncio encontrado com esses filtros.";
                 grid.appendChild(mensagem);
                 return;
             }
             lista.forEach((servico) => grid.appendChild(criarCardServico(servico)));
         })
-        .catch((erro) => console.error("Erro ao buscar serviços:", erro));
+        .catch((erro) => console.error("Erro ao buscar anúncios:", erro));
 }
 
 function configurarFiltros(token, elements) {

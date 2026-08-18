@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meus Serviços - MeuPimenta</title>
+    <title>Meus Anúncios - MeuPimenta</title>
     
     <link rel="stylesheet" href="../css/global.css">
     <link rel="stylesheet" href="../css/meus_servicos/meus_servicos-base.css">
@@ -16,8 +16,8 @@
     <header class="top-nav">
         <a href="servicos.html" class="nav-logo">MeuPimenta</a>
         <nav class="nav-links">
-            <a href="servicos.html" class="nav-item">Buscar Serviços</a>
-            <a href="meus_servicos.html" class="nav-item active hidden" data-conta-comercial>Meus Serviços</a>
+            <a href="servicos.html" class="nav-item">Buscar Anúncios</a>
+            <a href="meus_servicos.html" class="nav-item active hidden" data-conta-comercial>Meus Anúncios</a>
             <a href="perfil.html" class="nav-item">Perfil</a>
         </nav>
         <div class="nav-actions">
@@ -27,15 +27,15 @@
     <main class="container-servicos">
         <section class="meus-servicos-intro" aria-labelledby="titulo-meus-servicos">
             <div class="meus-servicos-intro-copy">
-                <h1 id="titulo-meus-servicos">Meus Serviços</h1>
-                <p>Gerencie os serviços que você oferece na plataforma.</p>
+                <h1 id="titulo-meus-servicos">Meus Anúncios</h1>
+                <p>Gerencie os anúncios que você publica na plataforma.</p>
             </div>
             <div class="meus-servicos-novo">
                 <button type="button" id="btn-novo-servico" class="btn btn-primary btn-anunciar-servico">
                     <span aria-hidden="true">＋</span>
-                    Anunciar Serviço
+                    Criar Anúncio
                 </button>
-                <p>Crie um novo serviço e comece a receber clientes.</p>
+                <p>Crie um novo anúncio e comece a receber clientes.</p>
             </div>
         </section>
 
@@ -53,8 +53,8 @@
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
                     </div>
                     <div>
-                        <h2>Anunciar Serviço</h2>
-                        <p class="modal-edicao-subtitle modal-cadastro-subtitle">Preencha os dados abaixo para publicar seu serviço.</p>
+                        <h2>Criar Anúncio</h2>
+                        <p class="modal-edicao-subtitle modal-cadastro-subtitle">Preencha os dados abaixo para publicar seu anúncio.</p>
                     </div>
                 </div>
                 <button type="button" id="btn-fechar-cadastro" class="modal-edicao-close modal-cadastro-close" aria-label="Fechar modal">
@@ -67,11 +67,21 @@
             <form id="form-servico" class="modal-edicao-form modal-cadastro-form">
                 <div class="form-group modal-campo">
                     <div class="modal-campo-label">
+                        <label for="tipo">Tipo de anúncio *</label>
+                    </div>
+                    <select id="tipo" name="tipo" required>
+                        <option value="">Selecione</option>
+                        <option value="SERVICO">Serviço</option>
+                        <option value="COMERCIO">Comércio</option>
+                    </select>
+                </div>
+                <div class="form-group modal-campo">
+                    <div class="modal-campo-label">
                         <span class="modal-campo-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg></span>
-                        <label for="nome">Nome do Serviço/Profissional *</label>
+                        <label for="nome">Nome do Anúncio *</label>
                     </div>
                     <input type="text" id="nome" name="nome" placeholder="Ex.: Design de Sobrancelhas" required>
-                    <span class="modal-campo-hint">Seja claro e direto no nome do seu serviço.</span>
+                    <span class="modal-campo-hint">Seja claro e direto no nome do seu anúncio.</span>
                 </div>
 
                 <div class="form-group modal-campo">
@@ -110,7 +120,7 @@
                 <div class="form-group modal-campo">
                     <div class="modal-campo-label">
                         <span class="modal-campo-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></span>
-                        <label for="fotos-input">Fotos do Serviço (até 5)</label>
+                        <label for="fotos-input">Fotos do Anúncio (até 5)</label>
                     </div>
                     <div class="modal-fotos-area">
                         <label for="fotos-input" class="modal-fotos-trigger">
@@ -126,14 +136,14 @@
                     <button type="button" id="btn-cancelar-servico" class="btn btn-outline">Cancelar</button>
                     <button type="submit" class="btn btn-primary modal-btn-publicar">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                        Publicar Serviço
+                        Publicar Anúncio
                     </button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- Modal Editar Serviço -->
+    <!-- Modal Editar Anúncio -->
     <div id="modal-editar-servico" class="modal hidden">
         <div class="modal-content modal-edicao">
             <!-- Header do modal -->
@@ -143,8 +153,8 @@
                         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                     </div>
                     <div>
-                        <h2>Editar Serviço</h2>
-                        <p class="modal-edicao-subtitle">Atualize as informações do seu serviço.</p>
+                        <h2>Editar Anúncio</h2>
+                        <p class="modal-edicao-subtitle">Atualize as informações do seu anúncio.</p>
                     </div>
                 </div>
                 <button type="button" id="btn-fechar-edicao" class="modal-edicao-close" aria-label="Fechar modal">
@@ -155,13 +165,23 @@
             <form id="form-editar-servico" class="modal-edicao-form">
                 <input type="hidden" id="editar-id" name="id">
 
+                <div class="modal-campo">
+                    <div class="modal-campo-label">
+                        <label for="editar-tipo">Tipo de anúncio *</label>
+                    </div>
+                    <select id="editar-tipo" name="tipo" required>
+                        <option value="SERVICO">Serviço</option>
+                        <option value="COMERCIO">Comércio</option>
+                    </select>
+                </div>
+
                 <!-- Campo: Nome -->
                 <div class="modal-campo">
                     <div class="modal-campo-label">
                         <span class="modal-campo-icon">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
                         </span>
-                        <label for="editar-nome">Nome do Serviço *</label>
+                        <label for="editar-nome">Nome do Anúncio *</label>
                     </div>
                     <input type="text" id="editar-nome" name="nome" placeholder="Ex.: Design de Sobrancelhas" required>
                     <span class="modal-campo-hint">O nome visível para seus clientes.</span>
@@ -189,7 +209,7 @@
                     </div>
                     <input type="text" id="editar-descricao" name="descricao" placeholder="O que você faz?" maxlength="120">
                     <div class="modal-campo-footer">
-                        <span class="modal-campo-hint">Resumo rápido do seu serviço.</span>
+                        <span class="modal-campo-hint">Resumo rápido do seu anúncio.</span>
                         <span class="modal-campo-counter" data-target="editar-descricao" data-max="120">0/120</span>
                     </div>
                 </div>
@@ -215,7 +235,7 @@
                         <span class="modal-campo-icon">
                             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
                         </span>
-                        <label for="editar-fotos">Fotos do Serviço (até 5)</label>
+                        <label for="editar-fotos">Fotos do Anúncio (até 5)</label>
                     </div>
                     <div class="modal-fotos-area">
                         <label for="editar-fotos" class="modal-fotos-trigger">
@@ -240,10 +260,10 @@
         </div>
     </div>
 
-    <!-- Modal Excluir Serviço -->
+    <!-- Modal Excluir Anúncio -->
     <div id="modal-excluir-servico" class="modal hidden">
         <div class="modal-content">
-            <h2>Excluir Serviço</h2>
+            <h2>Excluir Anúncio</h2>
             <p>Para confirmar a exclusão, digite seu e-mail abaixo:</p>
             <input type="hidden" id="excluir-id">
             <input type="email" id="input-email-confirmacao" placeholder="seu@email.com" required>

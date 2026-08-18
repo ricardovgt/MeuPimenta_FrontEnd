@@ -16,3 +16,7 @@ async function configurarNavegacaoPorTipoConta() {
 }
 
 configurarNavegacaoPorTipoConta();
+
+window.addEventListener("connecta:sessao-encerrada", () => {
+    atualizarVisibilidadeMeusServicos(null);
+});

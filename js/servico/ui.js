@@ -101,12 +101,47 @@ function exibirFotoDono(fotoPerfilUsuario, elementoFoto) {
     };
 }
 
+function servicoPertenceAoUsuarioAutenticado(servico, idUsuarioAutenticado) {
+    if (idUsuarioAutenticado === null || idUsuarioAutenticado === undefined) return false;
+
+    const idDono = servico?.idUsuario
+        ?? servico?.usuarioId
+        ?? servico?.usuario?.idUsuario
+        ?? servico?.usuario?.id;
+
+    return idDono !== null
+        && idDono !== undefined
+        && Number(idDono) === Number(idUsuarioAutenticado);
+}
+
 function popularServico(servico, elements) {
     const avaliacaoMedia = Number(servico.avaliacaoMedia || 0);
     const totalAvaliacoes = Number(servico.totalAvaliacoes || 0);
+    const anuncioBanido = servico.status === "BANIDO";
+    const usuarioEhDono = servicoPertenceAoUsuarioAutenticado(
+        servico,
+        elements.idUsuarioAutenticado
+    );
+    const ocultarAcoesDoAnuncio = anuncioBanido || usuarioEhDono;
+
+    if (elements.detalhe) {
+        elements.detalhe.classList.toggle("servico-detalhe--banido", anuncioBanido);
+        elements.detalhe.querySelector(".servico-banido-overlay")?.remove();
+        if (anuncioBanido) {
+            const overlay = document.createElement("div");
+            overlay.className = "servico-banido-overlay";
+            overlay.setAttribute("aria-label", "Anúncio banido. Somente leitura.");
+            const titulo = document.createElement("strong");
+            titulo.textContent = "BANIDO";
+            const descricao = document.createElement("span");
+            descricao.textContent = "Somente leitura";
+            overlay.append(titulo, descricao);
+            elements.detalhe.appendChild(overlay);
+        }
+    }
 
     if (elements.nome) {
-        elements.nome.textContent = servico.nome || "Serviço";
+        elements.nome.textContent = servico.nome || "Anúncio";
     }
 
     if (elements.postador) {
@@ -139,12 +174,13 @@ function popularServico(servico, elements) {
     renderizarFotoAtual(elements);
 
     if (elements.foto) {
-        elements.foto.alt = servico.nome || "Serviço";
+        elements.foto.alt = servico.nome || "Anúncio";
     }
 
     if (elements.badges) {
         elements.badges.innerHTML = "";
         const badges = [
+            { label: servico.tipo === "COMERCIO" ? "Comércio" : servico.tipo === "SERVICO" ? "Serviço" : "Tipo não informado", className: "tipo" },
             { label: `📞 ${servico.telefone || "Telefone não informado"}` },
             { label: `⭐ ${avaliacaoMedia.toFixed(1)} - ${totalAvaliacoes} ${totalAvaliacoes === 1 ? "avaliação" : "avaliações"}`, className: "avaliacao" }
         ];
@@ -158,10 +194,16 @@ function popularServico(servico, elements) {
     }
 
     if (elements.whatsapp) {
+        elements.whatsapp.classList.toggle("hidden", ocultarAcoesDoAnuncio);
         elements.whatsapp.href = `https://wa.me/${(servico.telefone || "").replace(/\D/g, "")}`;
-        elements.whatsapp.innerHTML = `<span>💬</span> ${servico.telefone ? "Abrir WhatsApp" : "Telefone indisponível"}`;
+        elements.whatsapp.innerHTML = `
+            <img class="btn-icon" src="../img/whatsapp_Icon.png" alt="" aria-hidden="true">
+            <span>${servico.telefone ? "Abrir WhatsApp" : "Telefone indisponível"}</span>
+        `;
     }
 
+    elements.btnAvaliar?.classList.toggle("hidden", ocultarAcoesDoAnuncio);
+    elements.btnDenunciar?.classList.toggle("hidden", ocultarAcoesDoAnuncio);
     if (elements.resumoNota) {
         elements.resumoNota.textContent = avaliacaoMedia.toFixed(1);
     }
@@ -202,12 +244,12 @@ function popularServico(servico, elements) {
     }
 }
 
-function mostrarModalAvaliacao(token, idServico, elements, opcoes = {}) {
+function mostrarModalAvaliacao(token, idAnuncio, elements, opcoes = {}) {
     const painel = document.createElement("div");
     painel.className = "avaliacao-panel avaliacao-form-panel";
     painel.innerHTML = `
-        <h2 class="section-title">Avaliar este serviço</h2>
-        <div class="estrelas-avaliacao" role="radiogroup" aria-label="Avaliação do serviço">
+        <h2 class="section-title">Avaliar este anúncio</h2>
+        <div class="estrelas-avaliacao" role="radiogroup" aria-label="Avaliação do anúncio">
             <button type="button" class="estrela-btn" data-valor="1" aria-label="1 estrela">★</button>
             <button type="button" class="estrela-btn" data-valor="2" aria-label="2 estrelas">★</button>
             <button type="button" class="estrela-btn" data-valor="3" aria-label="3 estrelas">★</button>
@@ -253,7 +295,7 @@ function mostrarModalAvaliacao(token, idServico, elements, opcoes = {}) {
 
             Connecta.ui.mostrarFeedback(feedback, "Enviando avaliação...", "error");
 
-            enviarAvaliacao(token, idServico, notaSelecionada, comentario)
+            enviarAvaliacao(token, idAnuncio, notaSelecionada, comentario)
                 .then(({ status, body }) => {
                     if (status === 201 || status === 200) {
                         Connecta.ui.mostrarFeedback(feedback, body?.mensagem || "Avaliação enviada com sucesso!", "success");
@@ -417,7 +459,7 @@ function appendAvaliacoes(avaliacoes, opcoes = {}) {
 
     if (avaliacoesVisiveis.length === 0) {
         if (list.children.length === 0) {
-            list.innerHTML = '<p class="avaliacao-vazia">Ainda não há comentários para este serviço.</p>';
+            list.innerHTML = '<p class="avaliacao-vazia">Ainda não há comentários para este anúncio.</p>';
         }
         return;
     }

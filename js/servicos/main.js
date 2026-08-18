@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", async () => {
-    const sessao = await Connecta.auth.exigirSessao();
-    if (!sessao) return;
-    const token = sessao.token;
+    const sessao = await Connecta.auth.validarSessao();
+    const token = sessao?.token || null;
 
     const elements = {
         formFiltros: document.getElementById("form-filtros"),

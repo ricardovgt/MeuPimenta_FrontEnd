@@ -22,10 +22,14 @@ function configurarNavegacao(elements) {
     }
 }
 
-function configurarAvaliacoes(token, idServico, elements) {
+function configurarAvaliacoes(token, idAnuncio, elements) {
     if (!elements.btnAvaliar) return;
 
     elements.btnAvaliar.addEventListener("click", () => {
+        if (!token) {
+            window.location.assign("login.html");
+            return;
+        }
         const painelExistente = document.querySelector(".avaliacao-form-panel");
 
         if (painelExistente) {
@@ -33,10 +37,10 @@ function configurarAvaliacoes(token, idServico, elements) {
             return;
         }
 
-        mostrarModalAvaliacao(token, idServico, elements, {
+        mostrarModalAvaliacao(token, idAnuncio, elements, {
             aoEnviar: () => {
                 elements.carregarAvaliacoesPagina?.(1);
-                carregarServicoCompleto(token, idServico, elements);
+                carregarServicoCompleto(token, idAnuncio, elements);
             }
         });
     });
@@ -48,7 +52,7 @@ function configurarAvaliacoes(token, idServico, elements) {
                 if (navigator.share) {
                     await navigator.share({
                         title: document.title,
-                        text: "Confira este serviço no MeuPimenta",
+                        text: "Confira este anúncio no MeuPimenta",
                         url
                     });
                     return;
@@ -68,8 +72,58 @@ function configurarAvaliacoes(token, idServico, elements) {
     }
 }
 
-function carregarServicoCompleto(token, idServico, elements) {
-    return obterServicoCompleto(token, idServico)
+function configurarDenuncia(token, idAnuncio, elements) {
+    if (!elements.btnDenunciar) return;
+
+    elements.btnDenunciar.addEventListener("click", async () => {
+        if (!token) {
+            window.location.assign("login.html");
+            return;
+        }
+        if (elements.btnDenunciar.disabled) return;
+
+        const confirmado = await Connecta.ui.confirmar({
+            titulo: "Denunciar Anúncio",
+            mensagem: "Essa ação registrará uma denúncia para este anúncio. Confirme se deseja continuar.",
+            textoConfirmacao: "Denunciar",
+            textoConfirmar: "Enviar denúncia",
+            textoCancelar: "Cancelar",
+            kicker: "Confirmação Obrigatória"
+        });
+        if (!confirmado) return;
+
+        elements.btnDenunciar.disabled = true;
+        const htmlOriginal = elements.btnDenunciar.innerHTML;
+        elements.btnDenunciar.textContent = "Enviando denúncia...";
+        Connecta.ui.limparFeedback(elements.feedback);
+
+        try {
+            const { status, body } = await denunciarAnuncio(token, idAnuncio);
+            if (status === 200) {
+                Connecta.ui.mostrarFeedback(
+                    elements.feedback,
+                    body?.mensagem || "Denúncia registrada com sucesso.",
+                    "success"
+                );
+                return;
+            }
+            Connecta.ui.mostrarFeedback(
+                elements.feedback,
+                body?.erro || body?.mensagem || "Não foi possível registrar a denúncia.",
+                "error"
+            );
+        } catch (erro) {
+            console.error("Erro ao denunciar anúncio:", erro);
+            Connecta.ui.mostrarFeedback(elements.feedback, "Erro de conexão com o servidor.", "error");
+        } finally {
+            elements.btnDenunciar.disabled = false;
+            elements.btnDenunciar.innerHTML = htmlOriginal;
+        }
+    });
+}
+
+function carregarServicoCompleto(token, idAnuncio, elements) {
+    return obterServicoCompleto(token, idAnuncio)
         .then(({ status, body }) => {
             if (status === 200) {
                 popularServico(body, elements);
@@ -77,17 +131,17 @@ function carregarServicoCompleto(token, idServico, elements) {
             }
             Connecta.ui.mostrarFeedback(
                 elements.feedback,
-                body?.erro || body?.mensagem || "Não foi possível carregar este serviço.",
+                body?.erro || body?.mensagem || "Não foi possível carregar este anúncio.",
                 "error"
             );
         })
         .catch((erro) => {
-            console.error("Erro ao carregar serviço:", erro);
+            console.error("Erro ao carregar anúncio:", erro);
             Connecta.ui.mostrarFeedback(elements.feedback, "Erro de conexão com o servidor.", "error");
         });
 }
 
-function configurarListaAvaliacoes(token, idServico, elements, usuarioAutenticado) {
+function configurarListaAvaliacoes(token, idAnuncio, elements, usuarioAutenticado) {
     const state = {
         paginaAtual: 1,
         totalPaginas: 1,
@@ -97,7 +151,7 @@ function configurarListaAvaliacoes(token, idServico, elements, usuarioAutenticad
 
     function carregarPagina(pagina = 1) {
         const paginaRequisitada = Number(pagina);
-        listarAvaliacoes(idServico, paginaRequisitada, state.limite)
+        listarAvaliacoes(idAnuncio, paginaRequisitada, state.limite)
             .then(({ status, body }) => {
                 if (status !== 200) {
                     mostrarErroAvaliacoes(body?.erro || body?.mensagem || "Não foi possível carregar avaliações.");
@@ -113,7 +167,7 @@ function configurarListaAvaliacoes(token, idServico, elements, usuarioAutenticad
                     idUsuarioAutenticado: state.idUsuarioAutenticado,
                     aoExcluir: () => {
                         carregarPagina(1);
-                        carregarServicoCompleto(token, idServico, elements);
+                        carregarServicoCompleto(token, idAnuncio, elements);
                     }
                 });
                 atualizarBotaoCarregarMais(state.paginaAtual, state.totalPaginas);

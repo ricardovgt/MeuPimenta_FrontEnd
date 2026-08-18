@@ -1,16 +1,16 @@
-const ENDPOINT_SERVICOS = "servicos";
+const ENDPOINT_ANUNCIOS = "anuncios";
 const ENDPOINT_AVALIACOES = "avaliacoes";
 
-function obterServicoCompleto(token, idServico) {
-    return Connecta.api.requisicao(ENDPOINT_SERVICOS, {
+function obterServicoCompleto(token, idAnuncio) {
+    return Connecta.api.requisicao(ENDPOINT_ANUNCIOS, {
         method: "GET",
         token,
-        parametros: { id: idServico }
+        parametros: { id: idAnuncio }
     });
 }
 
-function enviarAvaliacao(token, idServico, nota, comentario) {
-    const body = new URLSearchParams({ idServico: String(idServico), nota: String(nota) });
+function enviarAvaliacao(token, idAnuncio, nota, comentario) {
+    const body = new URLSearchParams({ idAnuncio: String(idAnuncio), nota: String(nota) });
     if (comentario !== undefined && comentario !== null) body.set("comentario", String(comentario));
 
     return Connecta.api.requisicao(ENDPOINT_AVALIACOES, {
@@ -21,10 +21,19 @@ function enviarAvaliacao(token, idServico, nota, comentario) {
     });
 }
 
-function listarAvaliacoes(idServico, pagina = 1, limite = 10) {
+function listarAvaliacoes(idAnuncio, pagina = 1, limite = 10) {
     return Connecta.api.requisicao(ENDPOINT_AVALIACOES, {
         method: "GET",
-        parametros: { idServico, pagina, limite }
+        parametros: { idAnuncio, pagina, limite }
+    });
+}
+
+function denunciarAnuncio(token, idAnuncio) {
+    return Connecta.api.requisicao(ENDPOINT_ANUNCIOS, {
+        method: "POST",
+        token,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ acao: "DENUNCIAR", idAnuncio: Number(idAnuncio) })
     });
 }
 

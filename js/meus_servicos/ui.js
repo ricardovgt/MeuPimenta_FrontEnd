@@ -18,7 +18,7 @@ function criarBotaoAnunciar(callback, classeAdicional = "") {
     const icone = document.createElement("span");
     icone.setAttribute("aria-hidden", "true");
     icone.textContent = "＋";
-    botao.append(icone, "Anunciar Serviço");
+    botao.append(icone, "Criar Anúncio");
     botao.addEventListener("click", callback);
     return botao;
 }
@@ -33,10 +33,10 @@ function criarEstadoVazio(onNovo) {
     icone.className = "meus-servicos-vazio-icone";
 
     const titulo = document.createElement("h2");
-    titulo.textContent = "Você ainda não possui serviços cadastrados.";
+    titulo.textContent = "Você ainda não possui anúncios cadastrados.";
 
     const descricao = document.createElement("p");
-    descricao.textContent = "Adicione seu primeiro serviço para aparecer para clientes que estão procurando por você.";
+    descricao.textContent = "Adicione seu primeiro anúncio para aparecer para clientes que estão procurando por você.";
 
     estadoVazio.append(
         icone,
@@ -48,13 +48,19 @@ function criarEstadoVazio(onNovo) {
 }
 
 function criarCard(servico, callbacks) {
-    const card = document.createElement("div");
-    card.className = "card-servico";
+    const status = ["ATIVO", "OCULTO", "BANIDO"].includes(servico.status)
+        ? servico.status
+        : "";
+    const tipo = servico.tipo === "SERVICO"
+        ? "Serviço"
+        : servico.tipo === "COMERCIO" ? "Comércio" : "Tipo não informado";
+    const card = document.createElement("article");
+    card.className = `card-servico${status ? ` card-servico--${status.toLowerCase()}` : ""}`;
 
     const thumb = document.createElement("img");
     thumb.className = "thumb";
     thumb.src = servico.fotoCapa || "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
-    thumb.alt = servico.nome || "Serviço";
+    thumb.alt = servico.nome || "Anúncio";
 
     const info = document.createElement("div");
     info.className = "info";
@@ -63,20 +69,63 @@ function criarCard(servico, callbacks) {
     const linha = document.createElement("p");
     linha.textContent = servico.nomeUsuario || "";
 
+    const metadados = document.createElement("div");
+    metadados.className = "card-servico-metadados";
+    const badgeTipo = document.createElement("span");
+    badgeTipo.className = "card-servico-badge card-servico-badge--tipo";
+    badgeTipo.textContent = tipo;
+    metadados.appendChild(badgeTipo);
+    if (status) {
+        const badgeStatus = document.createElement("span");
+        badgeStatus.className = `card-servico-badge card-servico-badge--${status.toLowerCase()}`;
+        badgeStatus.textContent = status === "OCULTO" ? "Oculto" : status === "ATIVO" ? "Ativo" : "Banido";
+        metadados.appendChild(badgeStatus);
+    }
+
     const acoes = document.createElement("div");
     acoes.className = "acoes";
-    const btnEditar = document.createElement("button");
-    btnEditar.type = "button";
-    btnEditar.textContent = "Editar Serviço";
-    btnEditar.addEventListener("click", () => callbacks.onEditar(servico));
-    const btnExcluir = document.createElement("button");
-    btnExcluir.type = "button";
-    btnExcluir.textContent = "Excluir";
-    btnExcluir.addEventListener("click", () => callbacks.onExcluir(servico.id));
+    const linkDetalhes = document.createElement("a");
+    linkDetalhes.className = "card-servico-link";
+    linkDetalhes.href = `servico.html?id=${encodeURIComponent(servico.id)}`;
+    linkDetalhes.textContent = "Ver detalhes";
 
-    acoes.append(btnEditar, btnExcluir);
-    info.append(titulo, linha, acoes);
+    if (status !== "BANIDO") {
+        const btnEditar = document.createElement("button");
+        btnEditar.type = "button";
+        btnEditar.textContent = "Editar Anúncio";
+        btnEditar.addEventListener("click", () => callbacks.onEditar(servico));
+
+        if (status === "ATIVO" || status === "OCULTO") {
+            const btnStatus = document.createElement("button");
+            btnStatus.type = "button";
+            btnStatus.className = "btn-status-anuncio";
+            btnStatus.textContent = status === "ATIVO" ? "Pausar" : "Reativar";
+            btnStatus.addEventListener("click", () => callbacks.onAlterarStatus(servico, btnStatus));
+            acoes.appendChild(btnStatus);
+        }
+
+        const btnExcluir = document.createElement("button");
+        btnExcluir.type = "button";
+        btnExcluir.textContent = "Excluir";
+        btnExcluir.addEventListener("click", () => callbacks.onExcluir(servico.id));
+        acoes.append(btnEditar, btnExcluir, linkDetalhes);
+    }
+
+    info.append(titulo, linha, metadados, acoes);
     card.append(thumb, info);
+
+    if (status === "BANIDO") {
+        const bloqueio = document.createElement("div");
+        bloqueio.className = "card-servico-banido-overlay";
+        bloqueio.setAttribute("aria-label", "Anúncio banido. Disponível somente para visualização.");
+        const texto = document.createElement("strong");
+        texto.textContent = "BANIDO";
+        const descricao = document.createElement("span");
+        descricao.textContent = "Somente leitura";
+        linkDetalhes.classList.add("card-servico-link--banido");
+        bloqueio.append(texto, descricao, linkDetalhes);
+        card.appendChild(bloqueio);
+    }
     return card;
 }
 
@@ -168,7 +217,9 @@ function renderizarPreviewFotosEdicao(elementoPreview) {
 }
 
 function carregarFotosExistentes(fotos, elementoPreview) {
-    fotosEdicaoAtual = Array.isArray(fotos) ? fotos.map((foto) => foto.fotoBase64).filter(Boolean) : [];
+    fotosEdicaoAtual = Array.isArray(fotos)
+        ? fotos.map((foto) => foto?.fotoBase64).filter(Boolean).slice(0, LIMITE_FOTOS)
+        : [];
     renderizarPreviewFotosEdicao(elementoPreview);
 }
 

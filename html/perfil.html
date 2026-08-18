@@ -14,8 +14,8 @@
     <header class="top-nav">
         <a href="servicos.html" class="nav-logo">MeuPimenta</a>
         <nav class="nav-links" aria-label="Navegação principal">
-            <a href="servicos.html" class="nav-item">Buscar Serviços</a>
-            <a href="meus_servicos.html" class="nav-item hidden" data-conta-comercial>Meus Serviços</a>
+            <a href="servicos.html" class="nav-item">Buscar Anúncios</a>
+            <a href="meus_servicos.html" class="nav-item hidden" data-conta-comercial>Meus Anúncios</a>
             <a href="perfil.html" class="nav-item active" aria-current="page">Perfil</a>
         </nav>
         <div class="nav-actions"></div>
@@ -65,7 +65,7 @@
             </form>
 
             <form id="form-tipo-conta" class="setting-card">
-                <div><p class="section-eyebrow">Plano</p><h2>Alterar tipo de conta</h2><p>Essa mudança afeta os serviços publicados.</p></div>
+                <div><p class="section-eyebrow">Plano</p><h2>Alterar tipo de conta</h2><p>Essa mudança afeta os anúncios publicados.</p></div>
                 <div class="form-group"><label for="input-tipo-conta">Tipo de conta</label><select id="input-tipo-conta" name="tipoConta" required><option value="COMUM">Conta comum</option><option value="COMERCIAL">Conta comercial</option></select></div>
                 <div id="feedback-tipo-conta" class="feedback-msg hidden" aria-live="polite"></div>
                 <button class="btn btn-primary" type="submit">Continuar</button>
@@ -81,7 +81,7 @@
         </section>
 
         <section class="danger-zone" aria-labelledby="danger-title">
-            <div><p class="section-eyebrow">Zona de perigo</p><h2 id="danger-title">Excluir conta</h2><p>Esta ação também exclui todos os seus serviços e não pode ser desfeita.</p></div>
+            <div><p class="section-eyebrow">Zona de perigo</p><h2 id="danger-title">Excluir conta</h2><p>Esta ação também exclui todos os seus anúncios e não pode ser desfeita.</p></div>
             <button type="button" class="btn btn-danger" id="btn-abrir-exclusao">Excluir minha conta</button>
         </section>
         <div class="perfil-actions"><button type="button" class="btn btn-outline" id="btn-sair">Sair da conta</button></div>
@@ -91,7 +91,7 @@
         <div class="profile-modal-content">
             <h2 id="modal-senha-titulo">Confirme sua senha</h2>
             <p id="modal-senha-descricao">Digite sua senha atual para continuar.</p>
-            <p id="modal-tipo-aviso" class="modal-warning hidden">Changing account type will permanently delete all your published services.</p>
+            <p id="modal-tipo-aviso" class="modal-warning hidden">Alterar o tipo de conta excluirá permanentemente todos os seus anúncios publicados.</p>
             <form id="form-modal-senha">
                 <div class="form-group"><label for="modal-senha-atual">Senha atual</label><input id="modal-senha-atual" type="password" autocomplete="current-password" required></div>
                 <div id="feedback-modal-senha" class="feedback-msg hidden" aria-live="polite"></div>
@@ -102,9 +102,9 @@
 
     <div id="modal-exclusao" class="profile-modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-exclusao-titulo">
         <div class="profile-modal-content profile-modal-danger">
-            <p class="danger-kicker">Irreversible action.</p>
+            <p class="danger-kicker">Ação irreversível.</p>
             <h2 id="modal-exclusao-titulo">Excluir conta permanentemente?</h2>
-            <p>Digite manualmente o e-mail da conta e sua senha atual. Todos os seus serviços também serão excluídos.</p>
+            <p>Digite manualmente o e-mail da conta e sua senha atual. Todos os seus anúncios também serão excluídos.</p>
             <form id="form-exclusao">
                 <div class="form-group"><label for="exclusao-email">E-mail da conta</label><input id="exclusao-email" type="email" autocomplete="off" placeholder="seu@email.com" required></div>
                 <div class="form-group"><label for="exclusao-senha">Senha atual</label><input id="exclusao-senha" type="password" autocomplete="current-password" required></div>
