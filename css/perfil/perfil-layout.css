@@ -82,6 +82,10 @@
     width: auto;
 }
 
+#form-tipo-conta {
+    scroll-margin-top: 7rem;
+}
+
 @media (max-width: 720px) {
     .perfil-container {
         margin-top: 7.5rem;

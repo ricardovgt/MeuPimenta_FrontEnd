@@ -17,15 +17,46 @@
         <nav class="nav-links">
             <a href="servicos.html" class="nav-item">Buscar Anúncios</a>
             <a href="meus_servicos.html" class="nav-item hidden" data-conta-comercial>Meus Anúncios</a>
-            <a href="perfil.html" class="nav-item">Perfil</a>
         </nav>
         <div class="nav-actions">
             <button id="btn-voltar" class="btn btn-outline btn-sm">← Voltar para Anúncios</button>
+            <a href="perfil.html" class="nav-avatar-link" data-nav-avatar-link aria-label="Abrir perfil" title="Perfil">
+                <img class="nav-avatar" data-nav-avatar src="../img/default-profile.png" alt="Foto de perfil">
+            </a>
         </div>
     </header>
 
     <main class="container-servico">
         <section id="servico-detalhe" class="card-servico">
+            <div id="servico-indisponivel" class="servico-indisponivel hidden" role="status">
+                <img
+                    class="servico-indisponivel-ilustracao"
+                    src="../img/anuncio_not_found.png"
+                    alt=""
+                    aria-hidden="true"
+                >
+                <h1>Anúncio não encontrado</h1>
+                <p class="servico-indisponivel-descricao">
+                    Este anúncio pode ter sido removido, ocultado ou não está mais disponível.
+                </p>
+                <p class="servico-indisponivel-ajuda">
+                    Se você acessou por um link antigo, tente buscar outros serviços na plataforma.
+                </p>
+                <div class="servico-indisponivel-acoes">
+                    <a href="servicos.html" class="btn btn-primary servico-indisponivel-btn">
+                        <span aria-hidden="true">⌕</span>
+                        Buscar outros serviços
+                    </a>
+                    <a href="perfil.html" class="btn btn-outline servico-indisponivel-btn">
+                        <span aria-hidden="true">⌂</span>
+                        Voltar para a página inicial
+                    </a>
+                </div>
+                <button id="btn-tentar-novamente" type="button" class="servico-tentar-novamente">
+                    <span aria-hidden="true">↻</span>
+                    Tentar novamente
+                </button>
+            </div>
             <div class="card-header-top">
                 <div id="servico-postador" class="servico-dono hidden">
                     <img id="servico-postador-foto" class="servico-dono-avatar" src="../img/default-profile.png" alt="Foto do dono do anúncio">

@@ -3,10 +3,30 @@
     flex-grow: 1;
 }
 
-.lista-servicos h2 {
+.lista-servicos-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
     margin-bottom: 1.5rem;
+}
+
+.lista-servicos-header h2 {
+    margin: 0;
     font-size: 1.5rem;
     color: var(--text-primary);
+}
+
+.btn.btn-anunciar {
+    width: auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    flex: 0 0 auto;
+    margin: 0;
+    padding: 0.65rem 1rem;
+    font-size: 0.88rem;
 }
 
 .grid-container {
@@ -106,4 +126,14 @@
 .rating {
     color: var(--primary-color);
     font-weight: bold;
+}
+
+@media (max-width: 520px) {
+    .lista-servicos-header {
+        align-items: flex-start;
+    }
+
+    .lista-servicos-header h2 {
+        font-size: 1.3rem;
+    }
 }

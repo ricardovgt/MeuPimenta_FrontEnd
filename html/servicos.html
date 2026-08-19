@@ -17,9 +17,12 @@
         <nav class="nav-links">
             <a href="servicos.html" class="nav-item active">Buscar Anúncios</a>
             <a href="meus_servicos.html" class="nav-item hidden" data-conta-comercial>Meus Anúncios</a>
-            <a href="perfil.html" class="nav-item">Perfil</a>
         </nav>
-        <div class="nav-actions"></div>
+        <div class="nav-actions">
+            <a href="perfil.html" class="nav-avatar-link" data-nav-avatar-link aria-label="Abrir perfil" title="Perfil">
+                <img class="nav-avatar" data-nav-avatar src="../img/default-profile.png" alt="Foto de perfil">
+            </a>
+        </div>
     </header>
 
     <main class="container-servicos">
@@ -79,7 +82,13 @@
         </aside>
 
         <section class="lista-servicos">
-            <h2>Anúncios Disponíveis</h2>
+            <div class="lista-servicos-header">
+                <h2>Anúncios Disponíveis</h2>
+                <button type="button" id="btn-anunciar" class="btn btn-primary btn-anunciar">
+                    <span aria-hidden="true">＋</span>
+                    Anunciar
+                </button>
+            </div>
             <div id="grid-servicos" class="grid-container">
                 <p>Carregando anúncios...</p>
             </div>

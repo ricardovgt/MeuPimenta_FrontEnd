@@ -45,4 +45,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     configurarMascaraTelefone(elements.inputTelefoneCadastro);
     configurarMascaraTelefone(elements.inputTelefone);
     Connecta.ui.configurarContadoresCaracteres();
+
+    const abrirNovoAnuncio = new URLSearchParams(window.location.search).get("novo") === "1";
+    if (sessao.usuario?.tipoConta === "COMERCIAL" && abrirNovoAnuncio) {
+        abrirCadastro(elements);
+    }
 });

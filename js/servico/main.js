@@ -47,13 +47,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         btnDenunciar: id("btn-denunciar"),
         btnCarregarMais: id("btn-carregar-mais"),
         btnVoltar: id("btn-voltar"),
-        btnHome: id("btn-home")
+        btnHome: id("btn-home"),
+        indisponivel: id("servico-indisponivel"),
+        btnTentarNovamente: id("btn-tentar-novamente")
     };
 
     configurarNavegacao(elements);
     configurarGaleriaFotos(elements);
     configurarAvaliacoes(token, idAnuncio, elements);
     configurarDenuncia(token, idAnuncio, elements);
-    configurarListaAvaliacoes(token, idAnuncio, elements, sessao?.usuario);
-    carregarServicoCompleto(token, idAnuncio, elements);
+    const anuncioDisponivel = await carregarServicoCompleto(token, idAnuncio, elements);
+    if (anuncioDisponivel) {
+        configurarListaAvaliacoes(token, idAnuncio, elements, sessao?.usuario);
+    }
 });

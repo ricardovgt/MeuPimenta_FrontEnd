@@ -8,8 +8,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         filtroTipo: document.getElementById("filtro-tipo"),
         filtroTop: document.getElementById("filtro-top"),
         btnLimparFiltros: document.getElementById("btn-limpar-filtros"),
+        btnAnunciar: document.getElementById("btn-anunciar"),
         gridServicos: document.getElementById("grid-servicos")
     };
 
     configurarFiltros(token, elements);
+    configurarBotaoAnunciar(sessao, elements);
 });

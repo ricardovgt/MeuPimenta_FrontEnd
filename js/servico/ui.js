@@ -114,31 +114,34 @@ function servicoPertenceAoUsuarioAutenticado(servico, idUsuarioAutenticado) {
         && Number(idDono) === Number(idUsuarioAutenticado);
 }
 
+function mostrarAnuncioIndisponivel(elements) {
+    elements.detalhe?.classList.add("servico-indisponivel-ativo");
+    elements.indisponivel?.classList.remove("hidden");
+    document.title = "Anúncio não encontrado - MeuPimenta";
+}
+
+function ocultarAnuncioIndisponivel(elements) {
+    elements.detalhe?.classList.remove("servico-indisponivel-ativo");
+    elements.indisponivel?.classList.add("hidden");
+}
+
 function popularServico(servico, elements) {
     const avaliacaoMedia = Number(servico.avaliacaoMedia || 0);
     const totalAvaliacoes = Number(servico.totalAvaliacoes || 0);
-    const anuncioBanido = servico.status === "BANIDO";
+    const statusAnuncio = String(servico.status || "").toUpperCase();
+    const anuncioIndisponivel = ["BANIDO", "OCULTO"].includes(statusAnuncio);
+
+    if (anuncioIndisponivel) {
+        mostrarAnuncioIndisponivel(elements);
+        return false;
+    }
+
+    ocultarAnuncioIndisponivel(elements);
     const usuarioEhDono = servicoPertenceAoUsuarioAutenticado(
         servico,
         elements.idUsuarioAutenticado
     );
-    const ocultarAcoesDoAnuncio = anuncioBanido || usuarioEhDono;
-
-    if (elements.detalhe) {
-        elements.detalhe.classList.toggle("servico-detalhe--banido", anuncioBanido);
-        elements.detalhe.querySelector(".servico-banido-overlay")?.remove();
-        if (anuncioBanido) {
-            const overlay = document.createElement("div");
-            overlay.className = "servico-banido-overlay";
-            overlay.setAttribute("aria-label", "Anúncio banido. Somente leitura.");
-            const titulo = document.createElement("strong");
-            titulo.textContent = "BANIDO";
-            const descricao = document.createElement("span");
-            descricao.textContent = "Somente leitura";
-            overlay.append(titulo, descricao);
-            elements.detalhe.appendChild(overlay);
-        }
-    }
+    const ocultarAcoesDoAnuncio = usuarioEhDono;
 
     if (elements.nome) {
         elements.nome.textContent = servico.nome || "Anúncio";
@@ -251,6 +254,8 @@ function popularServico(servico, elements) {
             if (count) count.textContent = quantidade;
         });
     }
+
+    return true;
 }
 
 function mostrarModalAvaliacao(token, idAnuncio, elements, opcoes = {}) {

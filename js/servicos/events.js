@@ -45,3 +45,30 @@ function configurarFiltros(token, elements) {
 
     atualizarListaServicos(token, elements);
 }
+
+function configurarBotaoAnunciar(sessao, elements) {
+    elements.btnAnunciar?.addEventListener("click", async () => {
+        if (!sessao) {
+            window.location.assign("login.html");
+            return;
+        }
+
+        const tipoConta = String(sessao.usuario?.tipoConta || "").toUpperCase();
+        if (tipoConta === "COMERCIAL") {
+            window.location.assign("meus_servicos.html?novo=1");
+            return;
+        }
+
+        const desejaAlterarTipo = await Connecta.ui.confirmar({
+            titulo: "Quer anunciar um serviço?",
+            mensagem: "Para publicar anúncios, sua conta precisa ser do tipo Comercial.",
+            textoConfirmar: "Tornar minha conta Comercial",
+            textoCancelar: "Agora não",
+            kicker: "Conta Comercial"
+        });
+
+        if (desejaAlterarTipo) {
+            window.location.assign("perfil.html#form-tipo-conta");
+        }
+    });
+}

@@ -20,6 +20,10 @@ function configurarNavegacao(elements) {
             window.location.assign("perfil.html");
         });
     }
+
+    elements.btnTentarNovamente?.addEventListener("click", () => {
+        window.location.reload();
+    });
 }
 
 function configurarAvaliacoes(token, idAnuncio, elements) {
@@ -126,18 +130,15 @@ function carregarServicoCompleto(token, idAnuncio, elements) {
     return obterServicoCompleto(token, idAnuncio)
         .then(({ status, body }) => {
             if (status === 200) {
-                popularServico(body, elements);
-                return;
+                return popularServico(body, elements);
             }
-            Connecta.ui.mostrarFeedback(
-                elements.feedback,
-                body?.erro || body?.mensagem || "Não foi possível carregar este anúncio.",
-                "error"
-            );
+            mostrarAnuncioIndisponivel(elements);
+            return false;
         })
         .catch((erro) => {
             console.error("Erro ao carregar anúncio:", erro);
-            Connecta.ui.mostrarFeedback(elements.feedback, "Erro de conexão com o servidor.", "error");
+            mostrarAnuncioIndisponivel(elements);
+            return false;
         });
 }
 

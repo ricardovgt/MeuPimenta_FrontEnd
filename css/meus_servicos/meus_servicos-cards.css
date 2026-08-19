@@ -157,7 +157,7 @@
 }
 
 .card-servico-banido-overlay strong {
-    color: #fecaca;
+    color: #ef4444;
     font-size: clamp(2.8rem, 9vw, 5.75rem);
     font-weight: 950;
     letter-spacing: 0.16em;

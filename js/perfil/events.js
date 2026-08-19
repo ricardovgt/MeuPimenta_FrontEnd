@@ -43,6 +43,10 @@ function configurarUploadFotoPerfil(token, elements) {
             const { status, body } = await atualizarFotoPerfil(token, fotoBase64);
             if (status === 200) {
                 exibirFotoPerfil(fotoBase64, elements);
+                atualizarAvatarNavegacao({
+                    fotoPerfil: fotoBase64,
+                    nome: elements.nomePerfil?.textContent
+                });
                 mostrarFeedback(elements.feedbackFoto, "Foto de perfil atualizada.", "success");
             } else if (await tratarContaBanida(status, body)) {
                 return;
