@@ -278,7 +278,7 @@ function mostrarModalAvaliacao(token, idAnuncio, elements, opcoes = {}) {
             <button type="button" class="estrela-btn" data-valor="4" aria-label="4 estrelas">★</button>
             <button type="button" class="estrela-btn" data-valor="5" aria-label="5 estrelas">★</button>
         </div>
-        <textarea id="comentario-avaliacao" class="comentario-input" placeholder="Deixe um comentário (opcional)"></textarea>
+        <textarea id="comentario-avaliacao" class="comentario-input" placeholder="Deixe um comentário (opcional)" maxlength="1000"></textarea>
         <div id="feedback-avaliacao" class="feedback-msg hidden"></div>
         <button id="btn-enviar-avaliacao" type="button" class="btn btn-primary btn-sm">Enviar avaliação</button>
     `;
@@ -308,12 +308,16 @@ function mostrarModalAvaliacao(token, idAnuncio, elements, opcoes = {}) {
 
     if (btnEnviar) {
         btnEnviar.addEventListener("click", () => {
-            if (!notaSelecionada) {
-                Connecta.ui.mostrarFeedback(feedback, "Selecione uma nota antes de enviar.", "error");
+            if (!Number.isInteger(notaSelecionada) || notaSelecionada < 1 || notaSelecionada > 5) {
+                Connecta.ui.mostrarFeedback(feedback, "Selecione uma nota inteira de 1 a 5 antes de enviar.", "error");
                 return;
             }
 
             const comentario = painel.querySelector("#comentario-avaliacao").value.trim();
+            if (comentario.length > 1000) {
+                Connecta.ui.mostrarFeedback(feedback, "O comentário deve ter no máximo 1.000 caracteres.", "error");
+                return;
+            }
 
             Connecta.ui.mostrarFeedback(feedback, "Enviando avaliação...", "error");
 

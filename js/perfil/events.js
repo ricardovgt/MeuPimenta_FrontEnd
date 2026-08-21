@@ -158,6 +158,7 @@ function configurarAcoesComSenha(token, state, elements) {
                 const concluida = acaoPendente;
                 fecharModal(elements.modalSenha);
                 if (concluida.tipo === "email") {
+                    if (body?.token) Connecta.auth.salvarToken(body.token);
                     state.usuario.email = concluida.payload.email;
                     elements.email.textContent = ocultarEmail(concluida.payload.email);
                 } else if (concluida.tipo === "tipoConta") {

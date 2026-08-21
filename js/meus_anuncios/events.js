@@ -1,5 +1,17 @@
+const LIMITE_DESCRICAO = 255;
+const LIMITE_DESCRICAO_DETALHADA = 2000;
 const LIMITE_ANUNCIOS_POR_USUARIO = 5;
 const MENSAGEM_LIMITE_ANUNCIOS = "Cada usuário pode ter no máximo 5 anúncios.";
+
+function validarDescricoesAnuncio(descricao, descricaoDetalhada) {
+    if (descricao.length > LIMITE_DESCRICAO) {
+        return `A descrição deve ter no máximo ${LIMITE_DESCRICAO} caracteres.`;
+    }
+    if (descricaoDetalhada.length > LIMITE_DESCRICAO_DETALHADA) {
+        return `A descrição detalhada deve ter no máximo ${LIMITE_DESCRICAO_DETALHADA} caracteres.`;
+    }
+    return null;
+}
 
 async function tratarErroAutenticacao(body) {
     const contaBanida = body?.erro === "Sua conta foi banida por violação das regras de conduta."
@@ -274,6 +286,16 @@ function configurarCadastroAnuncio(token, elements) {
             fotos: obterFotosCadastroAtual()
         };
 
+        const erroDescricoes = validarDescricoesAnuncio(
+            dadosAnuncio.descricao,
+            dadosAnuncio.descricaoDetalhada
+        );
+        if (erroDescricoes) {
+            fecharRegrasPublicacao();
+            Connecta.ui.mostrarFeedback(elements.feedbackAnuncio, erroDescricoes, "error");
+            return;
+        }
+
         if (dadosAnuncio.tipo !== "SERVICO" && dadosAnuncio.tipo !== "COMERCIO") {
             fecharRegrasPublicacao();
             Connecta.ui.mostrarFeedback(elements.feedbackAnuncio, "Selecione Serviço ou Comércio.", "error");
@@ -364,6 +386,8 @@ function configurarEdicaoAnuncio(token, elements) {
     elements.formEditar.addEventListener("submit", (ev) => {
         ev.preventDefault();
 
+        if (!elements.formEditar.reportValidity()) return;
+
         const dados = {
             id: Number(elements.inputEditarId.value),
             tipo: elements.inputEditarTipo.value,
@@ -373,6 +397,16 @@ function configurarEdicaoAnuncio(token, elements) {
             descricaoDetalhada: elements.inputDescricaoDetalhada.value || "",
             fotos: obterFotosEdicaoAtual()
         };
+
+        const erroDescricoes = validarDescricoesAnuncio(dados.descricao, dados.descricaoDetalhada);
+        if (erroDescricoes) {
+            Connecta.ui.alerta({
+                titulo: "Descrição muito longa",
+                mensagem: erroDescricoes,
+                kicker: "Atenção"
+            });
+            return;
+        }
 
         if (!dados.nome || !dados.telefone || !["SERVICO", "COMERCIO"].includes(dados.tipo)) {
             Connecta.ui.alerta({

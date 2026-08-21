@@ -10,7 +10,15 @@ function obterAnuncioCompleto(token, idAnuncio) {
 }
 
 function enviarAvaliacao(token, idAnuncio, nota, comentario) {
-    const body = new URLSearchParams({ idAnuncio: String(idAnuncio), nota: String(nota) });
+    const notaNumerica = Number(nota);
+    if (!Number.isInteger(notaNumerica) || notaNumerica < 1 || notaNumerica > 5) {
+        return Promise.reject(new Error("A nota deve ser um número inteiro de 1 a 5."));
+    }
+    if (String(comentario ?? "").length > 1000) {
+        return Promise.reject(new Error("O comentário deve ter no máximo 1.000 caracteres."));
+    }
+
+    const body = new URLSearchParams({ idAnuncio: String(idAnuncio), nota: String(notaNumerica) });
     if (comentario !== undefined && comentario !== null) body.set("comentario", String(comentario));
 
     return Connecta.api.requisicao(ENDPOINT_AVALIACOES, {

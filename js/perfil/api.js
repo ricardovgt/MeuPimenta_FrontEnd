@@ -1,9 +1,10 @@
 const ENDPOINT_USUARIO = "usuario";
 
 function requisicaoUsuario(token, options = {}) {
+    const tokenAtual = Connecta.auth.obterToken() || token;
     return Connecta.api.requisicao(ENDPOINT_USUARIO, {
         ...options,
-        token,
+        token: tokenAtual,
         headers: {
             ...(options.body ? { "Content-Type": "application/json" } : {}),
             ...options.headers
