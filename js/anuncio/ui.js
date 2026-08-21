@@ -115,15 +115,15 @@ function anuncioPertenceAoUsuarioAutenticado(anuncio, idUsuarioAutenticado) {
 }
 
 function mostrarAnuncioIndisponivel(elements) {
-    elements.detalhe?.classList.add("servico-indisponivel-ativo");
-    elements.detalhe?.classList.remove("servico-banido-proprietario");
+    elements.detalhe?.classList.add("anuncio-indisponivel-ativo");
+    elements.detalhe?.classList.remove("anuncio-banido-proprietario");
     elements.indisponivel?.classList.remove("hidden");
     elements.avisoRestricao?.classList.add("hidden");
     document.title = "Anúncio não encontrado - MeuPimenta";
 }
 
 function ocultarAnuncioIndisponivel(elements) {
-    elements.detalhe?.classList.remove("servico-indisponivel-ativo");
+    elements.detalhe?.classList.remove("anuncio-indisponivel-ativo");
     elements.indisponivel?.classList.add("hidden");
 }
 
@@ -145,7 +145,7 @@ function popularAnuncio(anuncio, elements) {
 
     ocultarAnuncioIndisponivel(elements);
     const exibirAvisoBanido = usuarioEhDono && statusAnuncio === "BANIDO";
-    elements.detalhe?.classList.toggle("servico-banido-proprietario", exibirAvisoBanido);
+    elements.detalhe?.classList.toggle("anuncio-banido-proprietario", exibirAvisoBanido);
     elements.avisoRestricao?.classList.toggle("hidden", !exibirAvisoBanido);
     const ocultarAcoesDoAnuncio = usuarioEhDono;
 
@@ -322,7 +322,7 @@ function mostrarModalAvaliacao(token, idAnuncio, elements, opcoes = {}) {
             Connecta.ui.mostrarFeedback(feedback, "Enviando avaliação...", "error");
 
             enviarAvaliacao(token, idAnuncio, notaSelecionada, comentario)
-                .then(({ status, body }) => {
+                .then(async ({ status, body }) => {
                     if (status === 201 || status === 200) {
                         Connecta.ui.mostrarFeedback(feedback, body?.mensagem || "Avaliação enviada com sucesso!", "success");
 
@@ -330,6 +330,7 @@ function mostrarModalAvaliacao(token, idAnuncio, elements, opcoes = {}) {
 
                         return;
                     }
+                    if (await tratarSessaoEncerradaAnuncio(status, body)) return;
                     Connecta.ui.mostrarFeedback(feedback, body?.erro || body?.mensagem || "Não foi possível enviar a avaliação.", "error");
                 })
                 .catch(() => {
@@ -430,6 +431,8 @@ function criarAvaliacaoElemento(avaliacao, opcoes = {}) {
                     if (typeof opcoes.aoExcluir === "function") opcoes.aoExcluir();
                     return;
                 }
+
+                if (await tratarSessaoEncerradaAnuncio(status, body)) return;
 
                 const mensagemPadrao = status === 404
                     ? "A avaliação não existe ou não pertence a você."

@@ -1,4 +1,4 @@
-.container-servico {
+.container-anuncio {
     width: 100%;
     max-width: 1100px;
     margin: 6rem auto 2rem auto;
@@ -6,7 +6,7 @@
 }
 
 @media (max-width: 768px) {
-    .container-servico {
+    .container-anuncio {
         padding: 1rem;
         margin-top: 6rem;
     }

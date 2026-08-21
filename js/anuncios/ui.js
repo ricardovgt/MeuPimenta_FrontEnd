@@ -1,6 +1,6 @@
 function criarCardAnuncio(anuncio) {
     const card = document.createElement("div");
-    card.className = "servico-card clickable";
+    card.className = "anuncio-card clickable";
     card.setAttribute("role", "button");
     card.setAttribute("tabindex", "0");
 
@@ -8,14 +8,14 @@ function criarCardAnuncio(anuncio) {
     const img = document.createElement("img");
     img.src = anuncio.fotoCapa || fallbackImage;
     img.alt = anuncio.nome || "Anúncio";
-    img.className = "servico-foto";
+    img.className = "anuncio-foto";
     img.onerror = () => {
         img.onerror = null;
         img.src = fallbackImage;
     };
 
     const info = document.createElement("div");
-    info.className = "servico-info";
+    info.className = "anuncio-info";
     const title = document.createElement("h4");
     title.textContent = anuncio.nome || "Anúncio";
     const description = document.createElement("p");
@@ -26,14 +26,14 @@ function criarCardAnuncio(anuncio) {
     const textoQuantidade = totalAvaliacoes + " "
         + (totalAvaliacoes === 1 ? "avaliação" : "avaliações");
     const avaliacao = document.createElement("div");
-    avaliacao.className = "servico-avaliacao";
+    avaliacao.className = "anuncio-avaliacao";
     avaliacao.setAttribute(
         "aria-label",
         "Nota " + avaliacaoMedia.toFixed(1) + " de 5, " + textoQuantidade
     );
 
     const estrela = document.createElement("span");
-    estrela.className = "servico-avaliacao-estrela";
+    estrela.className = "anuncio-avaliacao-estrela";
     estrela.setAttribute("aria-hidden", "true");
     estrela.textContent = "★";
 
@@ -41,7 +41,7 @@ function criarCardAnuncio(anuncio) {
     nota.textContent = avaliacaoMedia.toFixed(1);
 
     const separador = document.createElement("span");
-    separador.className = "servico-avaliacao-separador";
+    separador.className = "anuncio-avaliacao-separador";
     separador.setAttribute("aria-hidden", "true");
     separador.textContent = "•";
 
@@ -50,7 +50,7 @@ function criarCardAnuncio(anuncio) {
 
     avaliacao.append(estrela, nota, separador, quantidade);
     const meta = document.createElement("div");
-    meta.className = "servico-meta";
+    meta.className = "anuncio-meta";
     const badge = document.createElement("span");
     badge.className = "badge-link";
     badge.textContent = "Clique para ver mais";

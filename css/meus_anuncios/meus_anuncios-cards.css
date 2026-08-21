@@ -2,13 +2,13 @@
    Meus Serviços — Grid & Cards de Serviços
    ============================================================ */
 
-#grid-meus-servicos {
+#grid-meus-anuncios {
     display: grid;
     grid-template-columns: 1fr;
     gap: 1.25rem;
 }
 
-.card-servico {
+.card-anuncio {
     position: relative;
     overflow: hidden;
     min-height: 124px;
@@ -23,13 +23,13 @@
     transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.card-servico:hover {
+.card-anuncio:hover {
     border-color: rgba(250, 204, 21, 0.45);
     transform: translateY(-3px);
     box-shadow: 0 12px 26px rgba(0, 0, 0, 0.4);
 }
 
-.card-servico .thumb {
+.card-anuncio .thumb {
     width: 140px;
     height: 96px;
     object-fit: cover;
@@ -38,18 +38,18 @@
     border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.card-servico .info {
+.card-anuncio .info {
     flex: 1;
     min-width: 0;
 }
 
-.card-servico h3 {
+.card-anuncio h3 {
     margin-bottom: 0.4rem;
     color: var(--primary-color);
     font-weight: 700;
 }
 
-.card-servico p {
+.card-anuncio p {
     color: var(--text-secondary);
     margin-bottom: 0.6rem;
 }
@@ -61,7 +61,7 @@
 }
 
 .acoes button,
-.card-servico-link {
+.card-anuncio-link {
     background: rgba(255, 255, 255, 0.06);
     color: var(--text-primary);
     border: 1px solid rgba(255, 255, 255, 0.08);
@@ -75,7 +75,7 @@
 }
 
 .acoes button:hover,
-.card-servico-link:hover {
+.card-anuncio-link:hover {
     border-color: rgba(250, 204, 21, 0.35);
     background-color: rgba(250, 204, 21, 0.12);
     color: var(--primary-color);
@@ -86,14 +86,14 @@
     opacity: 0.65;
 }
 
-.card-servico-metadados {
+.card-anuncio-metadados {
     display: flex;
     flex-wrap: wrap;
     gap: 0.45rem;
     margin-bottom: 0.8rem;
 }
 
-.card-servico-badge {
+.card-anuncio-badge {
     display: inline-flex;
     align-items: center;
     min-height: 26px;
@@ -108,40 +108,40 @@
     text-transform: uppercase;
 }
 
-.card-servico-badge--ativo {
+.card-anuncio-badge--ativo {
     border-color: rgba(34, 197, 94, 0.28);
     background: rgba(34, 197, 94, 0.1);
     color: #86efac;
 }
 
-.card-servico-badge--oculto {
+.card-anuncio-badge--oculto {
     border-color: rgba(250, 204, 21, 0.3);
     background: rgba(250, 204, 21, 0.1);
     color: #fde047;
 }
 
-.card-servico-badge--banido {
+.card-anuncio-badge--banido {
     border-color: rgba(239, 68, 68, 0.35);
     background: rgba(239, 68, 68, 0.12);
     color: #fca5a5;
 }
 
-.card-servico--oculto {
+.card-anuncio--oculto {
     border-color: rgba(250, 204, 21, 0.23);
 }
 
-.card-servico--banido {
+.card-anuncio--banido {
     min-height: 190px;
     border-color: rgba(239, 68, 68, 0.4);
 }
 
-.card-servico--banido .thumb,
-.card-servico--banido .info {
+.card-anuncio--banido .thumb,
+.card-anuncio--banido .info {
     opacity: 0.5;
     filter: saturate(0.55);
 }
 
-.card-servico-banido-overlay {
+.card-anuncio-banido-overlay {
     position: absolute;
     inset: 0;
     z-index: 2;
@@ -156,7 +156,7 @@
     text-align: center;
 }
 
-.card-servico-banido-overlay strong {
+.card-anuncio-banido-overlay strong {
     color: #ef4444;
     font-size: clamp(2.8rem, 9vw, 5.75rem);
     font-weight: 950;
@@ -166,7 +166,7 @@
     text-shadow: 0 8px 30px rgba(127, 29, 29, 0.7);
 }
 
-.card-servico-banido-overlay span {
+.card-anuncio-banido-overlay span {
     color: rgba(255, 255, 255, 0.82);
     font-size: 0.82rem;
     font-weight: 800;
@@ -174,7 +174,7 @@
     text-transform: uppercase;
 }
 
-.card-servico-link--banido {
+.card-anuncio-link--banido {
     margin-top: 0.55rem;
     border-color: rgba(254, 202, 202, 0.45);
     background: rgba(0, 0, 0, 0.35);
@@ -182,12 +182,12 @@
 }
 
 @media (max-width: 600px) {
-    .card-servico {
+    .card-anuncio {
         align-items: flex-start;
         flex-direction: column;
     }
 
-    .card-servico .thumb {
+    .card-anuncio .thumb {
         width: 100%;
         height: 180px;
     }
@@ -197,17 +197,17 @@
     }
 
     .acoes button,
-    .card-servico-link {
+    .card-anuncio-link {
         flex: 1;
         text-align: center;
     }
 
-    .card-servico-banido-overlay strong {
+    .card-anuncio-banido-overlay strong {
         font-size: clamp(2.4rem, 15vw, 4.5rem);
     }
 }
 
-.meus-servicos-vazio {
+.meus-anuncios-vazio {
     min-height: 420px;
     padding: clamp(2rem, 6vw, 4rem) 1.5rem;
     display: flex;
@@ -223,7 +223,7 @@
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.18);
 }
 
-.meus-servicos-vazio-icone {
+.meus-anuncios-vazio-icone {
     width: clamp(100px, 13vw, 150px);
     height: auto;
     margin-bottom: 1.5rem;
@@ -231,21 +231,21 @@
     filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.28));
 }
 
-.meus-servicos-vazio h2 {
+.meus-anuncios-vazio h2 {
     max-width: 700px;
     color: var(--text-primary);
     font-size: clamp(1.25rem, 3vw, 1.65rem);
     margin-bottom: 0.75rem;
 }
 
-.meus-servicos-vazio p {
+.meus-anuncios-vazio p {
     max-width: 570px;
     color: var(--text-secondary);
     font-size: 1rem;
     line-height: 1.6;
 }
 
-.meus-servicos-vazio .btn-anunciar-servico--empty {
+.meus-anuncios-vazio .btn-anunciar-anuncio--empty {
     width: min(100%, 300px);
     min-height: 54px;
     margin-top: 1.75rem;
@@ -255,7 +255,7 @@
    Painel de resumo
    ============================================================ */
 
-.meus-servicos-resumo {
+.meus-anuncios-resumo {
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 1.25rem;
@@ -343,11 +343,11 @@
    Lista horizontal de anúncios
    ============================================================ */
 
-#grid-meus-servicos {
+#grid-meus-anuncios {
     gap: 0.75rem;
 }
 
-.card-servico {
+.card-anuncio {
     min-height: 168px;
     display: grid;
     grid-template-columns: 190px minmax(220px, 1fr) minmax(280px, 340px);
@@ -363,13 +363,13 @@
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.13);
 }
 
-.card-servico:hover {
+.card-anuncio:hover {
     transform: translateY(-1px);
     border-color: rgba(250, 204, 21, 0.32);
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.24);
 }
 
-.card-servico-midia {
+.card-anuncio-midia {
     width: 100%;
     height: 136px;
     min-width: 0;
@@ -379,7 +379,7 @@
     background: #27272a;
 }
 
-.card-servico .thumb {
+.card-anuncio .thumb {
     width: 100%;
     height: 100%;
     min-height: 0;
@@ -391,7 +391,7 @@
     background: #27272a;
 }
 
-.card-servico .info {
+.card-anuncio .info {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -399,22 +399,22 @@
     padding: 0.25rem 0;
 }
 
-.card-servico h3 {
+.card-anuncio h3 {
     margin-bottom: 0.25rem;
     font-size: 1.2rem;
     line-height: 1.25;
 }
 
-.card-servico p {
+.card-anuncio p {
     margin-bottom: 0.55rem;
     font-size: 0.92rem;
 }
 
-.card-servico-metadados {
+.card-anuncio-metadados {
     margin-bottom: 0;
 }
 
-.card-servico-painel-acoes {
+.card-anuncio-painel-acoes {
     align-self: center;
     width: 100%;
 }
@@ -433,7 +433,7 @@
 }
 
 .acoes button,
-.card-servico-link {
+.card-anuncio-link {
     min-height: 42px;
     display: inline-flex;
     align-items: center;
@@ -454,56 +454,56 @@
     color: #f87171;
 }
 
-.card-servico-link {
+.card-anuncio-link {
     width: 100%;
     border-color: rgba(250, 204, 21, 0.55);
     background: transparent;
     color: #facc15;
 }
 
-.card-servico-link:hover {
+.card-anuncio-link:hover {
     border-color: #facc15;
 }
 
-.card-servico--oculto {
+.card-anuncio--oculto {
     border-color: rgba(250, 204, 21, 0.22);
 }
 
-.card-servico--banido {
+.card-anuncio--banido {
     min-height: 168px;
     overflow: hidden;
     border-color: rgba(239, 68, 68, 0.28);
 }
 
-.card-servico--banido .thumb,
-.card-servico--banido .info {
+.card-anuncio--banido .thumb,
+.card-anuncio--banido .info {
     opacity: 0.72;
     filter: saturate(0.7);
 }
 
-.card-servico-aviso-banido {
+.card-anuncio-aviso-banido {
     margin: 0.45rem 0 0 !important;
     color: #fca5a5 !important;
     font-size: 0.78rem !important;
 }
 
-.card-servico-link--banido {
+.card-anuncio-link--banido {
     margin: 0;
     border-color: rgba(239, 68, 68, 0.38);
     color: #fca5a5;
 }
 
-.card-servico--banido .card-servico-banido-overlay {
+.card-anuncio--banido .card-anuncio-banido-overlay {
     display: flex;
     background: linear-gradient(105deg, rgba(62, 10, 13, 0.82), rgba(15, 15, 18, 0.9));
     backdrop-filter: blur(2px);
 }
 
-.card-servico--banido .card-servico-banido-overlay strong {
+.card-anuncio--banido .card-anuncio-banido-overlay strong {
     font-size: clamp(3.2rem, 7vw, 5.8rem);
 }
 
-.card-servico--banido .card-servico-banido-overlay .card-servico-link--banido {
+.card-anuncio--banido .card-anuncio-banido-overlay .card-anuncio-link--banido {
     width: auto;
     min-width: 150px;
     min-height: 40px;
@@ -514,12 +514,12 @@
 }
 
 @media (max-width: 680px) {
-    .card-servico--banido .card-servico-banido-overlay strong {
+    .card-anuncio--banido .card-anuncio-banido-overlay strong {
         font-size: clamp(2.5rem, 15vw, 4rem);
     }
 }
 
-.meus-servicos-contagem {
+.meus-anuncios-contagem {
     min-height: 1.4rem;
     margin-top: 1.3rem;
     color: #a1a1aa;
@@ -528,15 +528,15 @@
 }
 
 @media (max-width: 1100px) {
-    .meus-servicos-resumo {
+    .meus-anuncios-resumo {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .card-servico {
+    .card-anuncio {
         grid-template-columns: 170px minmax(220px, 1fr);
     }
 
-    .card-servico-painel-acoes {
+    .card-anuncio-painel-acoes {
         grid-column: 1 / -1;
         display: grid;
         grid-template-columns: minmax(0, 1fr) minmax(220px, 0.55fr);
@@ -549,7 +549,7 @@
 }
 
 @media (max-width: 680px) {
-    .meus-servicos-resumo {
+    .meus-anuncios-resumo {
         grid-template-columns: 1fr;
         gap: 0.65rem;
     }
@@ -569,20 +569,20 @@
         height: 24px;
     }
 
-    .card-servico {
+    .card-anuncio {
         display: flex;
         padding: 0.85rem;
     }
 
-    .card-servico-midia {
+    .card-anuncio-midia {
         height: 190px;
     }
 
-    .card-servico .thumb {
+    .card-anuncio .thumb {
         height: 190px;
     }
 
-    .card-servico-painel-acoes {
+    .card-anuncio-painel-acoes {
         display: block;
     }
 

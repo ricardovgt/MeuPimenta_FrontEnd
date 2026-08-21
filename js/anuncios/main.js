@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         filtroTop: document.getElementById("filtro-top"),
         btnLimparFiltros: document.getElementById("btn-limpar-filtros"),
         btnAnunciar: document.getElementById("btn-anunciar"),
-        gridAnuncios: document.getElementById("grid-servicos"),
+        gridAnuncios: document.getElementById("grid-anuncios"),
         paginacao: document.getElementById("paginacao-anuncios"),
         paginacaoInfo: document.getElementById("paginacao-info"),
         paginacaoTotal: document.getElementById("paginacao-total"),

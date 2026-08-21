@@ -2,14 +2,20 @@ function mensagemErro(body, fallback) {
     return body?.erro || body?.mensagem || fallback;
 }
 
-async function tratarContaBanida(status, body) {
-    if (!Connecta.auth.respostaContaBanida(status, body)) return false;
+async function tratarSessaoEncerrada(status, body) {
+    if (!(await Connecta.auth.respostaSessaoEncerrada(status, body))) return false;
+    const contaBanida = Connecta.auth.respostaContaBanida(status, body);
     await Connecta.ui.alerta({
-        titulo: "Conta banida",
-        mensagem: mensagemErro(body, "Sua conta foi banida por violação das regras de conduta."),
+        titulo: contaBanida ? "Conta banida" : "Sessão expirada",
+        mensagem: mensagemErro(
+            body,
+            contaBanida
+                ? "Sua conta foi banida por violação das regras de conduta."
+                : "Sua sessão expirou. Entre novamente para continuar."
+        ),
         kicker: "Acesso encerrado"
     });
-    window.location.assign("login.html");
+    Connecta.auth.fazerLogout();
     return true;
 }
 
@@ -48,7 +54,7 @@ function configurarUploadFotoPerfil(token, elements) {
                     nome: elements.nomePerfil?.textContent
                 });
                 mostrarFeedback(elements.feedbackFoto, "Foto de perfil atualizada.", "success");
-            } else if (await tratarContaBanida(status, body)) {
+            } else if (await tratarSessaoEncerrada(status, body)) {
                 return;
             } else {
                 mostrarFeedback(elements.feedbackFoto, mensagemErro(body, "Não foi possível atualizar a foto."), "error");
@@ -81,7 +87,7 @@ function configurarFormularioNome(token, state, elements) {
                 elements.nome.textContent = nome;
                 elements.nomePerfil.textContent = nome;
                 mostrarFeedback(elements.feedbackNome, "Nome atualizado com sucesso.", "success");
-            } else if (await tratarContaBanida(status, body)) {
+            } else if (await tratarSessaoEncerrada(status, body)) {
                 return;
             } else {
                 mostrarFeedback(elements.feedbackNome, mensagemErro(body, "Não foi possível atualizar o nome."), "error");
@@ -173,7 +179,7 @@ function configurarAcoesComSenha(token, state, elements) {
                 mostrarFeedback(concluida.feedback, mensagemErro(body, "Alteração realizada com sucesso."), "success");
                 elements.formModalSenha.reset();
                 acaoPendente = null;
-            } else if (await tratarContaBanida(status, body)) {
+            } else if (await tratarSessaoEncerrada(status, body)) {
                 return;
             } else if (status === 401) {
                 mostrarFeedback(elements.feedbackModalSenha, mensagemErro(body, "Senha atual incorreta."), "error");
@@ -219,6 +225,7 @@ function configurarExclusaoConta(token, state, elements) {
                 Connecta.auth.fazerLogout();
                 return;
             }
+            if (await tratarSessaoEncerrada(status, body)) return;
             mostrarFeedback(elements.feedbackExclusao, status === 401 ? mensagemErro(body, "E-mail ou senha inválidos.") : mensagemErro(body, "Não foi possível excluir a conta."), "error");
         } catch (erro) {
             mostrarFeedback(elements.feedbackExclusao, "Erro de conexão com o servidor.", "error");

@@ -1,4 +1,4 @@
-.card-servico {
+.card-anuncio {
     position: relative;
     background: var(--surface-color);
     border: 1px solid #2e2e34;
@@ -15,18 +15,18 @@
     margin-bottom: 1.25rem;
 }
 
-.servico-dono {
+.anuncio-dono {
     display: flex;
     align-items: center;
     gap: 0.85rem;
     min-width: 0;
 }
 
-.servico-dono.hidden {
+.anuncio-dono.hidden {
     display: none;
 }
 
-.servico-dono-avatar {
+.anuncio-dono-avatar {
     width: 52px;
     height: 52px;
     display: block;
@@ -37,7 +37,7 @@
     border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
-.servico-dono-identidade {
+.anuncio-dono-identidade {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
@@ -45,14 +45,14 @@
     min-width: 0;
 }
 
-.servico-dono-nome {
+.anuncio-dono-nome {
     color: #fff;
     font-size: 1rem;
     font-weight: 750;
     line-height: 1.3;
 }
 
-.servico-dono-tag {
+.anuncio-dono-tag {
     display: inline-flex;
     align-items: center;
     gap: 0.3rem;
@@ -65,21 +65,21 @@
     line-height: 1;
 }
 
-.card-servico .hero {
+.card-anuncio .hero {
     position: relative;
     display: flex;
     justify-content: center;
     margin-bottom: 1rem;
 }
 
-.card-servico .hero.hidden,
+.card-anuncio .hero.hidden,
 .foto-nav-btn.hidden,
 .foto-contador.hidden,
 .foto-thumbs.hidden {
     display: none;
 }
 
-.card-servico .hero img {
+.card-anuncio .hero img {
     width: 100%;
     max-width: 580px;
     height: 300px;
@@ -165,18 +165,18 @@
     opacity: 1;
 }
 
-.card-servico .content {
+.card-anuncio .content {
     padding: 0;
 }
 
-.card-servico h1 {
+.card-anuncio h1 {
     font-size: 1.85rem;
     font-weight: 800;
     margin-bottom: 0.75rem;
     color: var(--primary-color);
 }
 
-.card-servico .resumo {
+.card-anuncio .resumo {
     color: var(--text-secondary);
     font-size: 0.95rem;
     margin-bottom: 1.25rem;
@@ -254,12 +254,12 @@
     color: #fecaca;
 }
 
-.servico-banido-proprietario {
+.anuncio-banido-proprietario {
     border-color: rgba(239, 68, 68, 0.42);
     box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35), 0 0 32px rgba(127, 29, 29, 0.12);
 }
 
-.servico-aviso-restricao {
+.anuncio-aviso-restricao {
     margin: -0.65rem -0.65rem 1.5rem;
     padding: 1.35rem 1rem;
     display: flex;
@@ -274,11 +274,11 @@
     text-align: center;
 }
 
-.servico-aviso-restricao.hidden {
+.anuncio-aviso-restricao.hidden {
     display: none;
 }
 
-.servico-aviso-restricao strong {
+.anuncio-aviso-restricao strong {
     color: #ef4444;
     font-size: clamp(2.7rem, 8vw, 5rem);
     font-weight: 950;
@@ -288,7 +288,7 @@
     text-shadow: 0 7px 24px rgba(127, 29, 29, 0.65);
 }
 
-.servico-aviso-restricao span {
+.anuncio-aviso-restricao span {
     margin-top: 0.55rem;
     color: rgba(255, 255, 255, 0.82);
     font-size: 0.76rem;
@@ -297,11 +297,11 @@
     text-transform: uppercase;
 }
 
-.servico-indisponivel-ativo > :not(.servico-indisponivel) {
+.anuncio-indisponivel-ativo > :not(.anuncio-indisponivel) {
     display: none;
 }
 
-.servico-indisponivel {
+.anuncio-indisponivel {
     min-height: 610px;
     display: flex;
     flex-direction: column;
@@ -311,11 +311,11 @@
     text-align: center;
 }
 
-.servico-indisponivel.hidden {
+.anuncio-indisponivel.hidden {
     display: none;
 }
 
-.servico-indisponivel-ilustracao {
+.anuncio-indisponivel-ilustracao {
     width: min(100%, 280px);
     height: 180px;
     margin-bottom: 1.4rem;
@@ -323,31 +323,31 @@
     filter: drop-shadow(0 18px 20px rgba(0, 0, 0, 0.42));
 }
 
-.card-servico .servico-indisponivel h1 {
+.card-anuncio .anuncio-indisponivel h1 {
     margin: 0 0 0.65rem;
     color: var(--primary-color);
     font-size: clamp(1.8rem, 5vw, 2.5rem);
 }
 
-.servico-indisponivel-descricao,
-.servico-indisponivel-ajuda {
+.anuncio-indisponivel-descricao,
+.anuncio-indisponivel-ajuda {
     max-width: 650px;
     margin: 0;
     color: var(--text-secondary);
     line-height: 1.6;
 }
 
-.servico-indisponivel-descricao {
+.anuncio-indisponivel-descricao {
     color: #d4d4d8;
     font-size: 1rem;
 }
 
-.servico-indisponivel-ajuda {
+.anuncio-indisponivel-ajuda {
     margin-top: 0.35rem;
     font-size: 0.9rem;
 }
 
-.servico-indisponivel-acoes {
+.anuncio-indisponivel-acoes {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
@@ -355,7 +355,7 @@
     margin-top: 1.8rem;
 }
 
-.servico-indisponivel-btn {
+.anuncio-indisponivel-btn {
     min-width: 220px;
     display: inline-flex;
     align-items: center;
@@ -368,7 +368,7 @@
     text-decoration: none;
 }
 
-.servico-tentar-novamente {
+.anuncio-tentar-novamente {
     display: inline-flex;
     align-items: center;
     gap: 0.5rem;
@@ -381,7 +381,7 @@
     cursor: pointer;
 }
 
-.servico-tentar-novamente:hover {
+.anuncio-tentar-novamente:hover {
     color: var(--text-primary);
 }
 
@@ -506,11 +506,11 @@
 }
 
 @media (max-width: 768px) {
-    .card-servico {
+    .card-anuncio {
         padding: 1.25rem;
     }
 
-    .card-servico .hero img {
+    .card-anuncio .hero img {
         height: 220px;
     }
 
@@ -541,13 +541,13 @@
         width: 100%;
     }
 
-    .servico-indisponivel {
+    .anuncio-indisponivel {
         min-height: 500px;
         padding-inline: 0;
     }
 
-    .servico-indisponivel-acoes,
-    .servico-indisponivel-btn {
+    .anuncio-indisponivel-acoes,
+    .anuncio-indisponivel-btn {
         width: 100%;
     }
 }

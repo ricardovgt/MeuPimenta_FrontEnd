@@ -6,10 +6,10 @@
     <title>Meus Anúncios - MeuPimenta</title>
     
     <link rel="stylesheet" href="../css/global.css">
-    <link rel="stylesheet" href="../css/meus_servicos/meus_servicos-base.css">
-    <link rel="stylesheet" href="../css/meus_servicos/meus_servicos-layout.css">
-    <link rel="stylesheet" href="../css/meus_servicos/meus_servicos-cards.css">
-    <link rel="stylesheet" href="../css/meus_servicos/meus_servicos-modals.css">
+    <link rel="stylesheet" href="../css/meus_anuncios/meus_anuncios-base.css">
+    <link rel="stylesheet" href="../css/meus_anuncios/meus_anuncios-layout.css">
+    <link rel="stylesheet" href="../css/meus_anuncios/meus_anuncios-cards.css">
+    <link rel="stylesheet" href="../css/meus_anuncios/meus_anuncios-modals.css">
 </head>
 <body class="site-layout">
 
@@ -28,14 +28,14 @@
         </div>
     </header>
 
-    <main class="container-servicos">
-        <section class="meus-servicos-intro" aria-labelledby="titulo-meus-servicos">
-            <div class="meus-servicos-intro-copy">
-                <h1 id="titulo-meus-servicos">Meus Anúncios</h1>
+    <main class="container-anuncios">
+        <section class="meus-anuncios-intro" aria-labelledby="titulo-meus-anuncios">
+            <div class="meus-anuncios-intro-copy">
+                <h1 id="titulo-meus-anuncios">Meus Anúncios</h1>
                 <p>Gerencie seus anúncios publicados.</p>
             </div>
-            <div class="meus-servicos-novo">
-                <button type="button" id="btn-novo-servico" class="btn btn-primary btn-anunciar-servico">
+            <div class="meus-anuncios-novo">
+                <button type="button" id="btn-novo-anuncio" class="btn btn-primary btn-anunciar-anuncio">
                     <span aria-hidden="true">＋</span>
                     Criar Anúncio
                 </button>
@@ -45,10 +45,10 @@
             </div>
         </section>
 
-        <section id="meus-servicos-area" aria-live="polite">
-            <div id="resumo-meus-servicos" class="meus-servicos-resumo" aria-label="Resumo dos anúncios"></div>
-            <div id="grid-meus-servicos"></div>
-            <p id="meus-servicos-contagem" class="meus-servicos-contagem"></p>
+        <section id="meus-anuncios-area" aria-live="polite">
+            <div id="resumo-meus-anuncios" class="meus-anuncios-resumo" aria-label="Resumo dos anúncios"></div>
+            <div id="grid-meus-anuncios"></div>
+            <p id="meus-anuncios-contagem" class="meus-anuncios-contagem"></p>
         </section>
 </main>
 
@@ -63,7 +63,7 @@
 </footer>
 
     <!-- Modal Cadastrar Anúncio -->
-    <div id="modal-cadastro-servico" class="modal hidden">
+    <div id="modal-cadastro-anuncio" class="modal hidden">
         <div class="modal-content modal-edicao modal-cadastro">
             <div class="modal-edicao-header modal-cadastro-header">
                 <div class="modal-edicao-header-left modal-cadastro-header-left">
@@ -80,9 +80,9 @@
                 </button>
             </div>
 
-            <div id="feedback-servico" class="feedback-msg hidden" aria-live="polite"></div>
+            <div id="feedback-anuncio" class="feedback-msg hidden" aria-live="polite"></div>
 
-            <form id="form-servico" class="modal-edicao-form modal-cadastro-form">
+            <form id="form-anuncio" class="modal-edicao-form modal-cadastro-form">
                 <div class="form-group modal-campo">
                     <div class="modal-campo-label">
                         <label for="tipo">Tipo de anúncio *</label>
@@ -159,7 +159,7 @@
                 </div>
 
                 <div class="modal-actions modal-edicao-actions modal-cadastro-actions">
-                    <button type="button" id="btn-cancelar-servico" class="btn btn-outline">Cancelar</button>
+                    <button type="button" id="btn-cancelar-anuncio" class="btn btn-outline">Cancelar</button>
                     <button type="submit" class="btn btn-primary modal-btn-publicar">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                         Publicar Anúncio
@@ -239,7 +239,7 @@
     </div>
 
     <!-- Modal Editar Anúncio -->
-    <div id="modal-editar-servico" class="modal hidden">
+    <div id="modal-editar-anuncio" class="modal hidden">
         <div class="modal-content modal-edicao">
             <!-- Header do modal -->
             <div class="modal-edicao-header">
@@ -257,7 +257,7 @@
                 </button>
             </div>
 
-            <form id="form-editar-servico" class="modal-edicao-form">
+            <form id="form-editar-anuncio" class="modal-edicao-form">
                 <input type="hidden" id="editar-id" name="id">
 
                 <div class="modal-campo">
@@ -356,7 +356,7 @@
     </div>
 
     <!-- Modal Excluir Anúncio -->
-    <div id="modal-excluir-servico" class="modal hidden">
+    <div id="modal-excluir-anuncio" class="modal hidden">
         <div class="modal-content">
             <h2>Excluir Anúncio</h2>
             <p>Para confirmar a exclusão, digite seu e-mail abaixo:</p>

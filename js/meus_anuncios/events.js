@@ -13,19 +13,21 @@ function validarDescricoesAnuncio(descricao, descricaoDetalhada) {
     return null;
 }
 
-async function tratarErroAutenticacao(body) {
-    const contaBanida = body?.erro === "Sua conta foi banida por violação das regras de conduta."
-        || body?.mensagem === "Sua conta foi banida por violação das regras de conduta.";
+async function tratarErroAutenticacao(status, body) {
+    const contaBanida = Connecta.auth.respostaContaBanida(status, body);
+    const sessaoEncerrada = await Connecta.auth.respostaSessaoEncerrada(status, body);
+    if (!sessaoEncerrada) return false;
     try {
         await Connecta.ui.alerta({
-            titulo: contaBanida ? "Conta Banida" : "Autenticação Expirada",
-            mensagem: body?.erro || body?.mensagem || "Token inválido ou expirado.",
+            titulo: contaBanida ? "Conta Banida" : "Sessão Expirada",
+            mensagem: body?.erro || body?.mensagem || "Sua sessão expirou. Entre novamente para continuar.",
             kicker: "Atenção"
         });
     } catch (e) {
         // ignore
     }
     Connecta.auth.fazerLogout();
+    return true;
 }
 
 function atualizarLimiteAnuncios(elements, lista) {
@@ -33,7 +35,7 @@ function atualizarLimiteAnuncios(elements, lista) {
     const limiteAtingido = total >= LIMITE_ANUNCIOS_POR_USUARIO;
     elements.totalAnuncios = total;
 
-    elements.btnNovoAnuncio?.classList.toggle("btn-anunciar-servico--limite", limiteAtingido);
+    elements.btnNovoAnuncio?.classList.toggle("btn-anunciar-anuncio--limite", limiteAtingido);
     if (elements.btnNovoAnuncio) {
         elements.btnNovoAnuncio.setAttribute("aria-describedby", "aviso-limite-anuncios");
         elements.btnNovoAnuncio.setAttribute(
@@ -98,7 +100,7 @@ function abrirEdicao(token, anuncio, elements) {
     // A listagem só traz a foto de capa; aqui buscamos o anúncio completo para
     // pré-carregar todas as fotos existentes no preview de edição.
     obterAnuncioPorId(token, anuncio.id)
-        .then(({ status, body }) => {
+        .then(async ({ status, body }) => {
             if (status === 200 && body) {
                 if (body.status === "BANIDO") {
                     esconderModal(elements.modalEditar);
@@ -125,10 +127,7 @@ function abrirEdicao(token, anuncio, elements) {
                 }
                 return;
             }
-            if (status === 401 || Connecta.auth.respostaContaBanida(status, body)) {
-                tratarErroAutenticacao(body);
-                return;
-            }
+            if (await tratarErroAutenticacao(status, body)) return;
             Connecta.ui.alerta({
                 titulo: "Edição indisponível",
                 mensagem: body?.erro || body?.mensagem || "Não foi possível carregar as fotos atuais do anúncio.",
@@ -177,10 +176,7 @@ function configurarListaAnuncios(token, elements) {
                 elements.recarregarLista?.();
                 return;
             }
-            if (status === 401 || Connecta.auth.respostaContaBanida(status, body)) {
-                tratarErroAutenticacao(body);
-                return;
-            }
+            if (await tratarErroAutenticacao(status, body)) return;
             await Connecta.ui.alerta({
                 titulo: `Não foi possível ${acao}`,
                 mensagem: body?.erro || body?.mensagem || `O anúncio não pôde ser ${acao === "pausar" ? "pausado" : "reativado"}.`,
@@ -202,7 +198,7 @@ function configurarListaAnuncios(token, elements) {
 
     function carregar() {
         carregarMeusAnuncios(token)
-            .then(({ status, body }) => {
+            .then(async ({ status, body }) => {
                 if (status === 200) {
                     atualizarLimiteAnuncios(elements, body);
                     renderizarLista(elements.grid, body, {
@@ -218,10 +214,7 @@ function configurarListaAnuncios(token, elements) {
                     return;
                 }
 
-                if (status === 401 || Connecta.auth.respostaContaBanida(status, body)) {
-                    tratarErroAutenticacao(body);
-                    return;
-                }
+                if (await tratarErroAutenticacao(status, body)) return;
 
                 Connecta.ui.alerta({
                     titulo: "Erro de Carregamento",
@@ -315,7 +308,7 @@ function configurarCadastroAnuncio(token, elements) {
         Connecta.ui.mostrarFeedback(elements.feedbackAnuncio, "Salvando...", "error");
 
         criarAnuncio(token, dadosAnuncio)
-            .then(({ status, body }) => {
+            .then(async ({ status, body }) => {
                 if (status === 201) {
                     Connecta.ui.mostrarFeedback(elements.feedbackAnuncio, "Anúncio publicado com sucesso!", "success");
                     elements.formAnuncio.reset();
@@ -327,10 +320,7 @@ function configurarCadastroAnuncio(token, elements) {
                     setTimeout(() => fecharCadastro(elements), 1200);
                     return;
                 }
-                if (status === 401 || Connecta.auth.respostaContaBanida(status, body)) {
-                    tratarErroAutenticacao(body);
-                    return;
-                }
+                if (await tratarErroAutenticacao(status, body)) return;
                 const mensagem = body?.erro || body?.mensagem || "Falha ao publicar anúncio.";
                 Connecta.ui.mostrarFeedback(
                     elements.feedbackAnuncio,
@@ -430,10 +420,7 @@ function configurarEdicaoAnuncio(token, elements) {
                     return;
                 }
 
-                if (status === 401 || Connecta.auth.respostaContaBanida(status, body)) {
-                    tratarErroAutenticacao(body);
-                    return;
-                }
+                if (await tratarErroAutenticacao(status, body)) return;
 
                 Connecta.ui.alerta({
                     titulo: "Erro na Edição",
@@ -474,10 +461,7 @@ function configurarExclusaoAnuncio(token, elements) {
                     return;
                 }
 
-                if (status === 401 || Connecta.auth.respostaContaBanida(status, body)) {
-                    tratarErroAutenticacao(body);
-                    return;
-                }
+                if (await tratarErroAutenticacao(status, body)) return;
 
                 Connecta.ui.alerta({
                     titulo: "Erro na Exclusão",

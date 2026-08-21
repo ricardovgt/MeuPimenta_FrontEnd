@@ -1,36 +1,3 @@
-function exibirTodasAsCategorias(categoryCards) {
-    categoryCards.forEach((card) => {
-        card.style.display = "";
-    });
-}
-
-function filtrarCategorias(categoryCards, termo) {
-    const termoNormalizado = normalizarTexto(termo);
-
-    if (!termoNormalizado) {
-        exibirTodasAsCategorias(categoryCards);
-        return true;
-    }
-
-    let encontrou = false;
-
-    categoryCards.forEach((card) => {
-        const textoCard = normalizarTexto(
-            `${card.textContent} ${card.dataset.search || ""}`
-        );
-        const corresponde = textoCard.includes(termoNormalizado);
-
-        card.style.display = corresponde ? "" : "none";
-        encontrou = encontrou || corresponde;
-    });
-
-    return encontrou;
-}
-
-function avisarCategoriaNaoEncontrada(termo) {
-    window.alert(`Não encontramos uma categoria para "${termo}".`);
-}
-
 function criarCardDestaque(anuncio) {
     const card = document.createElement("article");
     card.className = "featured-card";

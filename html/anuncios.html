@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anúncios - MeuPimenta</title>
     <link rel="stylesheet" href="../css/global.css">
-    <link rel="stylesheet" href="../css/servicos/servicos-base.css">
-    <link rel="stylesheet" href="../css/servicos/servicos-layout.css">
-    <link rel="stylesheet" href="../css/servicos/servicos-filtros.css">
-    <link rel="stylesheet" href="../css/servicos/servicos-cards.css">
+    <link rel="stylesheet" href="../css/anuncios/anuncios-base.css">
+    <link rel="stylesheet" href="../css/anuncios/anuncios-layout.css">
+    <link rel="stylesheet" href="../css/anuncios/anuncios-filtros.css">
+    <link rel="stylesheet" href="../css/anuncios/anuncios-cards.css">
 </head>
 <body class="site-layout">
 
@@ -27,7 +27,7 @@
         </div>
     </header>
 
-    <main class="container-servicos">
+    <main class="container-anuncios">
         <aside class="filtros-section" aria-labelledby="titulo-filtros">
             <div class="filtros-header">
                 <div>
@@ -83,15 +83,15 @@
             </form>
         </aside>
 
-        <section class="lista-servicos">
-            <div class="lista-servicos-header">
+        <section class="lista-anuncios">
+            <div class="lista-anuncios-header">
                 <h2>Anúncios Disponíveis</h2>
                 <button type="button" id="btn-anunciar" class="btn btn-primary btn-anunciar">
                     <span aria-hidden="true">＋</span>
                     Anunciar
                 </button>
             </div>
-            <div id="grid-servicos" class="grid-container">
+            <div id="grid-anuncios" class="grid-container">
                 <p>Carregando anúncios...</p>
             </div>
             <nav id="paginacao-anuncios" class="paginacao-anuncios hidden" aria-label="Paginação dos anúncios">
@@ -117,7 +117,6 @@
 
     <script src="../js/global.js"></script>
     <script src="../js/nav-conta.js"></script>
-    <script src="../js/anuncios/utils.js"></script>
     <script src="../js/anuncios/api.js"></script>
     <script src="../js/anuncios/ui.js"></script>
     <script src="../js/anuncios/events.js"></script>

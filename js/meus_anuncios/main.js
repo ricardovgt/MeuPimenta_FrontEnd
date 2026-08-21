@@ -4,19 +4,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     const token = sessao.token;
 
     const elements = {
-        grid: document.getElementById("grid-meus-servicos"),
-        resumo: document.getElementById("resumo-meus-servicos"),
-        contagem: document.getElementById("meus-servicos-contagem"),
+        grid: document.getElementById("grid-meus-anuncios"),
+        resumo: document.getElementById("resumo-meus-anuncios"),
+        contagem: document.getElementById("meus-anuncios-contagem"),
 
-        btnNovoAnuncio: document.getElementById("btn-novo-servico"),
+        btnNovoAnuncio: document.getElementById("btn-novo-anuncio"),
         avisoLimiteAnuncios: document.getElementById("aviso-limite-anuncios"),
-        modalAnuncio: document.getElementById("modal-cadastro-servico"),
-        formAnuncio: document.getElementById("form-servico"),
+        modalAnuncio: document.getElementById("modal-cadastro-anuncio"),
+        formAnuncio: document.getElementById("form-anuncio"),
         inputTelefoneCadastro: document.getElementById("telefone"),
         inputFotosCadastro: document.getElementById("fotos-input"),
         fotosCadastroPreview: document.getElementById("fotos-preview"),
-        feedbackAnuncio: document.getElementById("feedback-servico"),
-        btnCancelarAnuncio: document.getElementById("btn-cancelar-servico"),
+        feedbackAnuncio: document.getElementById("feedback-anuncio"),
+        btnCancelarAnuncio: document.getElementById("btn-cancelar-anuncio"),
         btnFecharCadastro: document.getElementById("btn-fechar-cadastro"),
         aceiteRegrasAnuncio: document.getElementById("aceite-regras-anuncio"),
         btnVerRegrasPublicacao: document.getElementById("btn-ver-regras-publicacao"),
@@ -25,8 +25,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         btnRevisarAnuncio: document.getElementById("btn-revisar-anuncio"),
         btnConfirmarPublicacao: document.getElementById("btn-confirmar-publicacao"),
 
-        modalEditar: document.getElementById("modal-editar-servico"),
-        formEditar: document.getElementById("form-editar-servico"),
+        modalEditar: document.getElementById("modal-editar-anuncio"),
+        formEditar: document.getElementById("form-editar-anuncio"),
         inputEditarId: document.getElementById("editar-id"),
         inputEditarTipo: document.getElementById("editar-tipo"),
         inputNome: document.getElementById("editar-nome"),
@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         btnFecharEdicao: document.getElementById("btn-fechar-edicao"),
         btnSalvarEdicao: document.getElementById("btn-salvar-edicao"),
 
-        modalExcluir: document.getElementById("modal-excluir-servico"),
+        modalExcluir: document.getElementById("modal-excluir-anuncio"),
         excluirId: document.getElementById("excluir-id"),
         inputEmailConfirm: document.getElementById("input-email-confirmacao"),
         btnCancelarExcluir: document.getElementById("btn-cancelar-excluir"),

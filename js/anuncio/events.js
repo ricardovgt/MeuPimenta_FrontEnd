@@ -1,3 +1,17 @@
+async function tratarSessaoEncerradaAnuncio(status, body) {
+    if (!(await Connecta.auth.respostaSessaoEncerrada(status, body))) return false;
+    const contaBanida = Connecta.auth.respostaContaBanida(status, body);
+    await Connecta.ui.alerta({
+        titulo: contaBanida ? "Conta banida" : "Sessão expirada",
+        mensagem: body?.erro || body?.mensagem || (contaBanida
+            ? "Sua conta foi banida por violação das regras de conduta."
+            : "Sua sessão expirou. Entre novamente para continuar."),
+        kicker: "Acesso encerrado"
+    });
+    Connecta.auth.fazerLogout();
+    return true;
+}
+
 function configurarGaleriaFotos(elements) {
     if (elements.btnFotoAnterior) {
         elements.btnFotoAnterior.addEventListener("click", () => mostrarFotoAnterior(elements));
@@ -111,6 +125,7 @@ function configurarDenuncia(token, idAnuncio, elements) {
                 );
                 return;
             }
+            if (await tratarSessaoEncerradaAnuncio(status, body)) return;
             Connecta.ui.mostrarFeedback(
                 elements.feedback,
                 body?.erro || body?.mensagem || "Não foi possível registrar a denúncia.",

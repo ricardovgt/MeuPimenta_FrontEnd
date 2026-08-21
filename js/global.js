@@ -114,6 +114,19 @@
         return validacaoSessaoPendente;
     }
 
+    async function revalidarSessao() {
+        sessaoValidada = null;
+        validacaoSessaoPendente = null;
+        return validarSessao();
+    }
+
+    async function respostaSessaoEncerrada(status, body) {
+        if (respostaContaBanida(status, body)) return true;
+        if (status !== 401) return false;
+        if (!obterToken()) return true;
+        return !(await revalidarSessao());
+    }
+
     async function exigirSessao() {
         const sessao = await validarSessao();
         if (!sessao) {
@@ -383,6 +396,8 @@
             obterToken,
             removerToken,
             respostaContaBanida,
+            respostaSessaoEncerrada,
+            revalidarSessao,
             salvarToken,
             validarSessao
         }),

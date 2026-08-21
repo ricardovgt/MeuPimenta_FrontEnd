@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Detalhes do Anúncio - MeuPimenta</title>
     <link rel="stylesheet" href="../css/global.css">
-    <link rel="stylesheet" href="../css/servicos/servicos-base.css">
-    <link rel="stylesheet" href="../css/servico/servico-base.css">
-    <link rel="stylesheet" href="../css/servico/servico-layout.css">
-    <link rel="stylesheet" href="../css/servico/servico-card.css">
-    <link rel="stylesheet" href="../css/servico/servico-modals.css">
+    <link rel="stylesheet" href="../css/anuncios/anuncios-base.css">
+    <link rel="stylesheet" href="../css/anuncio/anuncio-base.css">
+    <link rel="stylesheet" href="../css/anuncio/anuncio-layout.css">
+    <link rel="stylesheet" href="../css/anuncio/anuncio-card.css">
+    <link rel="stylesheet" href="../css/anuncio/anuncio-modals.css">
 </head>
 <body class="site-layout">
     <header class="top-nav">
@@ -28,66 +28,66 @@
         </div>
     </header>
 
-    <main class="container-servico">
-        <section id="servico-detalhe" class="card-servico">
-            <div id="servico-indisponivel" class="servico-indisponivel hidden" role="status">
+    <main class="container-anuncio">
+        <section id="anuncio-detalhe" class="card-anuncio">
+            <div id="anuncio-indisponivel" class="anuncio-indisponivel hidden" role="status">
                 <img
-                    class="servico-indisponivel-ilustracao"
+                    class="anuncio-indisponivel-ilustracao"
                     src="../img/anuncio_not_found.png"
                     alt=""
                     aria-hidden="true"
                 >
                 <h1>Anúncio não encontrado</h1>
-                <p class="servico-indisponivel-descricao">
+                <p class="anuncio-indisponivel-descricao">
                     Este anúncio pode ter sido removido, ocultado ou não está mais disponível.
                 </p>
-                <p class="servico-indisponivel-ajuda">
+                <p class="anuncio-indisponivel-ajuda">
                     Se você acessou por um link antigo, tente buscar outros anúncios na plataforma.
                 </p>
-                <div class="servico-indisponivel-acoes">
-                    <a href="anuncios.html" class="btn btn-primary servico-indisponivel-btn">
+                <div class="anuncio-indisponivel-acoes">
+                    <a href="anuncios.html" class="btn btn-primary anuncio-indisponivel-btn">
                         <span aria-hidden="true">⌕</span>
                         Buscar outros anúncios
                     </a>
-                    <a href="home.html" class="btn btn-outline servico-indisponivel-btn">
+                    <a href="home.html" class="btn btn-outline anuncio-indisponivel-btn">
                         <span aria-hidden="true">⌂</span>
                         Voltar para a página inicial
                     </a>
                 </div>
-                <button id="btn-tentar-novamente" type="button" class="servico-tentar-novamente">
+                <button id="btn-tentar-novamente" type="button" class="anuncio-tentar-novamente">
                     <span aria-hidden="true">↻</span>
                     Tentar novamente
                 </button>
             </div>
-            <aside id="servico-aviso-restricao" class="servico-aviso-restricao hidden" role="status">
+            <aside id="anuncio-aviso-restricao" class="anuncio-aviso-restricao hidden" role="status">
                 <strong>BANIDO</strong>
                 <span>Somente leitura — apenas você pode visualizar este anúncio.</span>
             </aside>
             <div class="card-header-top">
-                <div id="servico-postador" class="servico-dono hidden">
-                    <img id="servico-postador-foto" class="servico-dono-avatar" src="../img/default-profile.png" alt="Foto do dono do anúncio">
-                    <div class="servico-dono-identidade">
-                        <span id="servico-postador-nome" class="servico-dono-nome"></span>
-                        <span class="servico-dono-tag" aria-label="Dono do anúncio"><span aria-hidden="true">★</span> Dono</span>
+                <div id="anuncio-postador" class="anuncio-dono hidden">
+                    <img id="anuncio-postador-foto" class="anuncio-dono-avatar" src="../img/default-profile.png" alt="Foto do dono do anúncio">
+                    <div class="anuncio-dono-identidade">
+                        <span id="anuncio-postador-nome" class="anuncio-dono-nome"></span>
+                        <span class="anuncio-dono-tag" aria-label="Dono do anúncio"><span aria-hidden="true">★</span> Dono</span>
                     </div>
                 </div>
             </div>
-            <div id="servico-hero" class="hero hidden">
+            <div id="anuncio-hero" class="hero hidden">
                 <button id="btn-foto-anterior" class="foto-nav-btn foto-nav-anterior hidden" type="button" aria-label="Foto anterior">‹</button>
-                <img id="servico-foto" src="" alt="Foto do anúncio">
+                <img id="anuncio-foto" src="" alt="Foto do anúncio">
                 <button id="btn-foto-proxima" class="foto-nav-btn foto-nav-proxima hidden" type="button" aria-label="Próxima foto">›</button>
                 <span id="foto-contador" class="foto-contador hidden"></span>
             </div>
             <div id="foto-thumbs" class="foto-thumbs hidden"></div>
             <div class="content">
-                <div id="feedback-servico" class="feedback-msg hidden" aria-live="polite"></div>
-                <h1 id="servico-nome">Carregando anúncio...</h1>
-                <p id="servico-resumo" class="resumo"></p>
+                <div id="feedback-anuncio" class="feedback-msg hidden" aria-live="polite"></div>
+                <h1 id="anuncio-nome">Carregando anúncio...</h1>
+                <p id="anuncio-resumo" class="resumo"></p>
 
-                <div id="servico-badges" class="badges"></div>
+                <div id="anuncio-badges" class="badges"></div>
 
                 <h2 class="section-title">Descrição</h2>
-                <p id="servico-descricao" class="descricao-detalhada"></p>
+                <p id="anuncio-descricao" class="descricao-detalhada"></p>
 
                 <div class="actions">
                     <button id="btn-avaliar" class="btn btn-primary btn-action hidden">
@@ -96,7 +96,7 @@
                     <button id="btn-compartilhar" class="btn btn-outline btn-action">
                         <span>🔗</span> Compartilhar
                     </button>
-                    <a id="servico-whatsapp" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-action btn-whatsapp hidden">
+                    <a id="anuncio-whatsapp" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-action btn-whatsapp hidden">
                         <img class="btn-icon" src="../img/whatsapp_Icon.svg" alt="" aria-hidden="true">
                         <span>Abrir WhatsApp</span>
                     </a>

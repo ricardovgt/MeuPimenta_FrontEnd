@@ -36,7 +36,7 @@ function esconderModal(modal) {
 function criarBotaoAnunciar(callback, classeAdicional = "") {
     const botao = document.createElement("button");
     botao.type = "button";
-    botao.className = `btn btn-primary btn-anunciar-servico ${classeAdicional}`.trim();
+    botao.className = `btn btn-primary btn-anunciar-anuncio ${classeAdicional}`.trim();
 
     const icone = document.createElement("span");
     icone.setAttribute("aria-hidden", "true");
@@ -48,12 +48,12 @@ function criarBotaoAnunciar(callback, classeAdicional = "") {
 
 function criarEstadoVazio(onNovo) {
     const estadoVazio = document.createElement("div");
-    estadoVazio.className = "meus-servicos-vazio";
+    estadoVazio.className = "meus-anuncios-vazio";
 
     const icone = document.createElement("img");
     icone.src = "../img/Icone_Clipboard.png";
     icone.alt = "";
-    icone.className = "meus-servicos-vazio-icone";
+    icone.className = "meus-anuncios-vazio-icone";
 
     const titulo = document.createElement("h2");
     titulo.textContent = "Você ainda não possui anúncios cadastrados.";
@@ -65,7 +65,7 @@ function criarEstadoVazio(onNovo) {
         icone,
         titulo,
         descricao,
-        criarBotaoAnunciar(onNovo, "btn-anunciar-servico--empty")
+        criarBotaoAnunciar(onNovo, "btn-anunciar-anuncio--empty")
     );
     return estadoVazio;
 }
@@ -78,10 +78,10 @@ function criarCard(anuncio, callbacks) {
         ? "Serviço"
         : anuncio.tipo === "COMERCIO" ? "Comércio" : "Tipo não informado";
     const card = document.createElement("article");
-    card.className = `card-servico${status ? ` card-servico--${status.toLowerCase()}` : ""}`;
+    card.className = `card-anuncio${status ? ` card-anuncio--${status.toLowerCase()}` : ""}`;
 
     const midia = document.createElement("div");
-    midia.className = "card-servico-midia";
+    midia.className = "card-anuncio-midia";
     const thumb = document.createElement("img");
     thumb.className = "thumb";
     thumb.src = anuncio.fotoCapa || "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
@@ -96,14 +96,14 @@ function criarCard(anuncio, callbacks) {
     linha.textContent = anuncio.nomeUsuario || "";
 
     const metadados = document.createElement("div");
-    metadados.className = "card-servico-metadados";
+    metadados.className = "card-anuncio-metadados";
     const badgeTipo = document.createElement("span");
-    badgeTipo.className = "card-servico-badge card-servico-badge--tipo";
+    badgeTipo.className = "card-anuncio-badge card-anuncio-badge--tipo";
     badgeTipo.textContent = tipo;
     metadados.appendChild(badgeTipo);
     if (status) {
         const badgeStatus = document.createElement("span");
-        badgeStatus.className = `card-servico-badge card-servico-badge--${status.toLowerCase()}`;
+        badgeStatus.className = `card-anuncio-badge card-anuncio-badge--${status.toLowerCase()}`;
         badgeStatus.textContent = status === "OCULTO" ? "Oculto" : status === "ATIVO" ? "Ativo" : "Banido";
         metadados.appendChild(badgeStatus);
     }
@@ -111,7 +111,7 @@ function criarCard(anuncio, callbacks) {
     const acoes = document.createElement("div");
     acoes.className = "acoes";
     const linkDetalhes = document.createElement("a");
-    linkDetalhes.className = "card-servico-link";
+    linkDetalhes.className = "card-anuncio-link";
     linkDetalhes.href = `anuncio.html?id=${encodeURIComponent(anuncio.id)}`;
     adicionarConteudoBotao(linkDetalhes, "detalhes", "Ver detalhes");
 
@@ -143,7 +143,7 @@ function criarCard(anuncio, callbacks) {
     }
 
     const painelAcoes = document.createElement("div");
-    painelAcoes.className = "card-servico-painel-acoes";
+    painelAcoes.className = "card-anuncio-painel-acoes";
     painelAcoes.append(acoes, linkDetalhes);
 
     info.append(titulo, linha, metadados);
@@ -151,13 +151,13 @@ function criarCard(anuncio, callbacks) {
 
     if (status === "BANIDO") {
         const bloqueio = document.createElement("div");
-        bloqueio.className = "card-servico-banido-overlay";
+        bloqueio.className = "card-anuncio-banido-overlay";
         bloqueio.setAttribute("aria-label", "Anúncio banido. Disponível somente para visualização.");
         const texto = document.createElement("strong");
         texto.textContent = "BANIDO";
         const descricao = document.createElement("span");
         descricao.textContent = "Somente leitura";
-        linkDetalhes.classList.add("card-servico-link--banido");
+        linkDetalhes.classList.add("card-anuncio-link--banido");
         bloqueio.append(texto, descricao, linkDetalhes);
         card.appendChild(bloqueio);
     }

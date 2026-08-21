@@ -1,5 +1,5 @@
 /* Layout principal da página de serviços */
-.container-servicos {
+.container-anuncios {
     display: flex;
     gap: 2rem;
     padding: 6rem 2rem 2rem 2rem;
