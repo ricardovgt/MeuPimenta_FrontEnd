@@ -1,6 +1,6 @@
 const LIMITE_ANUNCIOS_POR_PAGINA = 12;
 
-function navegarComFiltros(elements, pagina = 1) {
+function navegarComFiltros(elements, pagina = 1, filtroCategoria = null) {
     const url = new URL(window.location.href);
     const busca = elements.filtroBusca?.value.trim() || "";
     const tipo = elements.filtroTipo?.value || "";
@@ -10,6 +10,11 @@ function navegarComFiltros(elements, pagina = 1) {
     tipo ? url.searchParams.set("tipo", tipo) : url.searchParams.delete("tipo");
     top ? url.searchParams.set("top", "true") : url.searchParams.delete("top");
     url.searchParams.set("pagina", String(Math.max(1, Number(pagina) || 1)));
+    if (!busca && filtroCategoria?.palavrasChave?.length) {
+        preservarFiltroCategoria(filtroCategoria);
+    } else {
+        limparFiltroCategoriaHome();
+    }
     window.location.assign(url.toString());
 }
 
@@ -52,13 +57,23 @@ function atualizarListaAnuncios(token, elements, filtros = {}) {
     carregando.textContent = "Carregando anúncios...";
     grid.appendChild(carregando);
 
-    return carregarAnuncios(token, {
+    const opcoesCarregamento = {
         pagina: filtros.pagina,
         limite: LIMITE_ANUNCIOS_POR_PAGINA,
         top: filtros.top,
-        busca: filtros.busca,
         tipo: filtros.tipo
-    })
+    };
+    const requisicao = filtros.filtroCategoria?.palavrasChave?.length
+        ? carregarAnunciosPorPalavrasChave(token, {
+            ...opcoesCarregamento,
+            palavrasChave: filtros.filtroCategoria.palavrasChave
+        })
+        : carregarAnuncios(token, {
+            ...opcoesCarregamento,
+            busca: filtros.busca
+        });
+
+    return requisicao
         .then(({ status, body }) => {
             grid.innerHTML = "";
             if (status !== 200) {
@@ -74,7 +89,7 @@ function atualizarListaAnuncios(token, elements, filtros = {}) {
 
             const totalPaginas = Number(body?.totalPaginas) || 0;
             if (totalPaginas > 0 && filtros.pagina > totalPaginas) {
-                navegarComFiltros(elements, totalPaginas);
+                navegarComFiltros(elements, totalPaginas, filtros.filtroCategoria);
                 return;
             }
 
@@ -99,20 +114,29 @@ function atualizarListaAnuncios(token, elements, filtros = {}) {
 function configurarFiltros(token, elements, filtrosIniciais = {}) {
     elements.formFiltros?.addEventListener("submit", (event) => {
         event.preventDefault();
-        navegarComFiltros(elements, 1);
+        navegarComFiltros(elements, 1, filtrosIniciais.filtroCategoria);
     });
 
     elements.btnLimparFiltros?.addEventListener("click", () => {
+        limparFiltroCategoriaHome();
         const url = new URL(window.location.href);
         url.search = "";
         window.location.assign(url.toString());
     });
 
     elements.btnPaginaAnterior?.addEventListener("click", () => {
-        navegarComFiltros(elements, elements.btnPaginaAnterior.dataset.pagina);
+        navegarComFiltros(
+            elements,
+            elements.btnPaginaAnterior.dataset.pagina,
+            filtrosIniciais.filtroCategoria
+        );
     });
     elements.btnProximaPagina?.addEventListener("click", () => {
-        navegarComFiltros(elements, elements.btnProximaPagina.dataset.pagina);
+        navegarComFiltros(
+            elements,
+            elements.btnProximaPagina.dataset.pagina,
+            filtrosIniciais.filtroCategoria
+        );
     });
 
     atualizarListaAnuncios(token, elements, filtrosIniciais);

@@ -83,7 +83,7 @@
             <input
               type="text"
               id="searchInput"
-              aria-label="Buscar anúncios"
+              aria-label="Buscar categoria"
               placeholder="O que você está procurando?"
               autocomplete="off"
             />
@@ -165,7 +165,7 @@
         </div>
 
         <div class="popular-grid">
-          <a href="anuncios.html?busca=pedreiro" class="popular-card">
+          <a href="anuncios.html" class="popular-card" data-categoria="pedreiro">
             <span class="popular-icon" aria-hidden="true">
               <img src="../img/hammer.svg" alt="" />
             </span>
@@ -179,7 +179,7 @@
             <span class="popular-arrow"> → </span>
           </a>
 
-          <a href="anuncios.html?busca=informatica" class="popular-card">
+          <a href="anuncios.html" class="popular-card" data-categoria="informatica">
             <span class="popular-icon" aria-hidden="true">
               <img src="../img/laptop.svg" alt="" />
             </span>
@@ -193,7 +193,7 @@
             <span class="popular-arrow"> → </span>
           </a>
 
-          <a href="anuncios.html?busca=mecanica" class="popular-card">
+          <a href="anuncios.html" class="popular-card" data-categoria="mecanica">
             <span class="popular-icon" aria-hidden="true">
               <img src="../img/car.svg" alt="" />
             </span>
@@ -207,7 +207,7 @@
             <span class="popular-arrow"> → </span>
           </a>
 
-          <a href="anuncios.html?busca=beleza" class="popular-card">
+          <a href="anuncios.html" class="popular-card" data-categoria="beleza">
             <span class="popular-icon" aria-hidden="true">
               <img src="../img/beautiful.svg" alt="" />
             </span>
@@ -252,6 +252,7 @@
     <script src="../js/global.js"></script>
     <script src="../js/nav-conta.js"></script>
     <script src="../js/home/api.js"></script>
+    <script src="../js/home/utils.js"></script>
     <script src="../js/home/ui.js"></script>
     <script src="../js/home/events.js"></script>
     <script src="../js/home/main.js"></script>

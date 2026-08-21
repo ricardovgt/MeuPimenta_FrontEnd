@@ -23,12 +23,29 @@ function configurarPesquisaAnuncios(elements) {
 }
 
 function configurarCategoriasPopulares(elements) {
-    const categorias = ["pedreiro", "informatica", "mecanica", "beleza"];
-
-    elements.popularCards.forEach((card, index) => {
-        const categoria = categorias[index];
+    elements.popularCards.forEach((card) => {
+        const categoria = card.dataset.categoria;
         if (!categoria) return;
 
-        card.href = `anuncios.html?busca=${encodeURIComponent(categoria)}`;
+        card.href = "anuncios.html";
+        card.addEventListener("click", async (event) => {
+            event.preventDefault();
+            if (card.getAttribute("aria-busy") === "true") return;
+
+            card.setAttribute("aria-busy", "true");
+            try {
+                const palavrasChave = await carregarPalavrasChaveCategoria(categoria);
+                if (palavrasChave.length === 0) {
+                    throw new Error(`A categoria ${categoria} não possui palavras-chave.`);
+                }
+
+                salvarFiltroCategoriaHome(categoria, palavrasChave);
+                window.location.assign("anuncios.html");
+            } catch (erro) {
+                card.removeAttribute("aria-busy");
+                console.error("Erro ao abrir categoria popular:", erro);
+                window.alert("Não foi possível carregar essa categoria. Tente novamente.");
+            }
+        });
     });
 }

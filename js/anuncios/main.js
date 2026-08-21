@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         ? paginaInformada
         : 1;
     const topInicial = parametros.get("top") === "true";
+    const filtroCategoria = buscaInicial ? null : consumirFiltroCategoriaHome();
 
     const elements = {
         formFiltros: document.getElementById("form-filtros"),
@@ -36,7 +37,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         busca: buscaInicial,
         tipo: tipoInicial,
         top: topInicial,
-        pagina: paginaInicial
+        pagina: paginaInicial,
+        filtroCategoria
     });
     configurarBotaoAnunciar(sessao, elements);
 });
