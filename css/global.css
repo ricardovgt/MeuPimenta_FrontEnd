@@ -27,6 +27,95 @@ body {
     min-height: 100vh;
 }
 
+body.site-layout {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: stretch;
+    min-height: 100vh;
+}
+
+body.auth-page {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(min-content, 1fr) auto;
+    justify-content: stretch;
+    width: 100%;
+}
+
+body.auth-page > .container {
+    align-self: center;
+    justify-self: center;
+    margin: 2rem auto;
+}
+
+body.auth-page > .site-footer {
+    margin-top: 0;
+}
+
+/* Rodapé compartilhado por todas as páginas */
+.site-footer {
+    width: 100%;
+    margin-top: auto;
+    padding: 50px 24px 46px;
+    flex: 0 0 auto;
+    color: var(--text-secondary);
+    text-align: center;
+    background: #111113;
+    border-top: 1px solid #2f2f35;
+}
+
+.site-footer__logo {
+    margin-bottom: 10px;
+    color: var(--primary-color);
+    font-size: 1.3rem;
+    font-weight: 800;
+}
+
+.site-footer p {
+    margin-bottom: 14px;
+    color: #b4b4bd;
+    font-size: 0.86rem;
+    line-height: 1.5;
+}
+
+.site-footer__links {
+    display: flex;
+    justify-content: center;
+    gap: 22px;
+    margin-bottom: 22px;
+}
+
+.site-footer__links a {
+    color: #f4f4f5;
+    font-size: 0.82rem;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    transition: color 0.2s ease;
+}
+
+.site-footer__links a:hover,
+.site-footer__links a:focus-visible {
+    color: var(--primary-color);
+}
+
+.site-footer small {
+    color: #a1a1aa;
+    font-size: 0.75rem;
+}
+
+@media (max-width: 480px) {
+    .site-footer {
+        padding: 40px 18px;
+    }
+
+    .site-footer__links {
+        align-items: center;
+        flex-direction: column;
+        gap: 10px;
+    }
+}
+
 /* Container padrão para os formulários */
 .container {
     background-color: var(--surface-color);
@@ -115,7 +204,7 @@ body {
 
 /* Estilos de erro/sucesso (preparando para o JS) */
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 .feedback-msg {
@@ -240,6 +329,32 @@ body {
     align-items: center;
     gap: 0.75rem;
     justify-self: end;
+}
+
+.nav-login-link {
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.55rem 1.2rem;
+    border: 1px solid #3f3f46;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--text-primary);
+    font-size: 0.92rem;
+    font-weight: 700;
+    line-height: 1;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+}
+
+.nav-login-link:hover,
+.nav-login-link:focus-visible {
+    border-color: rgba(250, 204, 21, 0.62);
+    background: rgba(250, 204, 21, 0.08);
+    color: var(--primary-color);
+    outline: none;
 }
 
 .nav-avatar-link {

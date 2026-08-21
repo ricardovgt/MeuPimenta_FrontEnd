@@ -11,15 +11,17 @@
     <link rel="stylesheet" href="../css/meus_servicos/meus_servicos-cards.css">
     <link rel="stylesheet" href="../css/meus_servicos/meus_servicos-modals.css">
 </head>
-<body>
+<body class="site-layout">
 
     <header class="top-nav">
-        <a href="servicos.html" class="nav-logo">MeuPimenta</a>
-        <nav class="nav-links">
-            <a href="servicos.html" class="nav-item">Buscar Anúncios</a>
-            <a href="meus_servicos.html" class="nav-item active hidden" data-conta-comercial>Meus Anúncios</a>
+        <a href="anuncios.html" class="nav-logo">MeuPimenta</a>
+        <nav class="nav-links" aria-label="Navegação principal">
+            <a href="home.html" class="nav-item">Início</a>
+            <a href="anuncios.html" class="nav-item">Buscar Anúncios</a>
+            <a href="meus_anuncios.html" class="nav-item active hidden" data-conta-comercial aria-current="page">Meus Anúncios</a>
         </nav>
         <div class="nav-actions">
+            <a href="login.html" class="nav-login-link" data-nav-anonimo>Entrar</a>
             <a href="perfil.html" class="nav-avatar-link" data-nav-avatar-link aria-label="Abrir perfil" title="Perfil">
                 <img class="nav-avatar" data-nav-avatar src="../img/default-profile.png" alt="Foto de perfil">
             </a>
@@ -30,23 +32,37 @@
         <section class="meus-servicos-intro" aria-labelledby="titulo-meus-servicos">
             <div class="meus-servicos-intro-copy">
                 <h1 id="titulo-meus-servicos">Meus Anúncios</h1>
-                <p>Gerencie os anúncios que você publica na plataforma.</p>
+                <p>Gerencie seus anúncios publicados.</p>
             </div>
             <div class="meus-servicos-novo">
                 <button type="button" id="btn-novo-servico" class="btn btn-primary btn-anunciar-servico">
                     <span aria-hidden="true">＋</span>
                     Criar Anúncio
                 </button>
-                <p>Crie um novo anúncio e comece a receber clientes.</p>
+                <p id="aviso-limite-anuncios" class="aviso-limite-anuncios" aria-live="polite">
+                    Você pode publicar até 5 anúncios. Anúncios banidos também contam.
+                </p>
             </div>
         </section>
 
         <section id="meus-servicos-area" aria-live="polite">
+            <div id="resumo-meus-servicos" class="meus-servicos-resumo" aria-label="Resumo dos anúncios"></div>
             <div id="grid-meus-servicos"></div>
+            <p id="meus-servicos-contagem" class="meus-servicos-contagem"></p>
         </section>
-    </main>
+</main>
 
-    <!-- Modal Cadastrar Serviço -->
+<footer class="site-footer">
+    <div class="site-footer__logo">MeuPimenta</div>
+    <p>Conectando pessoas, negócios e oportunidades.</p>
+    <nav class="site-footer__links" aria-label="Links legais">
+        <a href="legal/privacidade.html">Política de Privacidade</a>
+        <a href="legal/termos.html">Termos de Conduta</a>
+    </nav>
+    <small>© 2026 MeuPimenta</small>
+</footer>
+
+    <!-- Modal Cadastrar Anúncio -->
     <div id="modal-cadastro-servico" class="modal hidden">
         <div class="modal-content modal-edicao modal-cadastro">
             <div class="modal-edicao-header modal-cadastro-header">
@@ -103,7 +119,7 @@
                         <span class="modal-campo-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>
                         <label for="descricaoDetalhada">Descrição detalhada</label>
                     </div>
-                    <textarea id="descricaoDetalhada" name="descricaoDetalhada" rows="4" placeholder="Conte mais sobre o serviço, horários, diferenciais e detalhes importantes." maxlength="1000" required></textarea>
+                    <textarea id="descricaoDetalhada" name="descricaoDetalhada" rows="4" placeholder="Conte mais sobre o anúncio, horários, diferenciais e detalhes importantes." maxlength="1000" required></textarea>
                     <div class="modal-campo-footer">
                         <span class="modal-campo-hint">Inclua informações que ajudem o cliente a te escolher.</span>
                         <span class="modal-campo-counter" data-target="descricaoDetalhada" data-max="1000">0/1000</span>
@@ -134,6 +150,14 @@
                     </div>
                 </div>
 
+                <div class="aceite-regras-publicacao">
+                    <label for="aceite-regras-anuncio">
+                        <input type="checkbox" id="aceite-regras-anuncio" name="aceiteRegras" required>
+                        <span>Li e concordo com as regras: as informações que estou publicando são verdadeiras. Anúncios repetidos, com dados falsos ou conteúdo proibido podem ser denunciados e, a partir de 5 denúncias, o anúncio é banido; a reincidência bane a conta. Negociações são feitas diretamente pelo WhatsApp; o MeuPimenta não intermedia pagamentos.</span>
+                    </label>
+                    <button type="button" id="btn-ver-regras-publicacao" class="btn-ver-regras">Ver regras completas</button>
+                </div>
+
                 <div class="modal-actions modal-edicao-actions modal-cadastro-actions">
                     <button type="button" id="btn-cancelar-servico" class="btn btn-outline">Cancelar</button>
                     <button type="submit" class="btn btn-primary modal-btn-publicar">
@@ -142,6 +166,75 @@
                     </button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- Modal de Regras para Publicação -->
+    <div id="modal-regras-publicacao" class="modal modal-regras-publicacao hidden" role="dialog" aria-modal="true" aria-labelledby="titulo-regras-publicacao">
+        <div class="modal-content modal-regras-content">
+            <div class="modal-regras-header">
+                <div>
+                    <span class="modal-regras-kicker">ANTES DE PUBLICAR</span>
+                    <h2 id="titulo-regras-publicacao">Revise as regras do anúncio</h2>
+                    <p>Confira se o anúncio que você acabou de preencher está de acordo com as regras do MeuPimenta.</p>
+                </div>
+                <button type="button" id="btn-fechar-regras-publicacao" class="modal-edicao-close" aria-label="Fechar regras">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+
+            <div class="modal-regras-lista">
+                <section>
+                    <h3><span>1</span> Veracidade das informações</h3>
+                    <ul>
+                        <li>Nome, descrição e fotos devem representar o serviço ou comércio real do anunciante.</li>
+                        <li>O telefone deve ser um WhatsApp válido e de uso do próprio anunciante.</li>
+                        <li>Se quiser divulgar um endereço comercial, inclua-o na descrição. Ele precisa ser real e condizer com o local de atendimento.</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3><span>2</span> Conteúdo proibido</h3>
+                    <ul>
+                        <li>Produtos ou serviços ilegais, incluindo armas, drogas, falsificações e jogos de azar ilegais.</li>
+                        <li>Conteúdo sexual explícito ou aliciamento.</li>
+                        <li>Discurso de ódio, discriminação ou ameaças.</li>
+                        <li>Esquemas de “renda garantida”, pirâmides financeiras ou vagas que cobram do candidato.</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3><span>3</span> Duplicidade e spam</h3>
+                    <ul>
+                        <li>Cada usuário pode ter no máximo 5 anúncios, incluindo anúncios pausados ou banidos.</li>
+                        <li>É proibido publicar o mesmo anúncio mais de uma vez ou recriar um anúncio banido com outro texto.</li>
+                        <li>Vários anúncios do mesmo comerciante só são permitidos para serviços ou produtos genuinamente diferentes.</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3><span>4</span> Negociação fora da plataforma</h3>
+                    <ul>
+                        <li>Preço, prazo e forma de pagamento são combinados diretamente pelo WhatsApp.</li>
+                        <li>O MeuPimenta não intermedia pagamentos, não garante entrega ou qualidade e não participa da negociação.</li>
+                        <li>É proibido alegar que “o site garante a transação” ou pedir pagamento adiantado “pela plataforma”.</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3><span>5</span> Denúncias e banimento</h3>
+                    <ul>
+                        <li>Qualquer usuário pode denunciar um anúncio uma vez, sem precisar informar o motivo.</li>
+                        <li>Ao atingir 5 denúncias, o anúncio é banido automaticamente, deixa as buscas e fica em modo somente leitura para o dono.</li>
+                        <li>Ao acumular 3 anúncios banidos, a conta inteira do comerciante é banida e o login é bloqueado.</li>
+                    </ul>
+                </section>
+            </div>
+
+            <div class="modal-actions modal-regras-actions">
+                <button type="button" id="btn-revisar-anuncio" class="btn btn-outline">Voltar e revisar</button>
+                <button type="button" id="btn-confirmar-publicacao" class="btn btn-primary">Concordo e publicar anúncio</button>
+            </div>
         </div>
     </div>
 
@@ -278,9 +371,9 @@
 
     <script src="../js/global.js"></script>
     <script src="../js/nav-conta.js"></script>
-    <script src="../js/meus_servicos/api.js"></script>
-    <script src="../js/meus_servicos/ui.js"></script>
-    <script src="../js/meus_servicos/events.js"></script>
-    <script src="../js/meus_servicos/main.js"></script>
+    <script src="../js/meus_anuncios/api.js"></script>
+    <script src="../js/meus_anuncios/ui.js"></script>
+    <script src="../js/meus_anuncios/events.js"></script>
+    <script src="../js/meus_anuncios/main.js"></script>
 </body>
 </html>

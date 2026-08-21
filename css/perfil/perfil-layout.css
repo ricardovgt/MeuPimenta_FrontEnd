@@ -3,8 +3,9 @@
    ============================================================ */
 
 .perfil-container {
+    width: min(calc(100% - 2rem), 980px);
     max-width: 980px;
-    margin: 6.5rem 1rem 3rem;
+    margin: 6.5rem auto 3rem;
     padding: 2.5rem;
     background: transparent;
     box-shadow: none;

@@ -1,3 +1,6 @@
+const LIMITE_ANUNCIOS_POR_USUARIO = 5;
+const MENSAGEM_LIMITE_ANUNCIOS = "Cada usuário pode ter no máximo 5 anúncios.";
+
 async function tratarErroAutenticacao(body) {
     const contaBanida = body?.erro === "Sua conta foi banida por violação das regras de conduta."
         || body?.mensagem === "Sua conta foi banida por violação das regras de conduta.";
@@ -13,29 +16,59 @@ async function tratarErroAutenticacao(body) {
     Connecta.auth.fazerLogout();
 }
 
+function atualizarLimiteAnuncios(elements, lista) {
+    const total = Array.isArray(lista) ? lista.length : 0;
+    const limiteAtingido = total >= LIMITE_ANUNCIOS_POR_USUARIO;
+    elements.totalAnuncios = total;
+
+    elements.btnNovoAnuncio?.classList.toggle("btn-anunciar-servico--limite", limiteAtingido);
+    if (elements.btnNovoAnuncio) {
+        elements.btnNovoAnuncio.setAttribute("aria-describedby", "aviso-limite-anuncios");
+        elements.btnNovoAnuncio.setAttribute(
+            "aria-label",
+            limiteAtingido ? "Limite de anúncios atingido" : "Criar anúncio"
+        );
+    }
+
+    if (elements.avisoLimiteAnuncios) {
+        elements.avisoLimiteAnuncios.textContent = limiteAtingido
+            ? `${total} de ${LIMITE_ANUNCIOS_POR_USUARIO} anúncios utilizados. Limite atingido; anúncios banidos também contam.`
+            : `${total} de ${LIMITE_ANUNCIOS_POR_USUARIO} anúncios utilizados. Anúncios banidos também contam.`;
+        elements.avisoLimiteAnuncios.classList.toggle("aviso-limite-anuncios--atingido", limiteAtingido);
+    }
+}
+
 function abrirCadastro(elements) {
-    Connecta.ui.limparFeedback(elements.feedbackServico);
-    mostrarModal(elements.modalServico);
+    if (elements.totalAnuncios >= LIMITE_ANUNCIOS_POR_USUARIO) {
+        Connecta.ui.alerta({
+            titulo: "Limite de anúncios atingido",
+            mensagem: `${MENSAGEM_LIMITE_ANUNCIOS} Anúncios banidos também contam para esse limite.`,
+            kicker: "Limite"
+        });
+        return;
+    }
+    Connecta.ui.limparFeedback(elements.feedbackAnuncio);
+    mostrarModal(elements.modalAnuncio);
 }
 
 function fecharCadastro(elements, limparFormulario = false) {
-    esconderModal(elements.modalServico);
+    esconderModal(elements.modalAnuncio);
     if (!limparFormulario) return;
-    elements.formServico?.reset();
-    elements.formServico?.querySelectorAll("[maxlength]").forEach((campo) => {
+    elements.formAnuncio?.reset();
+    elements.formAnuncio?.querySelectorAll("[maxlength]").forEach((campo) => {
         campo.dispatchEvent(new Event("input"));
     });
     limparFotosCadastro(elements.fotosCadastroPreview);
-    Connecta.ui.limparFeedback(elements.feedbackServico);
+    Connecta.ui.limparFeedback(elements.feedbackAnuncio);
 }
 
-function abrirEdicao(token, servico, elements) {
-    elements.inputEditarId.value = servico.id || "";
-    elements.inputEditarTipo.value = servico.tipo || "";
-    elements.inputNome.value = servico.nome || "";
-    elements.inputTelefone.value = servico.telefone || "";
-    elements.inputDescricao.value = servico.descricao || "";
-    elements.inputDescricaoDetalhada.value = servico.descricaoDetalhada || "";
+function abrirEdicao(token, anuncio, elements) {
+    elements.inputEditarId.value = anuncio.id || "";
+    elements.inputEditarTipo.value = anuncio.tipo || "";
+    elements.inputNome.value = anuncio.nome || "";
+    elements.inputTelefone.value = anuncio.telefone || "";
+    elements.inputDescricao.value = anuncio.descricao || "";
+    elements.inputDescricaoDetalhada.value = anuncio.descricaoDetalhada || "";
     [elements.inputDescricao, elements.inputDescricaoDetalhada].forEach((input) => {
         input?.dispatchEvent(new Event("input"));
     });
@@ -52,7 +85,7 @@ function abrirEdicao(token, servico, elements) {
 
     // A listagem só traz a foto de capa; aqui buscamos o anúncio completo para
     // pré-carregar todas as fotos existentes no preview de edição.
-    obterServicoPorId(token, servico.id)
+    obterAnuncioPorId(token, anuncio.id)
         .then(({ status, body }) => {
             if (status === 200 && body) {
                 if (body.status === "BANIDO") {
@@ -99,11 +132,11 @@ function abrirExclusao(id, elements) {
     mostrarModal(elements.modalExcluir);
 }
 
-function configurarListaServicos(token, elements) {
-    async function alterarStatus(servico, botao) {
-        if (!botao || botao.disabled || !["ATIVO", "OCULTO"].includes(servico.status)) return;
+function configurarListaAnuncios(token, elements) {
+    async function alterarStatus(anuncio, botao) {
+        if (!botao || botao.disabled || !["ATIVO", "OCULTO"].includes(anuncio.status)) return;
         botao.disabled = true;
-        const novoStatus = servico.status === "ATIVO" ? "OCULTO" : "ATIVO";
+        const novoStatus = anuncio.status === "ATIVO" ? "OCULTO" : "ATIVO";
         const acao = novoStatus === "OCULTO" ? "pausar" : "reativar";
         const confirmado = await Connecta.ui.confirmar({
             titulo: novoStatus === "OCULTO" ? "Pausar anúncio" : "Reativar anúncio",
@@ -119,10 +152,10 @@ function configurarListaServicos(token, elements) {
             return;
         }
 
-        const textoOriginal = botao.textContent;
+        const conteudoOriginal = botao.innerHTML;
         botao.textContent = novoStatus === "OCULTO" ? "Pausando..." : "Reativando...";
         try {
-            const { status, body } = await atualizarStatusAnuncio(token, servico.id, novoStatus);
+            const { status, body } = await atualizarStatusAnuncio(token, anuncio.id, novoStatus);
             if (status === 200) {
                 await Connecta.ui.alerta({
                     titulo: novoStatus === "OCULTO" ? "Anúncio pausado" : "Anúncio reativado",
@@ -151,20 +184,25 @@ function configurarListaServicos(token, elements) {
             });
         } finally {
             botao.disabled = false;
-            botao.textContent = textoOriginal;
+            botao.innerHTML = conteudoOriginal;
         }
     }
 
     function carregar() {
-        carregarMeusServicos(token)
+        carregarMeusAnuncios(token)
             .then(({ status, body }) => {
                 if (status === 200) {
+                    atualizarLimiteAnuncios(elements, body);
                     renderizarLista(elements.grid, body, {
-                        onEditar: (servico) => abrirEdicao(token, servico, elements),
+                        onEditar: (anuncio) => abrirEdicao(token, anuncio, elements),
                         onExcluir: (id) => abrirExclusao(id, elements),
                         onAlterarStatus: alterarStatus,
                         onNovo: () => abrirCadastro(elements)
-                    });
+                    }, elements.resumo, elements.contagem);
+                    if (elements.solicitarNovoAnuncio) {
+                        elements.solicitarNovoAnuncio = false;
+                        abrirCadastro(elements);
+                    }
                     return;
                 }
 
@@ -186,25 +224,48 @@ function configurarListaServicos(token, elements) {
     carregar();
 }
 
-function configurarCadastroServico(token, elements) {
-    elements.btnNovoServico?.addEventListener("click", () => abrirCadastro(elements));
-    elements.btnCancelarServico?.addEventListener("click", () => fecharCadastro(elements, true));
+function configurarCadastroAnuncio(token, elements) {
+    elements.btnNovoAnuncio?.addEventListener("click", () => abrirCadastro(elements));
+    elements.btnCancelarAnuncio?.addEventListener("click", () => fecharCadastro(elements, true));
     elements.btnFecharCadastro?.addEventListener("click", () => fecharCadastro(elements, true));
 
     elements.inputFotosCadastro?.addEventListener("change", () => {
         processarFotosCadastro(
             elements.inputFotosCadastro,
             elements.fotosCadastroPreview,
-            elements.feedbackServico
+            elements.feedbackAnuncio
         );
     });
 
-    elements.formServico?.addEventListener("submit", (event) => {
-        event.preventDefault();
-        const formData = new FormData(elements.formServico);
-        const submitButton = elements.formServico.querySelector('button[type="submit"]');
+    const fecharRegrasPublicacao = () => esconderModal(elements.modalRegrasPublicacao);
+    let publicacaoEmAndamento = false;
+
+    elements.btnVerRegrasPublicacao?.addEventListener("click", () => {
+        mostrarModal(elements.modalRegrasPublicacao);
+    });
+    elements.btnFecharRegrasPublicacao?.addEventListener("click", fecharRegrasPublicacao);
+    elements.btnRevisarAnuncio?.addEventListener("click", fecharRegrasPublicacao);
+    elements.modalRegrasPublicacao?.addEventListener("click", (event) => {
+        if (event.target === elements.modalRegrasPublicacao) fecharRegrasPublicacao();
+    });
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && !elements.modalRegrasPublicacao?.classList.contains("hidden")) {
+            fecharRegrasPublicacao();
+        }
+    });
+
+    function publicarAnuncioPreenchido() {
+        if (publicacaoEmAndamento || !elements.formAnuncio?.checkValidity()) {
+            fecharRegrasPublicacao();
+            elements.formAnuncio?.reportValidity();
+            return;
+        }
+
+        const formData = new FormData(elements.formAnuncio);
+        const submitButton = elements.formAnuncio.querySelector('button[type="submit"]');
+        const textoConfirmacaoOriginal = elements.btnConfirmarPublicacao?.textContent || "Concordo e publicar anúncio";
         const conteudoOriginal = submitButton?.innerHTML || "Publicar Anúncio";
-        const dadosServico = {
+        const dadosAnuncio = {
             nome: formData.get("nome") || "",
             descricao: formData.get("descricao") || "",
             descricaoDetalhada: formData.get("descricaoDetalhada") || "",
@@ -213,23 +274,30 @@ function configurarCadastroServico(token, elements) {
             fotos: obterFotosCadastroAtual()
         };
 
-        if (dadosServico.tipo !== "SERVICO" && dadosServico.tipo !== "COMERCIO") {
-            Connecta.ui.mostrarFeedback(elements.feedbackServico, "Selecione Serviço ou Comércio.", "error");
+        if (dadosAnuncio.tipo !== "SERVICO" && dadosAnuncio.tipo !== "COMERCIO") {
+            fecharRegrasPublicacao();
+            Connecta.ui.mostrarFeedback(elements.feedbackAnuncio, "Selecione Serviço ou Comércio.", "error");
             return;
         }
 
+        publicacaoEmAndamento = true;
+        fecharRegrasPublicacao();
         if (submitButton) {
             submitButton.disabled = true;
             submitButton.textContent = "Publicando...";
         }
-        Connecta.ui.mostrarFeedback(elements.feedbackServico, "Salvando...", "error");
+        if (elements.btnConfirmarPublicacao) {
+            elements.btnConfirmarPublicacao.disabled = true;
+            elements.btnConfirmarPublicacao.textContent = "Publicando...";
+        }
+        Connecta.ui.mostrarFeedback(elements.feedbackAnuncio, "Salvando...", "error");
 
-        criarServico(token, dadosServico)
+        criarAnuncio(token, dadosAnuncio)
             .then(({ status, body }) => {
                 if (status === 201) {
-                    Connecta.ui.mostrarFeedback(elements.feedbackServico, "Anúncio publicado com sucesso!", "success");
-                    elements.formServico.reset();
-                    elements.formServico.querySelectorAll("[maxlength]").forEach((campo) => {
+                    Connecta.ui.mostrarFeedback(elements.feedbackAnuncio, "Anúncio publicado com sucesso!", "success");
+                    elements.formAnuncio.reset();
+                    elements.formAnuncio.querySelectorAll("[maxlength]").forEach((campo) => {
                         campo.dispatchEvent(new Event("input"));
                     });
                     limparFotosCadastro(elements.fotosCadastroPreview);
@@ -241,21 +309,50 @@ function configurarCadastroServico(token, elements) {
                     tratarErroAutenticacao(body);
                     return;
                 }
-                Connecta.ui.mostrarFeedback(elements.feedbackServico, body?.erro || "Falha ao publicar anúncio.", "error");
+                const mensagem = body?.erro || body?.mensagem || "Falha ao publicar anúncio.";
+                Connecta.ui.mostrarFeedback(
+                    elements.feedbackAnuncio,
+                    mensagem,
+                    "error"
+                );
             })
             .catch(() => {
-                Connecta.ui.mostrarFeedback(elements.feedbackServico, "Erro de comunicação com o servidor.", "error");
+                Connecta.ui.mostrarFeedback(elements.feedbackAnuncio, "Erro de comunicação com o servidor.", "error");
             })
             .finally(() => {
+                publicacaoEmAndamento = false;
                 if (submitButton) {
                     submitButton.disabled = false;
                     submitButton.innerHTML = conteudoOriginal;
                 }
+                if (elements.btnConfirmarPublicacao) {
+                    elements.btnConfirmarPublicacao.disabled = false;
+                    elements.btnConfirmarPublicacao.textContent = textoConfirmacaoOriginal;
+                }
             });
+    }
+
+    elements.formAnuncio?.addEventListener("submit", (event) => {
+        event.preventDefault();
+
+        if (!elements.aceiteRegrasAnuncio?.checked) {
+            Connecta.ui.mostrarFeedback(
+                elements.feedbackAnuncio,
+                "Leia e aceite as regras para continuar com a publicação.",
+                "error"
+            );
+            elements.aceiteRegrasAnuncio?.focus();
+            return;
+        }
+
+        Connecta.ui.limparFeedback(elements.feedbackAnuncio);
+        mostrarModal(elements.modalRegrasPublicacao);
     });
+
+    elements.btnConfirmarPublicacao?.addEventListener("click", publicarAnuncioPreenchido);
 }
 
-function configurarEdicaoServico(token, elements) {
+function configurarEdicaoAnuncio(token, elements) {
     elements.btnCancelarEdicao.addEventListener("click", () => esconderModal(elements.modalEditar));
 
     if (elements.inputFotosEdicao) {
@@ -286,7 +383,7 @@ function configurarEdicaoServico(token, elements) {
             return;
         }
 
-        atualizarServico(token, dados)
+        atualizarAnuncio(token, dados)
             .then(async ({ status, body }) => {
                 if (status === 200) {
                     await Connecta.ui.alerta({
@@ -314,7 +411,7 @@ function configurarEdicaoServico(token, elements) {
     });
 }
 
-function configurarExclusaoServico(token, elements) {
+function configurarExclusaoAnuncio(token, elements) {
     elements.btnCancelarExcluir.addEventListener("click", () => esconderModal(elements.modalExcluir));
 
     elements.btnConfirmarExcluir.addEventListener("click", () => {
@@ -330,7 +427,7 @@ function configurarExclusaoServico(token, elements) {
             return;
         }
 
-        excluirServico(token, id, email)
+        excluirAnuncio(token, id, email)
             .then(async ({ status, body }) => {
                 if (status === 200) {
                     await Connecta.ui.alerta({

@@ -546,6 +546,174 @@
 }
 
 /* Modal Excluir Serviço - Estilo Vermelho e Preto */
+/* Aceite e regras para publicação */
+.aceite-regras-publicacao {
+    margin-top: 1.35rem;
+    padding: 1rem;
+    background: rgba(250, 204, 21, 0.055);
+    border: 1px solid rgba(250, 204, 21, 0.2);
+    border-radius: 12px;
+}
+
+.aceite-regras-publicacao label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+    font-weight: 500;
+    line-height: 1.55;
+    cursor: pointer;
+}
+
+.aceite-regras-publicacao input {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+    margin-top: 2px;
+    accent-color: var(--primary-color);
+    cursor: pointer;
+}
+
+.btn-ver-regras {
+    margin: 0.75rem 0 0 30px;
+    padding: 0;
+    color: var(--primary-color);
+    font: inherit;
+    font-size: 0.8rem;
+    font-weight: 700;
+    background: transparent;
+    border: 0;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.modal-regras-publicacao {
+    z-index: 1100;
+}
+
+.modal .modal-regras-content {
+    display: flex;
+    flex-direction: column;
+    width: min(100%, 760px);
+    max-height: min(90vh, 820px);
+    overflow: hidden;
+    padding: 0;
+    background: linear-gradient(168deg, #1a1a1f 0%, #141417 100%);
+    border-color: rgba(250, 204, 21, 0.22);
+    border-radius: 20px;
+}
+
+.modal-regras-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.6rem 1.75rem 1.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.modal-regras-header h2 {
+    margin: 0.2rem 0 0.35rem;
+    color: var(--text-primary);
+    font-size: 1.4rem;
+}
+
+.modal-regras-header p {
+    max-width: 620px;
+    font-size: 0.86rem;
+}
+
+.modal-regras-kicker {
+    color: var(--primary-color);
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+}
+
+.modal-regras-lista {
+    overflow-y: auto;
+    padding: 1.3rem 1.75rem;
+    scrollbar-color: #52525b transparent;
+}
+
+.modal-regras-lista section + section {
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.modal-regras-lista h3 {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    margin-bottom: 0.65rem;
+    color: var(--text-primary);
+    font-size: 0.96rem;
+}
+
+.modal-regras-lista h3 span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 25px;
+    height: 25px;
+    flex: 0 0 25px;
+    color: #171717;
+    background: var(--primary-color);
+    border-radius: 50%;
+    font-size: 0.75rem;
+    font-weight: 800;
+}
+
+.modal-regras-lista ul {
+    margin: 0;
+    padding-left: 1.25rem;
+    color: var(--text-secondary);
+}
+
+.modal-regras-lista li {
+    padding-left: 0.2rem;
+    font-size: 0.84rem;
+    line-height: 1.55;
+}
+
+.modal-regras-lista li + li {
+    margin-top: 0.35rem;
+}
+
+.modal-regras-actions {
+    flex: 0 0 auto;
+    margin: 0;
+    padding: 1.1rem 1.75rem 1.35rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.modal-regras-actions #btn-revisar-anuncio {
+    color: var(--text-primary);
+    background: transparent;
+    border-color: #3f3f46;
+}
+
+@media (max-width: 600px) {
+    .modal .modal-regras-content {
+        max-height: calc(100vh - 1rem);
+        padding: 0;
+    }
+
+    .modal-regras-header,
+    .modal-regras-lista {
+        padding-right: 1.15rem;
+        padding-left: 1.15rem;
+    }
+
+    .modal-regras-actions {
+        padding: 1rem 1.15rem 1.15rem;
+    }
+}
+
 #modal-excluir-servico .modal-content {
     background: #18181b;
     border: 1px solid rgba(239, 68, 68, 0.6);

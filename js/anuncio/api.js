@@ -1,7 +1,7 @@
 const ENDPOINT_ANUNCIOS = "anuncios";
 const ENDPOINT_AVALIACOES = "avaliacoes";
 
-function obterServicoCompleto(token, idAnuncio) {
+function obterAnuncioCompleto(token, idAnuncio) {
     return Connecta.api.requisicao(ENDPOINT_ANUNCIOS, {
         method: "GET",
         token,

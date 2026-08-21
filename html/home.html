@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Início - MeuPimenta</title>
+
+    <link rel="stylesheet" href="../css/global.css" />
+    <link rel="stylesheet" href="../css/home/home-base.css" />
+    <link rel="stylesheet" href="../css/home/home-layout.css" />
+    <link rel="stylesheet" href="../css/home/home-hero.css" />
+    <link rel="stylesheet" href="../css/home/home-cards.css" />
+    <link rel="stylesheet" href="../css/home/home-cta.css" />
+  </head>
+
+  <body class="site-layout">
+    <header class="top-nav">
+      <a
+        href="home.html"
+        class="nav-logo"
+        aria-label="MeuPimenta - página inicial"
+      >
+        MeuPimenta
+      </a>
+
+      <nav class="nav-links" aria-label="Navegação principal">
+        <a href="home.html" class="nav-item active" aria-current="page">
+          Início
+        </a>
+
+        <a href="anuncios.html" class="nav-item"> Buscar Anúncios </a>
+
+        <a
+          href="meus_anuncios.html"
+          class="nav-item hidden"
+          data-conta-comercial
+        >
+          Meus Anúncios
+        </a>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="login.html" class="nav-login-link" data-nav-anonimo>
+          Entrar
+        </a>
+
+        <a
+          href="perfil.html"
+          class="nav-avatar-link"
+          data-nav-avatar-link
+          aria-label="Abrir perfil"
+          title="Perfil"
+        >
+          <img
+            class="nav-avatar"
+            data-nav-avatar
+            src="../img/default-profile.png"
+            alt="Foto de perfil"
+          />
+        </a>
+      </div>
+    </header>
+
+    <main class="home">
+      <section class="hero">
+        <div class="hero-content">
+          <span class="hero-badge"> 📍 Pimenta Bueno </span>
+
+          <h1>
+            Tudo o que você precisa,
+            <span>em um só lugar.</span>
+          </h1>
+
+          <p>
+            Encontre os melhores prestadores de serviços, profissionais
+            autônomos e comércios de Pimenta Bueno.
+          </p>
+
+          <div class="search-box" role="search">
+            <span class="search-icon">🔎</span>
+
+            <input
+              type="text"
+              id="searchInput"
+              aria-label="Buscar categoria"
+              placeholder="O que você está procurando?"
+              autocomplete="off"
+            />
+
+            <button type="button" id="searchButton">Pesquisar</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <span class="section-kicker"> EXPLORE </span>
+
+            <h2>O que você procura?</h2>
+          </div>
+        </div>
+
+        <div class="categories">
+          <a
+            href="anuncios.html?tipo=SERVICO"
+            class="category-card"
+            data-search="serviços serviço profissionais"
+          >
+            <div class="category-icon" aria-hidden="true">
+              <img src="../img/wrench.svg" alt="" />
+            </div>
+
+            <div>
+              <h3>Serviços</h3>
+              <p>Encontre profissionais</p>
+            </div>
+
+            <span class="category-arrow">→</span>
+          </a>
+
+          <a
+            href="anuncios.html?tipo=COMERCIO"
+            class="category-card"
+            data-search="comércio lojas loja produtos"
+          >
+            <div class="category-icon" aria-hidden="true">
+              <img src="../img/merkatplace.svg" alt="" />
+            </div>
+
+            <div>
+              <h3>Comércios</h3>
+              <p>Lojas e empresas</p>
+            </div>
+
+            <span class="category-arrow">→</span>
+          </a>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <div>
+            <span class="section-kicker"> EM DESTAQUE </span>
+
+            <h2>Destaques da cidade</h2>
+          </div>
+
+          <a href="anuncios.html" class="see-all"> Ver todos → </a>
+        </div>
+
+        <div id="featuredGrid" class="featured-grid" aria-live="polite">
+          <p class="featured-status">Carregando destaques...</p>
+        </div>
+      </section>
+
+      <section class="section popular-section">
+        <div class="section-header">
+          <div>
+            <span class="section-kicker"> SERVIÇOS </span>
+
+            <h2>Serviços populares</h2>
+          </div>
+
+          <a href="anuncios.html" class="see-all"> Ver todos → </a>
+        </div>
+
+        <div class="popular-grid">
+          <a href="anuncios.html?busca=pedreiro" class="popular-card">
+            <span class="popular-icon" aria-hidden="true">
+              <img src="../img/hammer.svg" alt="" />
+            </span>
+
+            <div>
+              <strong> Pedreiro </strong>
+
+              <span> Construção e reformas </span>
+            </div>
+
+            <span class="popular-arrow"> → </span>
+          </a>
+
+          <a href="anuncios.html?busca=informatica" class="popular-card">
+            <span class="popular-icon" aria-hidden="true">
+              <img src="../img/laptop.svg" alt="" />
+            </span>
+
+            <div>
+              <strong> Informática </strong>
+
+              <span> Computadores e tecnologia </span>
+            </div>
+
+            <span class="popular-arrow"> → </span>
+          </a>
+
+          <a href="anuncios.html?busca=mecanica" class="popular-card">
+            <span class="popular-icon" aria-hidden="true">
+              <img src="../img/car.svg" alt="" />
+            </span>
+
+            <div>
+              <strong> Mecânica </strong>
+
+              <span> Automóveis e motos </span>
+            </div>
+
+            <span class="popular-arrow"> → </span>
+          </a>
+
+          <a href="anuncios.html?busca=beleza" class="popular-card">
+            <span class="popular-icon" aria-hidden="true">
+              <img src="../img/beautiful.svg" alt="" />
+            </span>
+
+            <div>
+              <strong> Beleza </strong>
+
+              <span> Salões e estética </span>
+            </div>
+
+            <span class="popular-arrow"> → </span>
+          </a>
+        </div>
+      </section>
+
+      <section class="business-cta">
+        <div>
+          <span class="section-kicker"> PARA EMPRESAS E PROFISSIONAIS </span>
+
+          <h2>Divulgue seu negócio no MeuPimenta.</h2>
+
+          <p>Cadastre seus anúncios e encontre novos clientes na sua cidade.</p>
+        </div>
+
+        <a href="meus_anuncios.html" class="cta-button"> Começar agora → </a>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="site-footer__logo">MeuPimenta</div>
+
+      <p>Conectando pessoas, negócios e oportunidades.</p>
+
+      <nav class="site-footer__links" aria-label="Links legais">
+        <a href="legal/privacidade.html">Política de Privacidade</a>
+        <a href="legal/termos.html">Termos de Conduta</a>
+      </nav>
+
+      <small>© 2026 MeuPimenta</small>
+    </footer>
+
+    <script src="../js/global.js"></script>
+    <script src="../js/nav-conta.js"></script>
+    <script src="../js/home/api.js"></script>
+    <script src="../js/home/utils.js"></script>
+    <script src="../js/home/ui.js"></script>
+    <script src="../js/home/events.js"></script>
+    <script src="../js/home/main.js"></script>
+  </body>
+</html>

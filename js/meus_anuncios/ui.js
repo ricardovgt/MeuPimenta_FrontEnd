@@ -2,6 +2,29 @@ let fotosCadastroAtual = [];
 let fotosEdicaoAtual = [];
 const LIMITE_FOTOS = 5;
 
+const ICONES_ANUNCIOS = {
+    total: '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/><path d="M9 15h.01M15 15h.01"/></svg>',
+    ativo: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12 2.7 2.7L16.5 9"/></svg>',
+    oculto: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+    banido: '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m9 9 6 6m0-6-6 6"/></svg>',
+    pausar: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6v12M15 6v12"/></svg>',
+    ativar: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 7 8 5-8 5z"/></svg>',
+    editar: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4z"/></svg>',
+    excluir: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M9 7V4h6v3M7 7l1 13h8l1-13M10 11v5M14 11v5"/></svg>',
+    detalhes: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.5"/></svg>'
+};
+
+function criarIconeAnuncio(nome, classe = "") {
+    const icone = document.createElement("span");
+    icone.className = `icone-anuncio ${classe}`.trim();
+    icone.innerHTML = ICONES_ANUNCIOS[nome] || "";
+    return icone;
+}
+
+function adicionarConteudoBotao(elemento, icone, texto) {
+    elemento.replaceChildren(criarIconeAnuncio(icone), document.createTextNode(texto));
+}
+
 function mostrarModal(modal) {
     modal?.classList.remove("hidden");
 }
@@ -47,27 +70,30 @@ function criarEstadoVazio(onNovo) {
     return estadoVazio;
 }
 
-function criarCard(servico, callbacks) {
-    const status = ["ATIVO", "OCULTO", "BANIDO"].includes(servico.status)
-        ? servico.status
+function criarCard(anuncio, callbacks) {
+    const status = ["ATIVO", "OCULTO", "BANIDO"].includes(anuncio.status)
+        ? anuncio.status
         : "";
-    const tipo = servico.tipo === "SERVICO"
+    const tipo = anuncio.tipo === "SERVICO"
         ? "Serviço"
-        : servico.tipo === "COMERCIO" ? "Comércio" : "Tipo não informado";
+        : anuncio.tipo === "COMERCIO" ? "Comércio" : "Tipo não informado";
     const card = document.createElement("article");
     card.className = `card-servico${status ? ` card-servico--${status.toLowerCase()}` : ""}`;
 
+    const midia = document.createElement("div");
+    midia.className = "card-servico-midia";
     const thumb = document.createElement("img");
     thumb.className = "thumb";
-    thumb.src = servico.fotoCapa || "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
-    thumb.alt = servico.nome || "Anúncio";
+    thumb.src = anuncio.fotoCapa || "data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=";
+    thumb.alt = anuncio.nome || "Anúncio";
+    midia.appendChild(thumb);
 
     const info = document.createElement("div");
     info.className = "info";
     const titulo = document.createElement("h3");
-    titulo.textContent = servico.nome || "(Sem título)";
+    titulo.textContent = anuncio.nome || "(Sem título)";
     const linha = document.createElement("p");
-    linha.textContent = servico.nomeUsuario || "";
+    linha.textContent = anuncio.nomeUsuario || "";
 
     const metadados = document.createElement("div");
     metadados.className = "card-servico-metadados";
@@ -86,33 +112,42 @@ function criarCard(servico, callbacks) {
     acoes.className = "acoes";
     const linkDetalhes = document.createElement("a");
     linkDetalhes.className = "card-servico-link";
-    linkDetalhes.href = `servico.html?id=${encodeURIComponent(servico.id)}`;
-    linkDetalhes.textContent = "Ver detalhes";
+    linkDetalhes.href = `anuncio.html?id=${encodeURIComponent(anuncio.id)}`;
+    adicionarConteudoBotao(linkDetalhes, "detalhes", "Ver detalhes");
 
     if (status !== "BANIDO") {
         const btnEditar = document.createElement("button");
         btnEditar.type = "button";
-        btnEditar.textContent = "Editar Anúncio";
-        btnEditar.addEventListener("click", () => callbacks.onEditar(servico));
+        adicionarConteudoBotao(btnEditar, "editar", "Editar");
+        btnEditar.addEventListener("click", () => callbacks.onEditar(anuncio));
 
         if (status === "ATIVO" || status === "OCULTO") {
             const btnStatus = document.createElement("button");
             btnStatus.type = "button";
             btnStatus.className = "btn-status-anuncio";
-            btnStatus.textContent = status === "ATIVO" ? "Pausar" : "Reativar";
-            btnStatus.addEventListener("click", () => callbacks.onAlterarStatus(servico, btnStatus));
+            adicionarConteudoBotao(
+                btnStatus,
+                status === "ATIVO" ? "pausar" : "ativar",
+                status === "ATIVO" ? "Pausar" : "Ativar"
+            );
+            btnStatus.addEventListener("click", () => callbacks.onAlterarStatus(anuncio, btnStatus));
             acoes.appendChild(btnStatus);
         }
 
         const btnExcluir = document.createElement("button");
         btnExcluir.type = "button";
-        btnExcluir.textContent = "Excluir";
-        btnExcluir.addEventListener("click", () => callbacks.onExcluir(servico.id));
-        acoes.append(btnEditar, btnExcluir, linkDetalhes);
+        btnExcluir.className = "btn-excluir-anuncio";
+        adicionarConteudoBotao(btnExcluir, "excluir", "Excluir");
+        btnExcluir.addEventListener("click", () => callbacks.onExcluir(anuncio.id));
+        acoes.append(btnEditar, btnExcluir);
     }
 
-    info.append(titulo, linha, metadados, acoes);
-    card.append(thumb, info);
+    const painelAcoes = document.createElement("div");
+    painelAcoes.className = "card-servico-painel-acoes";
+    painelAcoes.append(acoes, linkDetalhes);
+
+    info.append(titulo, linha, metadados);
+    card.append(midia, info, painelAcoes);
 
     if (status === "BANIDO") {
         const bloqueio = document.createElement("div");
@@ -129,13 +164,59 @@ function criarCard(servico, callbacks) {
     return card;
 }
 
-function renderizarLista(elementoGrid, lista, callbacks) {
+function criarResumoAnuncios(lista) {
+    const contagens = lista.reduce((resumo, anuncio) => {
+        const status = String(anuncio?.status || "").toUpperCase();
+        if (status === "ATIVO") resumo.ativos += 1;
+        else if (status === "OCULTO") resumo.ocultos += 1;
+        else if (status === "BANIDO") resumo.banidos += 1;
+        return resumo;
+    }, { ativos: 0, ocultos: 0, banidos: 0 });
+
+    return [
+        { chave: "total", rotulo: "Total de anúncios", valor: lista.length, detalhe: lista.length === 1 ? "anúncio publicado" : "anúncios publicados" },
+        { chave: "ativo", rotulo: "Ativos", valor: contagens.ativos, detalhe: contagens.ativos === 1 ? "anúncio no ar" : "anúncios no ar" },
+        { chave: "oculto", rotulo: "Pausados", valor: contagens.ocultos, detalhe: contagens.ocultos === 1 ? "anúncio oculto" : "anúncios ocultos" },
+        { chave: "banido", rotulo: "Banidos", valor: contagens.banidos, detalhe: contagens.banidos === 1 ? "anúncio indisponível" : "anúncios indisponíveis" }
+    ];
+}
+
+function renderizarResumo(elementoResumo, lista) {
+    if (!elementoResumo) return;
+    elementoResumo.innerHTML = "";
+    criarResumoAnuncios(lista).forEach((item) => {
+        const card = document.createElement("article");
+        card.className = `resumo-anuncio resumo-anuncio--${item.chave}`;
+        const icone = criarIconeAnuncio(item.chave, "resumo-anuncio-icone");
+        const conteudo = document.createElement("div");
+        const rotulo = document.createElement("p");
+        rotulo.textContent = item.rotulo;
+        const valor = document.createElement("strong");
+        valor.textContent = String(item.valor);
+        const detalhe = document.createElement("span");
+        detalhe.textContent = item.detalhe;
+        conteudo.append(rotulo, valor, detalhe);
+        card.append(icone, conteudo);
+        elementoResumo.appendChild(card);
+    });
+}
+
+function renderizarLista(elementoGrid, lista, callbacks, elementoResumo, elementoContagem) {
     elementoGrid.innerHTML = "";
-    if (!Array.isArray(lista) || lista.length === 0) {
+    const anuncios = Array.isArray(lista) ? lista : [];
+    renderizarResumo(elementoResumo, anuncios);
+    if (elementoContagem) elementoContagem.textContent = "";
+
+    if (anuncios.length === 0) {
         elementoGrid.appendChild(criarEstadoVazio(callbacks.onNovo));
         return;
     }
-    lista.forEach((servico) => elementoGrid.appendChild(criarCard(servico, callbacks)));
+    anuncios.forEach((anuncio) => elementoGrid.appendChild(criarCard(anuncio, callbacks)));
+    if (elementoContagem) {
+        elementoContagem.textContent = anuncios.length === 1
+            ? "Mostrando 1 anúncio"
+            : `Mostrando todos os ${anuncios.length} anúncios`;
+    }
 }
 
 function renderizarPreviewFotos(fotos, elementoPreview, aoRemover) {

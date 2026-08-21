@@ -1,21 +1,21 @@
-// Estado do carrossel de fotos do serviço (trocar de foto só troca o src, sem recarregar nada)
-let fotosServicoAtual = [];
+// Estado do carrossel de fotos do anúncio (trocar de foto só troca o src, sem recarregar nada)
+let fotosAnuncioAtual = [];
 let indiceFotoAtual = 0;
 
 function renderizarFotoAtual(elements) {
-    const temFoto = fotosServicoAtual.length > 0;
+    const temFoto = fotosAnuncioAtual.length > 0;
 
     if (elements.hero) {
         elements.hero.classList.toggle("hidden", !temFoto);
     }
 
     if (elements.foto) {
-        const fotoAtual = fotosServicoAtual[indiceFotoAtual];
+        const fotoAtual = fotosAnuncioAtual[indiceFotoAtual];
         if (temFoto) {
             elements.foto.onerror = () => {
                 elements.foto.onerror = null;
-                fotosServicoAtual.splice(indiceFotoAtual, 1);
-                indiceFotoAtual = Math.max(0, Math.min(indiceFotoAtual, fotosServicoAtual.length - 1));
+                fotosAnuncioAtual.splice(indiceFotoAtual, 1);
+                indiceFotoAtual = Math.max(0, Math.min(indiceFotoAtual, fotosAnuncioAtual.length - 1));
                 renderizarFotoAtual(elements);
             };
             elements.foto.src = fotoAtual.fotoBase64;
@@ -25,7 +25,7 @@ function renderizarFotoAtual(elements) {
         }
     }
 
-    const temVariasFotos = fotosServicoAtual.length > 1;
+    const temVariasFotos = fotosAnuncioAtual.length > 1;
 
     if (elements.btnFotoAnterior) {
         elements.btnFotoAnterior.classList.toggle("hidden", !temVariasFotos);
@@ -37,7 +37,7 @@ function renderizarFotoAtual(elements) {
 
     if (elements.fotoContador) {
         if (temVariasFotos) {
-            elements.fotoContador.textContent = `${indiceFotoAtual + 1} / ${fotosServicoAtual.length}`;
+            elements.fotoContador.textContent = `${indiceFotoAtual + 1} / ${fotosAnuncioAtual.length}`;
             elements.fotoContador.classList.remove("hidden");
         } else {
             elements.fotoContador.classList.add("hidden");
@@ -52,14 +52,14 @@ function renderizarThumbs(elements) {
 
     elements.fotoThumbs.innerHTML = "";
 
-    if (fotosServicoAtual.length <= 1) {
+    if (fotosAnuncioAtual.length <= 1) {
         elements.fotoThumbs.classList.add("hidden");
         return;
     }
 
     elements.fotoThumbs.classList.remove("hidden");
 
-    fotosServicoAtual.forEach((foto, index) => {
+    fotosAnuncioAtual.forEach((foto, index) => {
         const thumb = document.createElement("img");
         thumb.className = `foto-thumb${index === indiceFotoAtual ? " ativa" : ""}`;
         thumb.src = foto.fotoBase64 || "";
@@ -73,14 +73,14 @@ function renderizarThumbs(elements) {
 }
 
 function mostrarFotoAnterior(elements) {
-    if (fotosServicoAtual.length === 0) return;
-    indiceFotoAtual = (indiceFotoAtual - 1 + fotosServicoAtual.length) % fotosServicoAtual.length;
+    if (fotosAnuncioAtual.length === 0) return;
+    indiceFotoAtual = (indiceFotoAtual - 1 + fotosAnuncioAtual.length) % fotosAnuncioAtual.length;
     renderizarFotoAtual(elements);
 }
 
 function mostrarFotoProxima(elements) {
-    if (fotosServicoAtual.length === 0) return;
-    indiceFotoAtual = (indiceFotoAtual + 1) % fotosServicoAtual.length;
+    if (fotosAnuncioAtual.length === 0) return;
+    indiceFotoAtual = (indiceFotoAtual + 1) % fotosAnuncioAtual.length;
     renderizarFotoAtual(elements);
 }
 
@@ -101,13 +101,13 @@ function exibirFotoDono(fotoPerfilUsuario, elementoFoto) {
     };
 }
 
-function servicoPertenceAoUsuarioAutenticado(servico, idUsuarioAutenticado) {
+function anuncioPertenceAoUsuarioAutenticado(anuncio, idUsuarioAutenticado) {
     if (idUsuarioAutenticado === null || idUsuarioAutenticado === undefined) return false;
 
-    const idDono = servico?.idUsuario
-        ?? servico?.usuarioId
-        ?? servico?.usuario?.idUsuario
-        ?? servico?.usuario?.id;
+    const idDono = anuncio?.idUsuario
+        ?? anuncio?.usuarioId
+        ?? anuncio?.usuario?.idUsuario
+        ?? anuncio?.usuario?.id;
 
     return idDono !== null
         && idDono !== undefined
@@ -116,7 +116,9 @@ function servicoPertenceAoUsuarioAutenticado(servico, idUsuarioAutenticado) {
 
 function mostrarAnuncioIndisponivel(elements) {
     elements.detalhe?.classList.add("servico-indisponivel-ativo");
+    elements.detalhe?.classList.remove("servico-banido-proprietario");
     elements.indisponivel?.classList.remove("hidden");
+    elements.avisoRestricao?.classList.add("hidden");
     document.title = "Anúncio não encontrado - MeuPimenta";
 }
 
@@ -125,11 +127,16 @@ function ocultarAnuncioIndisponivel(elements) {
     elements.indisponivel?.classList.add("hidden");
 }
 
-function popularServico(servico, elements) {
-    const avaliacaoMedia = Number(servico.avaliacaoMedia || 0);
-    const totalAvaliacoes = Number(servico.totalAvaliacoes || 0);
-    const statusAnuncio = String(servico.status || "").toUpperCase();
-    const anuncioIndisponivel = ["BANIDO", "OCULTO"].includes(statusAnuncio);
+function popularAnuncio(anuncio, elements) {
+    const avaliacaoMedia = Number(anuncio.avaliacaoMedia || 0);
+    const totalAvaliacoes = Number(anuncio.totalAvaliacoes || 0);
+    const statusAnuncio = String(anuncio.status || "").toUpperCase();
+    const usuarioEhDono = anuncioPertenceAoUsuarioAutenticado(
+        anuncio,
+        elements.idUsuarioAutenticado
+    );
+    const statusRestrito = ["BANIDO", "OCULTO"].includes(statusAnuncio);
+    const anuncioIndisponivel = statusRestrito && !usuarioEhDono;
 
     if (anuncioIndisponivel) {
         mostrarAnuncioIndisponivel(elements);
@@ -137,22 +144,21 @@ function popularServico(servico, elements) {
     }
 
     ocultarAnuncioIndisponivel(elements);
-    const usuarioEhDono = servicoPertenceAoUsuarioAutenticado(
-        servico,
-        elements.idUsuarioAutenticado
-    );
+    const exibirAvisoBanido = usuarioEhDono && statusAnuncio === "BANIDO";
+    elements.detalhe?.classList.toggle("servico-banido-proprietario", exibirAvisoBanido);
+    elements.avisoRestricao?.classList.toggle("hidden", !exibirAvisoBanido);
     const ocultarAcoesDoAnuncio = usuarioEhDono;
 
     if (elements.nome) {
-        elements.nome.textContent = servico.nome || "Anúncio";
+        elements.nome.textContent = anuncio.nome || "Anúncio";
     }
 
     if (elements.postador) {
-        const nomePostador = resumirNome(servico.nomeUsuario);
+        const nomePostador = resumirNome(anuncio.nomeUsuario);
 
         if (nomePostador) {
             elements.postadorNome.textContent = nomePostador;
-            exibirFotoDono(servico.fotoPerfilUsuario, elements.postadorFoto);
+            exibirFotoDono(anuncio.fotoPerfilUsuario, elements.postadorFoto);
             elements.postador.classList.remove("hidden");
         } else {
             elements.postador.classList.add("hidden");
@@ -160,15 +166,15 @@ function popularServico(servico, elements) {
     }
 
     if (elements.resumo) {
-        elements.resumo.textContent = servico.descricao || "Sem descrição disponível.";
+        elements.resumo.textContent = anuncio.descricao || "Sem descrição disponível.";
     }
 
     if (elements.descricao) {
-        elements.descricao.textContent = servico.descricaoDetalhada || "Mais detalhes em breve.";
+        elements.descricao.textContent = anuncio.descricaoDetalhada || "Mais detalhes em breve.";
     }
 
-    fotosServicoAtual = Array.isArray(servico.fotos)
-        ? servico.fotos.filter((foto) => {
+    fotosAnuncioAtual = Array.isArray(anuncio.fotos)
+        ? anuncio.fotos.filter((foto) => {
             const valor = typeof foto?.fotoBase64 === "string" ? foto.fotoBase64.trim() : "";
             return valor && valor.toLowerCase() !== "null";
         })
@@ -177,14 +183,16 @@ function popularServico(servico, elements) {
     renderizarFotoAtual(elements);
 
     if (elements.foto) {
-        elements.foto.alt = servico.nome || "Anúncio";
+        elements.foto.alt = anuncio.nome || "Anúncio";
     }
 
     if (elements.badges) {
         elements.badges.innerHTML = "";
         const badges = [
-            { label: servico.tipo === "COMERCIO" ? "Comércio" : servico.tipo === "SERVICO" ? "Serviço" : "Tipo não informado", className: "tipo" },
-            { label: servico.telefone || "Telefone não informado", className: "telefone-whatsapp", icon: "../img/whatsapp_Icon.svg" },
+            { label: anuncio.tipo === "COMERCIO" ? "Comércio" : anuncio.tipo === "SERVICO" ? "Serviço" : "Tipo não informado", className: "tipo" },
+            ...(statusAnuncio === "BANIDO" ? [{ label: "Banido", className: "status status-banido" }] : []),
+            ...(statusAnuncio === "OCULTO" ? [{ label: "Pausado", className: "status status-oculto" }] : []),
+            { label: anuncio.telefone || "Telefone não informado", className: "telefone-whatsapp", icon: "../img/whatsapp_Icon.svg" },
             { label: `⭐ ${avaliacaoMedia.toFixed(1)} - ${totalAvaliacoes} ${totalAvaliacoes === 1 ? "avaliação" : "avaliações"}`, className: "avaliacao" }
         ];
 
@@ -207,10 +215,10 @@ function popularServico(servico, elements) {
 
     if (elements.whatsapp) {
         elements.whatsapp.classList.toggle("hidden", ocultarAcoesDoAnuncio);
-        elements.whatsapp.href = `https://wa.me/${(servico.telefone || "").replace(/\D/g, "")}`;
+        elements.whatsapp.href = `https://wa.me/${(anuncio.telefone || "").replace(/\D/g, "")}`;
         elements.whatsapp.innerHTML = `
             <img class="btn-icon" src="../img/whatsapp_Icon.svg" alt="" aria-hidden="true">
-            <span>${servico.telefone ? "Abrir WhatsApp" : "Telefone indisponível"}</span>
+            <span>${anuncio.telefone ? "Abrir WhatsApp" : "Telefone indisponível"}</span>
         `;
     }
 
@@ -238,11 +246,11 @@ function popularServico(servico, elements) {
 
     if (elements.barras) {
         const totaisPorEstrela = {
-            5: Number(servico.total5Estrelas || 0),
-            4: Number(servico.total4Estrelas || 0),
-            3: Number(servico.total3Estrelas || 0),
-            2: Number(servico.total2Estrelas || 0),
-            1: Number(servico.total1Estrelas || 0)
+            5: Number(anuncio.total5Estrelas || 0),
+            4: Number(anuncio.total4Estrelas || 0),
+            3: Number(anuncio.total3Estrelas || 0),
+            2: Number(anuncio.total2Estrelas || 0),
+            1: Number(anuncio.total1Estrelas || 0)
         };
 
         Object.keys(elements.barras).forEach((estrela) => {

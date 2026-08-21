@@ -10,14 +10,16 @@
     <link rel="stylesheet" href="../css/perfil/perfil-cards.css">
     <link rel="stylesheet" href="../css/perfil/perfil-modals.css">
 </head>
-<body>
+<body class="site-layout">
     <header class="top-nav">
-        <a href="servicos.html" class="nav-logo">MeuPimenta</a>
+        <a href="anuncios.html" class="nav-logo">MeuPimenta</a>
         <nav class="nav-links" aria-label="Navegação principal">
-            <a href="servicos.html" class="nav-item">Buscar Anúncios</a>
-            <a href="meus_servicos.html" class="nav-item hidden" data-conta-comercial>Meus Anúncios</a>
+            <a href="home.html" class="nav-item">Início</a>
+            <a href="anuncios.html" class="nav-item">Buscar Anúncios</a>
+            <a href="meus_anuncios.html" class="nav-item hidden" data-conta-comercial>Meus Anúncios</a>
         </nav>
         <div class="nav-actions">
+            <a href="login.html" class="nav-login-link" data-nav-anonimo>Entrar</a>
             <a href="perfil.html" class="nav-avatar-link active" data-nav-avatar-link aria-label="Abrir perfil" aria-current="page" title="Perfil">
                 <img class="nav-avatar" data-nav-avatar src="../img/default-profile.png" alt="Foto de perfil">
             </a>
@@ -88,13 +90,23 @@
             <button type="button" class="btn btn-danger" id="btn-abrir-exclusao">Excluir minha conta</button>
         </section>
         <div class="perfil-actions"><button type="button" class="btn btn-outline" id="btn-sair">Sair da conta</button></div>
-    </main>
+</main>
+
+<footer class="site-footer">
+    <div class="site-footer__logo">MeuPimenta</div>
+    <p>Conectando pessoas, negócios e oportunidades.</p>
+    <nav class="site-footer__links" aria-label="Links legais">
+        <a href="legal/privacidade.html">Política de Privacidade</a>
+        <a href="legal/termos.html">Termos de Conduta</a>
+    </nav>
+    <small>© 2026 MeuPimenta</small>
+</footer>
 
     <div id="modal-senha" class="profile-modal hidden" role="dialog" aria-modal="true" aria-labelledby="modal-senha-titulo">
         <div class="profile-modal-content">
             <h2 id="modal-senha-titulo">Confirme sua senha</h2>
             <p id="modal-senha-descricao">Digite sua senha atual para continuar.</p>
-            <p id="modal-tipo-aviso" class="modal-warning hidden">Alterar o tipo de conta excluirá permanentemente todos os seus anúncios publicados.</p>
+            <p id="modal-tipo-aviso" class="modal-warning hidden">Ao mudar para uma conta comum, seus anúncios ficarão ocultos, mas não serão excluídos.</p>
             <form id="form-modal-senha">
                 <div class="form-group"><label for="modal-senha-atual">Senha atual</label><input id="modal-senha-atual" type="password" autocomplete="current-password" required></div>
                 <div id="feedback-modal-senha" class="feedback-msg hidden" aria-live="polite"></div>

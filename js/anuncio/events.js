@@ -11,7 +11,7 @@ function configurarGaleriaFotos(elements) {
 function configurarNavegacao(elements) {
     if (elements.btnVoltar) {
         elements.btnVoltar.addEventListener("click", () => {
-            window.location.assign("servicos.html");
+            window.location.assign("anuncios.html");
         });
     }
 
@@ -44,7 +44,7 @@ function configurarAvaliacoes(token, idAnuncio, elements) {
         mostrarModalAvaliacao(token, idAnuncio, elements, {
             aoEnviar: () => {
                 elements.carregarAvaliacoesPagina?.(1);
-                carregarServicoCompleto(token, idAnuncio, elements);
+                carregarAnuncioCompleto(token, idAnuncio, elements);
             }
         });
     });
@@ -126,11 +126,11 @@ function configurarDenuncia(token, idAnuncio, elements) {
     });
 }
 
-function carregarServicoCompleto(token, idAnuncio, elements) {
-    return obterServicoCompleto(token, idAnuncio)
+function carregarAnuncioCompleto(token, idAnuncio, elements) {
+    return obterAnuncioCompleto(token, idAnuncio)
         .then(({ status, body }) => {
             if (status === 200) {
-                return popularServico(body, elements);
+                return popularAnuncio(body, elements);
             }
             mostrarAnuncioIndisponivel(elements);
             return false;
@@ -168,7 +168,7 @@ function configurarListaAvaliacoes(token, idAnuncio, elements, usuarioAutenticad
                     idUsuarioAutenticado: state.idUsuarioAutenticado,
                     aoExcluir: () => {
                         carregarPagina(1);
-                        carregarServicoCompleto(token, idAnuncio, elements);
+                        carregarAnuncioCompleto(token, idAnuncio, elements);
                     }
                 });
                 atualizarBotaoCarregarMais(state.paginaAtual, state.totalPaginas);

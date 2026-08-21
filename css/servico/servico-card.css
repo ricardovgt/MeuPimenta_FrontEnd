@@ -254,6 +254,49 @@
     color: #fecaca;
 }
 
+.servico-banido-proprietario {
+    border-color: rgba(239, 68, 68, 0.42);
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.35), 0 0 32px rgba(127, 29, 29, 0.12);
+}
+
+.servico-aviso-restricao {
+    margin: -0.65rem -0.65rem 1.5rem;
+    padding: 1.35rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(239, 68, 68, 0.38);
+    border-radius: 15px;
+    background:
+        radial-gradient(circle at 50% 0%, rgba(239, 68, 68, 0.2), transparent 62%),
+        linear-gradient(110deg, rgba(62, 10, 13, 0.7), rgba(24, 24, 27, 0.86));
+    text-align: center;
+}
+
+.servico-aviso-restricao.hidden {
+    display: none;
+}
+
+.servico-aviso-restricao strong {
+    color: #ef4444;
+    font-size: clamp(2.7rem, 8vw, 5rem);
+    font-weight: 950;
+    letter-spacing: 0.15em;
+    line-height: 0.95;
+    text-indent: 0.15em;
+    text-shadow: 0 7px 24px rgba(127, 29, 29, 0.65);
+}
+
+.servico-aviso-restricao span {
+    margin-top: 0.55rem;
+    color: rgba(255, 255, 255, 0.82);
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
 .servico-indisponivel-ativo > :not(.servico-indisponivel) {
     display: none;
 }

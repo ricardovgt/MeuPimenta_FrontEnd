@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const idAnuncio = new URLSearchParams(window.location.search).get("id");
     if (!idAnuncio) {
-        window.location.assign("servicos.html");
+        window.location.assign("anuncios.html");
         return;
     }
 
@@ -49,6 +49,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         btnVoltar: id("btn-voltar"),
         btnHome: id("btn-home"),
         indisponivel: id("servico-indisponivel"),
+        avisoRestricao: id("servico-aviso-restricao"),
         btnTentarNovamente: id("btn-tentar-novamente")
     };
 
@@ -56,7 +57,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     configurarGaleriaFotos(elements);
     configurarAvaliacoes(token, idAnuncio, elements);
     configurarDenuncia(token, idAnuncio, elements);
-    const anuncioDisponivel = await carregarServicoCompleto(token, idAnuncio, elements);
+    const anuncioDisponivel = await carregarAnuncioCompleto(token, idAnuncio, elements);
     if (anuncioDisponivel) {
         configurarListaAvaliacoes(token, idAnuncio, elements, sessao?.usuario);
     }

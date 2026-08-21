@@ -100,7 +100,10 @@ function configurarAcoesComSenha(token, state, elements) {
     function prepararAcao(config) {
         acaoPendente = config;
         elements.modalSenhaTitulo.textContent = config.titulo;
-        elements.modalTipoAviso.classList.toggle("hidden", config.tipo !== "tipoConta");
+        const mudandoDeComercialParaComum = config.tipo === "tipoConta"
+            && String(state.usuario.tipoConta).toUpperCase() === "COMERCIAL"
+            && String(config.payload?.tipoConta).toUpperCase() === "COMUM";
+        elements.modalTipoAviso.classList.toggle("hidden", !mudandoDeComercialParaComum);
         elements.modalSenhaAtual.value = "";
         limparFeedback(elements.feedbackModalSenha);
         abrirModal(elements.modalSenha, elements.modalSenhaAtual);
@@ -162,7 +165,7 @@ function configurarAcoesComSenha(token, state, elements) {
                     const rotulo = nomeTipoConta(concluida.payload.tipoConta);
                     elements.tipo.textContent = rotulo;
                     elements.tipoPerfil.textContent = rotulo;
-                    atualizarVisibilidadeMeusServicos(concluida.payload.tipoConta);
+                    atualizarVisibilidadeMeusAnuncios(concluida.payload.tipoConta);
                 } else {
                     concluida.form.reset();
                 }

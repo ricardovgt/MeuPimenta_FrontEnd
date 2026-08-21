@@ -61,6 +61,23 @@
     font-size: 0.92rem;
 }
 
+.meus-servicos-novo .aviso-limite-anuncios {
+    max-width: 310px;
+    margin-top: 0.65rem;
+    font-size: 0.82rem;
+    line-height: 1.45;
+}
+
+.meus-servicos-novo .aviso-limite-anuncios--atingido {
+    color: #fca5a5;
+    font-weight: 700;
+}
+
+.btn-anunciar-servico--limite {
+    border-color: rgba(239, 68, 68, 0.38);
+    box-shadow: 0 10px 28px rgba(239, 68, 68, 0.1);
+}
+
 #meus-servicos-area {
     margin-top: 3.25rem;
     min-height: 280px;
@@ -87,5 +104,59 @@
 
     #meus-servicos-area {
         margin-top: 2rem;
+    }
+}
+
+/* Painel de gerenciamento */
+.container-servicos {
+    width: min(1460px, calc(100% - 4rem));
+    margin-top: 7.25rem;
+}
+
+.meus-servicos-intro {
+    align-items: center;
+}
+
+.meus-servicos-intro-copy h1 {
+    margin-bottom: 0.45rem;
+    color: var(--primary-color);
+    font-size: clamp(1.85rem, 3vw, 2.5rem);
+    letter-spacing: -0.035em;
+}
+
+.meus-servicos-intro-copy p {
+    font-size: 1rem;
+}
+
+.meus-servicos-novo {
+    width: auto;
+    min-width: 210px;
+}
+
+.btn-anunciar-servico {
+    min-height: 50px;
+    margin: 0;
+    padding-inline: 1.5rem;
+    border-radius: 14px;
+    box-shadow: 0 10px 28px rgba(250, 204, 21, 0.12);
+}
+
+#meus-servicos-area {
+    margin-top: 2rem;
+}
+
+@media (max-width: 760px) {
+    .container-servicos {
+        width: min(100% - 1.25rem, 1460px);
+        margin-top: 8.5rem;
+    }
+
+    .meus-servicos-intro {
+        align-items: stretch;
+        gap: 1.25rem;
+    }
+
+    .meus-servicos-novo {
+        width: 100%;
     }
 }

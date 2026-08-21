@@ -10,15 +10,17 @@
     <link rel="stylesheet" href="../css/servicos/servicos-filtros.css">
     <link rel="stylesheet" href="../css/servicos/servicos-cards.css">
 </head>
-<body>
+<body class="site-layout">
 
     <header class="top-nav">
-        <a href="servicos.html" class="nav-logo">MeuPimenta</a>
-        <nav class="nav-links">
-            <a href="servicos.html" class="nav-item active">Buscar Anúncios</a>
-            <a href="meus_servicos.html" class="nav-item hidden" data-conta-comercial>Meus Anúncios</a>
+        <a href="anuncios.html" class="nav-logo">MeuPimenta</a>
+        <nav class="nav-links" aria-label="Navegação principal">
+            <a href="home.html" class="nav-item">Início</a>
+            <a href="anuncios.html" class="nav-item active" aria-current="page">Buscar Anúncios</a>
+            <a href="meus_anuncios.html" class="nav-item hidden" data-conta-comercial>Meus Anúncios</a>
         </nav>
         <div class="nav-actions">
+            <a href="login.html" class="nav-login-link" data-nav-anonimo>Entrar</a>
             <a href="perfil.html" class="nav-avatar-link" data-nav-avatar-link aria-label="Abrir perfil" title="Perfil">
                 <img class="nav-avatar" data-nav-avatar src="../img/default-profile.png" alt="Foto de perfil">
             </a>
@@ -92,14 +94,33 @@
             <div id="grid-servicos" class="grid-container">
                 <p>Carregando anúncios...</p>
             </div>
+            <nav id="paginacao-anuncios" class="paginacao-anuncios hidden" aria-label="Paginação dos anúncios">
+                <button type="button" id="btn-pagina-anterior" class="btn-paginacao">← Anterior</button>
+                <div class="paginacao-anuncios-resumo" aria-live="polite">
+                    <strong id="paginacao-info">Página 1 de 1</strong>
+                    <span id="paginacao-total"></span>
+                </div>
+                <button type="button" id="btn-proxima-pagina" class="btn-paginacao">Próxima →</button>
+            </nav>
         </section>
-    </main>
+</main>
+
+<footer class="site-footer">
+    <div class="site-footer__logo">MeuPimenta</div>
+    <p>Conectando pessoas, negócios e oportunidades.</p>
+    <nav class="site-footer__links" aria-label="Links legais">
+        <a href="legal/privacidade.html">Política de Privacidade</a>
+        <a href="legal/termos.html">Termos de Conduta</a>
+    </nav>
+    <small>© 2026 MeuPimenta</small>
+</footer>
 
     <script src="../js/global.js"></script>
     <script src="../js/nav-conta.js"></script>
-    <script src="../js/servicos/api.js"></script>
-    <script src="../js/servicos/ui.js"></script>
-    <script src="../js/servicos/events.js"></script>
-    <script src="../js/servicos/main.js"></script>
+    <script src="../js/anuncios/utils.js"></script>
+    <script src="../js/anuncios/api.js"></script>
+    <script src="../js/anuncios/ui.js"></script>
+    <script src="../js/anuncios/events.js"></script>
+    <script src="../js/anuncios/main.js"></script>
 </body>
 </html>

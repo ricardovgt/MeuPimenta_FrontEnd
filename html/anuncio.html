@@ -11,15 +11,17 @@
     <link rel="stylesheet" href="../css/servico/servico-card.css">
     <link rel="stylesheet" href="../css/servico/servico-modals.css">
 </head>
-<body>
+<body class="site-layout">
     <header class="top-nav">
-        <a href="servicos.html" class="nav-logo">MeuPimenta</a>
-        <nav class="nav-links">
-            <a href="servicos.html" class="nav-item">Buscar Anúncios</a>
-            <a href="meus_servicos.html" class="nav-item hidden" data-conta-comercial>Meus Anúncios</a>
+        <a href="anuncios.html" class="nav-logo">MeuPimenta</a>
+        <nav class="nav-links" aria-label="Navegação principal">
+            <a href="home.html" class="nav-item">Início</a>
+            <a href="anuncios.html" class="nav-item">Buscar Anúncios</a>
+            <a href="meus_anuncios.html" class="nav-item hidden" data-conta-comercial>Meus Anúncios</a>
         </nav>
         <div class="nav-actions">
             <button id="btn-voltar" class="btn btn-outline btn-sm">← Voltar para Anúncios</button>
+            <a href="login.html" class="nav-login-link" data-nav-anonimo>Entrar</a>
             <a href="perfil.html" class="nav-avatar-link" data-nav-avatar-link aria-label="Abrir perfil" title="Perfil">
                 <img class="nav-avatar" data-nav-avatar src="../img/default-profile.png" alt="Foto de perfil">
             </a>
@@ -40,14 +42,14 @@
                     Este anúncio pode ter sido removido, ocultado ou não está mais disponível.
                 </p>
                 <p class="servico-indisponivel-ajuda">
-                    Se você acessou por um link antigo, tente buscar outros serviços na plataforma.
+                    Se você acessou por um link antigo, tente buscar outros anúncios na plataforma.
                 </p>
                 <div class="servico-indisponivel-acoes">
-                    <a href="servicos.html" class="btn btn-primary servico-indisponivel-btn">
+                    <a href="anuncios.html" class="btn btn-primary servico-indisponivel-btn">
                         <span aria-hidden="true">⌕</span>
-                        Buscar outros serviços
+                        Buscar outros anúncios
                     </a>
-                    <a href="perfil.html" class="btn btn-outline servico-indisponivel-btn">
+                    <a href="home.html" class="btn btn-outline servico-indisponivel-btn">
                         <span aria-hidden="true">⌂</span>
                         Voltar para a página inicial
                     </a>
@@ -57,6 +59,10 @@
                     Tentar novamente
                 </button>
             </div>
+            <aside id="servico-aviso-restricao" class="servico-aviso-restricao hidden" role="status">
+                <strong>BANIDO</strong>
+                <span>Somente leitura — apenas você pode visualizar este anúncio.</span>
+            </aside>
             <div class="card-header-top">
                 <div id="servico-postador" class="servico-dono hidden">
                     <img id="servico-postador-foto" class="servico-dono-avatar" src="../img/default-profile.png" alt="Foto do dono do anúncio">
@@ -146,14 +152,24 @@
                 </div>
             </div>
         </section>
-    </main>
+</main>
+
+<footer class="site-footer">
+    <div class="site-footer__logo">MeuPimenta</div>
+    <p>Conectando pessoas, negócios e oportunidades.</p>
+    <nav class="site-footer__links" aria-label="Links legais">
+        <a href="legal/privacidade.html">Política de Privacidade</a>
+        <a href="legal/termos.html">Termos de Conduta</a>
+    </nav>
+    <small>© 2026 MeuPimenta</small>
+</footer>
 
     <script src="../js/global.js"></script>
     <script src="../js/nav-conta.js"></script>
-    <script src="../js/servico/utils.js"></script>
-    <script src="../js/servico/api.js"></script>
-    <script src="../js/servico/ui.js"></script>
-    <script src="../js/servico/events.js"></script>
-    <script src="../js/servico/main.js"></script>
+    <script src="../js/anuncio/utils.js"></script>
+    <script src="../js/anuncio/api.js"></script>
+    <script src="../js/anuncio/ui.js"></script>
+    <script src="../js/anuncio/events.js"></script>
+    <script src="../js/anuncio/main.js"></script>
 </body>
 </html>

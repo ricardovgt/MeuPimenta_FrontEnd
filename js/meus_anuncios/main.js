@@ -5,16 +5,25 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const elements = {
         grid: document.getElementById("grid-meus-servicos"),
+        resumo: document.getElementById("resumo-meus-servicos"),
+        contagem: document.getElementById("meus-servicos-contagem"),
 
-        btnNovoServico: document.getElementById("btn-novo-servico"),
-        modalServico: document.getElementById("modal-cadastro-servico"),
-        formServico: document.getElementById("form-servico"),
+        btnNovoAnuncio: document.getElementById("btn-novo-servico"),
+        avisoLimiteAnuncios: document.getElementById("aviso-limite-anuncios"),
+        modalAnuncio: document.getElementById("modal-cadastro-servico"),
+        formAnuncio: document.getElementById("form-servico"),
         inputTelefoneCadastro: document.getElementById("telefone"),
         inputFotosCadastro: document.getElementById("fotos-input"),
         fotosCadastroPreview: document.getElementById("fotos-preview"),
-        feedbackServico: document.getElementById("feedback-servico"),
-        btnCancelarServico: document.getElementById("btn-cancelar-servico"),
+        feedbackAnuncio: document.getElementById("feedback-servico"),
+        btnCancelarAnuncio: document.getElementById("btn-cancelar-servico"),
         btnFecharCadastro: document.getElementById("btn-fechar-cadastro"),
+        aceiteRegrasAnuncio: document.getElementById("aceite-regras-anuncio"),
+        btnVerRegrasPublicacao: document.getElementById("btn-ver-regras-publicacao"),
+        modalRegrasPublicacao: document.getElementById("modal-regras-publicacao"),
+        btnFecharRegrasPublicacao: document.getElementById("btn-fechar-regras-publicacao"),
+        btnRevisarAnuncio: document.getElementById("btn-revisar-anuncio"),
+        btnConfirmarPublicacao: document.getElementById("btn-confirmar-publicacao"),
 
         modalEditar: document.getElementById("modal-editar-servico"),
         formEditar: document.getElementById("form-editar-servico"),
@@ -37,17 +46,15 @@ document.addEventListener("DOMContentLoaded", async () => {
         btnConfirmarExcluir: document.getElementById("btn-confirmar-excluir")
     };
 
-    configurarListaServicos(token, elements);
-    configurarCadastroServico(token, elements);
-    configurarEdicaoServico(token, elements);
-    configurarExclusaoServico(token, elements);
+    configurarListaAnuncios(token, elements);
+    configurarCadastroAnuncio(token, elements);
+    configurarEdicaoAnuncio(token, elements);
+    configurarExclusaoAnuncio(token, elements);
     configurarFechamentoEdicao(elements);
     configurarMascaraTelefone(elements.inputTelefoneCadastro);
     configurarMascaraTelefone(elements.inputTelefone);
     Connecta.ui.configurarContadoresCaracteres();
 
-    const abrirNovoAnuncio = new URLSearchParams(window.location.search).get("novo") === "1";
-    if (sessao.usuario?.tipoConta === "COMERCIAL" && abrirNovoAnuncio) {
-        abrirCadastro(elements);
-    }
+    elements.solicitarNovoAnuncio = sessao.usuario?.tipoConta === "COMERCIAL"
+        && new URLSearchParams(window.location.search).get("novo") === "1";
 });

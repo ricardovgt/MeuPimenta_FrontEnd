@@ -1,4 +1,4 @@
-function atualizarVisibilidadeMeusServicos(tipoConta) {
+function atualizarVisibilidadeMeusAnuncios(tipoConta) {
     const isContaComercial = tipoConta === "COMERCIAL";
 
     document.querySelectorAll("[data-conta-comercial]").forEach((link) => {
@@ -7,7 +7,8 @@ function atualizarVisibilidadeMeusServicos(tipoConta) {
 }
 
 function atualizarAvatarNavegacao(usuario) {
-    const fotoPadrao = "../img/default-profile.png";
+    const fotoPadrao = document.querySelector("[data-nav-avatar]")?.getAttribute("src")
+        || "../img/default-profile.png";
     const fotoRecebida = typeof usuario?.fotoPerfil === "string"
         ? usuario.fotoPerfil.trim()
         : "";
@@ -31,11 +32,24 @@ function atualizarAvatarNavegacao(usuario) {
     });
 }
 
+function atualizarNavegacaoPorSessao(usuario) {
+    const autenticado = Boolean(usuario);
+
+    document.querySelectorAll("[data-nav-autenticado]").forEach((elemento) => {
+        elemento.classList.toggle("hidden", !autenticado);
+    });
+
+    document.querySelectorAll("[data-nav-anonimo]").forEach((elemento) => {
+        elemento.classList.toggle("hidden", autenticado);
+    });
+}
+
 async function configurarNavegacaoPorTipoConta() {
     try {
         const sessao = await Connecta.auth.validarSessao();
+        atualizarNavegacaoPorSessao(sessao?.usuario);
         if (sessao) {
-            atualizarVisibilidadeMeusServicos(sessao.usuario?.tipoConta);
+            atualizarVisibilidadeMeusAnuncios(sessao.usuario?.tipoConta);
             atualizarAvatarNavegacao(sessao.usuario);
         }
     } catch (erro) {
@@ -46,6 +60,7 @@ async function configurarNavegacaoPorTipoConta() {
 configurarNavegacaoPorTipoConta();
 
 window.addEventListener("connecta:sessao-encerrada", () => {
-    atualizarVisibilidadeMeusServicos(null);
+    atualizarVisibilidadeMeusAnuncios(null);
     atualizarAvatarNavegacao(null);
+    atualizarNavegacaoPorSessao(null);
 });
